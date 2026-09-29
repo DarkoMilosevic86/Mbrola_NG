@@ -1,0 +1,9 @@
+; MBROLA NG - COM server exports of MBROLA_NG.dll (SAPI 5 engine)
+; Copyright (c) 2026 Darko Milosevic
+; SPDX-License-Identifier: GPL-2.0-or-later
+; The C API (mbng_*) is exported with __declspec(dllexport).
+EXPORTS
+  DllGetClassObject PRIVATE
+  DllCanUnloadNow PRIVATE
+  DllRegisterServer PRIVATE
+  DllUnregisterServer PRIVATE

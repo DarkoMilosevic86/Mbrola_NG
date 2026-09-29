@@ -1,0 +1,69 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - g2p.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Grapheme -> phoneme rules on CANONICAL letters (scripts.txt), used when a
+# word is not in lexicon.txt. At every position the LONGEST matching rule
+# wins; among equally long rules the first in the file wins.
+#
+# FORMAT:  letters -> phonemes [/ left _ right]
+#   ^letters  = only at the start of the word, letters$ = only at the end
+#   context:  letters, {CLASS} (letter class from classes.txt), ^ word start,
+#             $ word end
+#   phonemes: SAMPA symbols separated by spaces, 0 = nothing
+# =============================================================================
+
+# --- plain letters
+a -> a
+b -> b
+c -> ts
+č -> tS
+ć -> tS'
+d -> d
+đ -> dZ'
+e -> e
+f -> f
+g -> g
+h -> x
+i -> i
+j -> j
+k -> k
+l -> l
+m -> m
+n -> n
+o -> o
+p -> p
+r -> r
+s -> s
+š -> S
+t -> t
+u -> u
+v -> v
+z -> z
+ž -> Z
+
+# --- Latin digraphs (one sound)
+dž -> dZ
+lj -> L
+nj -> J
+
+# --- Cyrillic single letters џ љ њ (canonical ǆ ǉ ǌ)
+ǆ -> dZ
+ǉ -> L
+ǌ -> J
+
+# --- d + ž across a prefix boundary (ANALYSIS 7.2): nadživjeti, podžupan,
+# odžaliti. (n + j / l + j words such as injekcija are in lexicon.txt.)
+^nadž -> n a d Z
+^podž -> p o d Z
+^odž -> o d Z
+^predž -> p r e d Z
+
+# --- foreign letters
+qu -> k v
+q -> k
+w -> v
+x -> k s
+y -> j / _ {VOWEL_L}
+y -> i

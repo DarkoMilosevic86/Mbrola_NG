@@ -1,0 +1,15 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - syllables.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Syllable nuclei. Vowels are always nuclei (@nucleus CLASS to change that).
+# Additional syllabic consonants:  phoneme / left _ right
+#   (| = word edge, CLASS / phoneme / (a b) as in postlex.txt)
+#
+# Vocalic r (ANALYSIS 7.4): prst, vrt, trg, crkva, grlo, krv, rđa, grm.
+# =============================================================================
+
+r / CONS _ CONS
+r / | _ CONS
+r / CONS _ |

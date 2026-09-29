@@ -1,0 +1,62 @@
+# =============================================================================
+# MBROLA NG - English (en) - units.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Units and currencies ("5 km", "5%", "$5"). Syntax: see languages/hr/units.txt
+#   keys | gender | one | other [| flags]      (English has no genders: -)
+# =============================================================================
+
+@forms one other
+
+# --- currencies
+$ USD              | - | dollar | dollars | prefix
+€ EUR              | - | euro | euros | prefix
+£ GBP              | - | pound | pounds | prefix
+¥ JPY              | - | yen | yen | prefix
+CHF                | - | Swiss franc | Swiss francs | prefix
+
+# --- percent, degrees
+%                  | - | percent | percent
+‰                  | - | per mille | per mille
+°C                 | - | degree Celsius | degrees Celsius
+°F                 | - | degree Fahrenheit | degrees Fahrenheit
+°                  | - | degree | degrees
+
+# --- length, area, volume, mass
+km                 | - | kilometer | kilometers
+m                  | - | meter | meters | cs
+cm                 | - | centimeter | centimeters
+mm                 | - | millimeter | millimeters
+mi                 | - | mile | miles
+ft                 | - | foot | feet
+km²                | - | square kilometer | square kilometers
+m²                 | - | square meter | square meters
+l                  | - | liter | liters | cs
+ml                 | - | milliliter | milliliters
+kg                 | - | kilogram | kilograms
+g                  | - | gram | grams | cs
+lb lbs             | - | pound | pounds
+oz                 | - | ounce | ounces
+
+# --- speed, time
+km/h               | - | kilometer per hour | kilometers per hour
+mph                | - | mile per hour | miles per hour
+h                  | - | hour | hours | cs
+min                | - | minute | minutes
+ms                 | - | millisecond | milliseconds
+
+# --- computing, electricity
+kB KB              | - | kilobyte | kilobytes
+MB                 | - | megabyte | megabytes
+GB                 | - | gigabyte | gigabytes
+TB                 | - | terabyte | terabytes
+Hz                 | - | hertz | hertz
+kHz                | - | kilohertz | kilohertz
+MHz                | - | megahertz | megahertz
+GHz                | - | gigahertz | gigahertz
+W                  | - | watt | watts | cs
+kW                 | - | kilowatt | kilowatts
+kWh                | - | kilowatt hour | kilowatt hours
+V                  | - | volt | volts | cs
+mAh                | - | milliamp hour | milliamp hours

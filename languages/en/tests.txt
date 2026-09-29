@@ -1,0 +1,64 @@
+# =============================================================================
+# MBROLA NG - English (en) - tests.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Run by langc through the real core (every compile).
+# FORMAT:  "input" [| "input" ...] => expected words
+#          "input" [| "input" ...] => / expected phonemes /
+# =============================================================================
+
+# --- lexicon, apostrophes, post-lexical rules
+"Hello world"                            => hello world
+"don't" | "don’t"                        => don't
+"o'clock"                                => / @ k l A k /
+"cat"                                    => / k_h { t /
+"the end"                                => / D i E n d /
+"the cat"                                => / D @ k_h { t /
+
+# --- numbers
+"1,000" | "1000"                         => one thousand
+"1,000,000"                              => one million
+"101"                                    => one hundred one
+"2026"                                   => two thousand twenty six
+"-5"                                     => minus five
+"3.14"                                   => three point one four
+"21st"                                   => twenty first
+"20th"                                   => twentieth
+"100th"                                  => one hundredth
+"3rd"                                    => third
+
+# --- years and dates
+"in 1999"                                => in nineteen ninety nine
+"since 1905"                             => since nineteen oh five
+"in 2026"                                => in twenty twenty six
+"in 2005"                                => in two thousand five
+"September 29, 2026"                     => september twenty ninth twenty twenty six
+"9/29/2026" | "2026-09-29"               => september twenty ninth twenty twenty six
+
+# --- time
+"7:00"                                   => seven o'clock
+"2:05"                                   => two oh five
+"2:30"                                   => two thirty
+
+# --- money and units
+"$1"                                     => one dollar
+"$5"                                     => five dollars
+"$5.50"                                  => five dollars and fifty cents
+"5%"                                     => five percent
+"10 km"                                  => ten kilometers
+"1 km"                                   => one kilometer
+
+# --- abbreviations, acronyms, spelling
+"Dr. Smith"                              => doctor smith
+"e.g."                                   => for example
+"OK"                                     => oh kay
+"5G"                                     => five g
+"NASA"                                   => nasa
+"a & b"                                  => a and b
+"HTML"                                   => html
+"HTML" | "html"                          => / EI tS t i E m E l /
+
+# --- emoji
+"😀"                                     => grinning face
+"😂😂😂"                                  => three times face with tears of joy

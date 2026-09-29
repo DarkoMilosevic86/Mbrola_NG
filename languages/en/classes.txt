@@ -1,0 +1,19 @@
+# =============================================================================
+# MBROLA NG - English (en) - classes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Named sets used by the rule files.
+# FORMAT:  [phonemes] / [letters] section, then  NAME = items
+# =============================================================================
+
+[phonemes]
+VOWEL     = i I E { A O U u V @ r= EI AI OI @U aU
+SONORANT  = m n N l r w j
+OBS       = p p_h b t t_h d k k_h g tS dZ f v T D s z S Z h
+CONS      = SONORANT OBS
+
+[letters]
+VOWEL_L   = a e i o u y
+CONS_L    = b c d f g h j k l m n p q r s t v w x z
+FRONT_L   = e i y

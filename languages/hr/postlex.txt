@@ -1,0 +1,49 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - postlex.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phrase-level (post-lexical) phoneme rules. They see the whole phrase as one
+# stream, so they also work ACROSS word boundaries ("od kuće", "s bratom")
+# - MBROLA sees one continuous stream and cr1 aliases many consonant pairs
+# to silence (ANALYSIS 3.4).
+#
+# FORMAT:  focus -> replacement / left _ right
+#   focus        phoneme, CLASS or (a b c)
+#   replacement  phonemes, 0 (delete) or @partner (voicing partner from
+#                phonemes.txt)
+#   context      phonemes, CLASSES, (a b c), and word boundaries:
+#                |   a word boundary is required here
+#                |?  a word boundary is allowed here
+#                (without | or |? the context must be inside one word)
+# Rules are applied in file order; each rule scans the phrase from right to
+# left (so regressive assimilation spreads through consonant clusters).
+#
+#   @identical CLASS within=OP:N across=OP:N
+#     two identical neighbours (the voice has no X-X diphone):
+#     merge:N  keep one, duration N %;  pause:N  insert a pause of N ms;
+#     keep     leave them
+# =============================================================================
+
+# 1. n before a labial stop -> m ("jedanput" -> j e d a m p u t, "on pije")
+n -> m / _ |? LABIAL_STOP
+
+# 2. s, z before a palatal -> š, ž ("iz šume", "s čovjekom", "raspjevan"
+#    is not affected: only č ć dž đ lj nj)
+s -> S / _ |? PALATAL
+z -> Z / _ |? PALATAL
+s -> S / _ |? (S Z)
+z -> Z / _ |? (S Z)
+
+# 3. regressive voicing assimilation (v and sonorants do not trigger it)
+PAIRED_VL -> @partner / _ |? OBS_VD
+PAIRED_VD -> @partner / _ |? OBS_VL
+
+# 4. t/d before an affricate disappears ("podcijeniti", "odčepiti",
+#    "od čega")
+(t d) -> 0 / _ |? AFFRICATE
+
+# 5. identical neighbours: one longer consonant ("od dana", "iz zemlje");
+#    identical vowels inside a word merge, across words a tiny pause
+@identical CONS within=merge:130 across=merge:130
+@identical VOWEL within=merge:160 across=pause:25

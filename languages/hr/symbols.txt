@@ -1,0 +1,60 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - symbols.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  character | level | name [| break]
+#   level  the symbol is spoken when the punctuation level (host setting)
+#          is at least this:  none (always) some most all  never
+#          Defaults (P2): SAPI/Android "some", NVDA "none".
+#   break  pause/intonation it causes: comma semicolon colon dash period
+#          question exclaim paragraph
+# Characters may be written as U+XXXX (needed for | and #).
+# =============================================================================
+
+.       | all  | točka | period
+,       | all  | zarez | comma
+;       | most | točka zarez | semicolon
+:       | most | dvotočka | colon
+?       | all  | upitnik | question
+!       | all  | uskličnik | exclaim
+-       | most | crtica | dash
+(       | most | otvorena zagrada | comma
+)       | most | zatvorena zagrada | comma
+[       | most | otvorena uglata zagrada | comma
+]       | most | zatvorena uglata zagrada | comma
+{       | most | otvorena vitičasta zagrada | comma
+}       | most | zatvorena vitičasta zagrada | comma
+"       | most | navodnici
+'       | all  | apostrof
+@       | some | et
+U+0023  | some | ljestve
+$       | some | dolar
+%       | some | posto
+&       | some | i
+*       | some | zvjezdica
++       | some | plus
+=       | some | jednako
+/       | some | kosa crta
+\       | most | obrnuta kosa crta
+_       | most | podvlaka
+<       | some | manje od
+>       | some | veće od
+U+007C  | most | okomita crta
+~       | most | tilda
+^       | most | kapica
+`       | most | obrnuti apostrof
+€       | some | euro
+£       | some | funta
+¥       | some | jen
+§       | some | paragraf
+©       | some | autorsko pravo
+®       | some | registrirano
+™       | some | zaštitni znak
+°       | some | stupanj
+×       | some | puta
+÷       | some | podijeljeno
+±       | some | plus minus
+•       | most | grafička točka
+·       | most | središnja točka
+¶       | most | odlomak

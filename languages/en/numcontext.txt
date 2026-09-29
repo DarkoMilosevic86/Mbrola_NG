@@ -1,0 +1,28 @@
+# =============================================================================
+# MBROLA NG - English (en) - numcontext.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Numbers in context: ordinals, money, ranges, fractions.
+# Syntax: see languages/hr/dates.txt. (Plain numbers, decimals "3.14",
+# negative numbers, "1,000,000" and number + unit are handled by the engine
+# with language.txt and units.txt.)
+# =============================================================================
+
+@list ord-suffix = st nd rd th
+
+# --- 1st, 2nd, 21st, 100th
+( num @ord-suffix ) => $1:%spellout-ordinal
+
+# --- money with cents: $5.50 -> five dollars and fifty cents
+( U+0024 num . num2 ) => $1 $1:plural(one=dollar,other=dollars) and $2 $2:plural(one=cent,other=cents)
+( € num . num2 ) => $1 $1:plural(one=euro,other=euros) and $2 $2:plural(one=cent,other=cents)
+( £ num . num2 ) => $1 $1:plural(one=pound,other=pounds) and $2 $2:plural(one=penny,other=pence)
+
+# --- ranges 5-10 -> five to ten
+( num - num ) => $1 to $2
+
+# --- simple fractions
+( num[1] / num[2] ) => one half
+( num[1] / num[4] ) => one quarter
+( num[3] / num[4] ) => three quarters

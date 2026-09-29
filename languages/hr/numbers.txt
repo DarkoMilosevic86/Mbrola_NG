@@ -1,0 +1,116 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - numbers.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Numbers are ALWAYS Croatian (decision D2): tisuća, milijun ...
+#
+# FORMAT - rule-based number format (subset of ICU/CLDR RBNF syntax)
+#   %name:            starts a ruleset (%%name: = private helper)
+#   base: text;       rule for numbers >= base (up to the next rule)
+#     <<              quotient (number / divisor), same ruleset
+#     >>              remainder (number % divisor), same ruleset
+#     <%set<  >%set>  the same with another ruleset
+#     =%set=          the whole number with another ruleset
+#     [ ... ]         left out when the remainder is 0
+#     $(cardinal,one{..}few{..}other{..})$   plural form of the quotient
+#     divisor = 10^(number of digits of base - 1)
+#   -x: text;         negative numbers (>> = absolute value)
+#
+#   @plural CATEGORY: condition     CLDR plural rules (operands n i v f t)
+#   @replace FROM TO                fix-ups of the result (FROM$ = only at
+#                                   the end of a word)
+# =============================================================================
+
+@plural one: v = 0 and i % 10 = 1 and i % 100 != 11 or f % 10 = 1 and f % 100 != 11
+@plural few: v = 0 and i % 10 = 2..4 and i % 100 != 12..14 or f % 10 = 2..4 and f % 100 != 12..14
+
+# soft stems (treći): -og/-om/-o -> -eg/-em/-e
+@replace ćog ćeg
+@replace ćom ćem
+@replace ćo$ će
+
+# -----------------------------------------------------------------------------
+%spellout-cardinal-masculine:
+  -x: minus >>;
+  0: nula; 1: jedan; 2: dva; 3: tri; 4: četiri; 5: pet; 6: šest; 7: sedam;
+  8: osam; 9: devet; 10: deset; 11: jedanaest; 12: dvanaest; 13: trinaest;
+  14: četrnaest; 15: petnaest; 16: šesnaest; 17: sedamnaest; 18: osamnaest;
+  19: devetnaest;
+  20: dvadeset[ >>]; 30: trideset[ >>]; 40: četrdeset[ >>]; 50: pedeset[ >>];
+  60: šezdeset[ >>]; 70: sedamdeset[ >>]; 80: osamdeset[ >>];
+  90: devedeset[ >>];
+  100: sto[ >>]; 200: dvjesto[ >>]; 300: tristo[ >>]; 400: četiristo[ >>];
+  500: petsto[ >>]; 600: šesto[ >>]; 700: sedamsto[ >>]; 800: osamsto[ >>];
+  900: devetsto[ >>];
+  1000: tisuću[ >>];
+  2000: <%spellout-cardinal-feminine< $(cardinal,one{tisuća}few{tisuće}other{tisuća})$[ >>];
+  1000000: milijun[ >>];
+  2000000: << $(cardinal,one{milijun}few{milijuna}other{milijuna})$[ >>];
+  1000000000: milijarda[ >>];
+  2000000000: <%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$[ >>];
+  1000000000000: bilijun[ >>];
+  2000000000000: << $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$[ >>];
+
+%spellout-cardinal-feminine:
+  -x: minus >>;
+  0: nula; 1: jedna; 2: dvije; 3: =%spellout-cardinal-masculine=;
+  20: dvadeset[ >>]; 30: trideset[ >>]; 40: četrdeset[ >>]; 50: pedeset[ >>];
+  60: šezdeset[ >>]; 70: sedamdeset[ >>]; 80: osamdeset[ >>];
+  90: devedeset[ >>];
+  100: sto[ >>]; 200: dvjesto[ >>]; 300: tristo[ >>]; 400: četiristo[ >>];
+  500: petsto[ >>]; 600: šesto[ >>]; 700: sedamsto[ >>]; 800: osamsto[ >>];
+  900: devetsto[ >>];
+  1000: =%spellout-cardinal-masculine=;
+
+%spellout-cardinal-neuter:
+  -x: minus >>;
+  0: nula; 1: jedno; 2: dva; 3: =%spellout-cardinal-masculine=;
+  20: dvadeset[ >>]; 30: trideset[ >>]; 40: četrdeset[ >>]; 50: pedeset[ >>];
+  60: šezdeset[ >>]; 70: sedamdeset[ >>]; 80: osamdeset[ >>];
+  90: devedeset[ >>];
+  100: sto[ >>]; 200: dvjesto[ >>]; 300: tristo[ >>]; 400: četiristo[ >>];
+  500: petsto[ >>]; 600: šesto[ >>]; 700: sedamsto[ >>]; 800: osamsto[ >>];
+  900: devetsto[ >>];
+  1000: =%spellout-cardinal-masculine=;
+
+# -----------------------------------------------------------------------------
+# Ordinals: a stem (only the last word is ordinal: "dvadeset prv-") plus the
+# case/gender ending added by the public rulesets below.
+%%ord-stem:
+  0: nult; 1: prv; 2: drug; 3: treć; 4: četvrt; 5: pet; 6: šest; 7: sedm;
+  8: osm; 9: devet; 10: deset; 11: jedanaest; 12: dvanaest; 13: trinaest;
+  14: četrnaest; 15: petnaest; 16: šesnaest; 17: sedamnaest; 18: osamnaest;
+  19: devetnaest;
+  20: dvadeset; 21: dvadeset >>; 30: trideset; 31: trideset >>;
+  40: četrdeset; 41: četrdeset >>; 50: pedeset; 51: pedeset >>;
+  60: šezdeset; 61: šezdeset >>; 70: sedamdeset; 71: sedamdeset >>;
+  80: osamdeset; 81: osamdeset >>; 90: devedeset; 91: devedeset >>;
+  100: stot; 101: sto >>; 200: dvjestot; 201: dvjesto >>;
+  300: tristot; 301: tristo >>; 400: četiristot; 401: četiristo >>;
+  500: petstot; 501: petsto >>; 600: šestot; 601: šesto >>;
+  700: sedamstot; 701: sedamsto >>; 800: osamstot; 801: osamsto >>;
+  900: devetstot; 901: devetsto >>;
+  1000: tisućit; 1001: tisuću >>;
+  2000: dvijetisućit; 2001: dvije tisuće >>;
+  3000: tritisućit; 3001: tri tisuće >>;
+  4000: četiritisućit; 4001: četiri tisuće >>;
+  5000: pettisućit; 5001: <%spellout-cardinal-feminine< $(cardinal,one{tisuća}few{tisuće}other{tisuća})$ >>;
+  1000000: milijunt; 1000001: milijun >>;
+
+%spellout-ordinal-masculine:
+  0: =%%ord-stem=i;
+%spellout-ordinal-masculine-genitive:
+  0: =%%ord-stem=og;
+%spellout-ordinal-masculine-locative:
+  0: =%%ord-stem=om;
+%spellout-ordinal-feminine:
+  0: =%%ord-stem=a;
+%spellout-ordinal-feminine-genitive:
+  0: =%%ord-stem=e;
+%spellout-ordinal-feminine-locative:
+  0: =%%ord-stem=oj;
+%spellout-ordinal-feminine-accusative:
+  0: =%%ord-stem=u;
+%spellout-ordinal-neuter:
+  0: =%%ord-stem=o;

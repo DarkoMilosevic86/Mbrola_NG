@@ -1,0 +1,51 @@
+# =============================================================================
+# MBROLA NG - English (en) - spelling.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Character names for spelling / character mode. The names are words of
+# lexicon.txt (e.g. "ay", "aitch", "ess" are entries there).
+# FORMAT:  characters | name       @capital TEXT      @unknown TEXT
+# =============================================================================
+
+@capital cap
+@unknown unknown character
+
+a       | ay
+b       | bee
+c       | see
+d       | dee
+e       | ee
+f       | ef
+g       | gee
+h       | aitch
+i       | eye
+j       | jay
+k       | kay
+l       | el
+m       | em
+n       | en
+o       | oh
+p       | pee
+q       | cue
+r       | ar
+s       | ess
+t       | tee
+u       | you
+v       | vee
+w       | double you
+x       | ex
+y       | why
+z       | zee
+'       | apostrophe
+
+0       | zero
+1       | one
+2       | two
+3       | three
+4       | four
+5       | five
+6       | six
+7       | seven
+8       | eight
+9       | nine

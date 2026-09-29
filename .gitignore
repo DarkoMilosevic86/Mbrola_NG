@@ -1,0 +1,45 @@
+# MBROLA NG
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+# Build output (python build.py clean removes all of it)
+/build/
+/dist/
+/nvda/build/
+/nvda/*.nvda-addon
+/installer/build/
+/installer/*-setup.exe
+
+# Android (Gradle / NDK)
+.gradle/
+.cxx/
+.externalNativeBuild/
+local.properties
+/android/**/build/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Editors and IDEs
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+CMakeUserPresets.json
+
+# Local test output
+*.wav
+*.pho.out
+
+# MBROLA voices are never committed: each has its own license and is
+# downloaded by the voice managers (keep local test copies here)
+/voices/

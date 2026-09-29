@@ -1,0 +1,15 @@
+# =============================================================================
+# MBROLA NG - English (en) - clitics.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Unstressed function words (no accent, shorter).
+# FORMAT:  @proclitic / @enclitic, then words (any number per line).
+# =============================================================================
+
+@proclitic
+a an the
+of to at for from with by in on as
+and or but nor than
+
+@enclitic

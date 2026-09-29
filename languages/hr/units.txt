@@ -1,0 +1,76 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - units.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Units and currencies after a number ("5 km", "5%", "20 °C") or - with the
+# prefix flag - also before it ("€5", "EUR 5"). The number is read in the
+# unit's gender and the unit in the plural form the number requires
+# ("1 euro, 2 eura, 5 eura"; "1 kuna, 2 kune, 5 kuna").
+#
+#   @forms CATEGORIES               order of the form columns (CLDR names)
+#   @gender NAME %ruleset           number ruleset for a gender
+#   keys | gender | forms... [| flags]
+#     keys    spellings separated by spaces (U+XXXX allowed)
+#     gender  a @gender name, or - (default cardinal)
+#     flags   prefix  (may stand before the number)
+#             cs      (keys are case-sensitive)
+# =============================================================================
+
+@forms one few other
+@gender m %spellout-cardinal-masculine
+@gender f %spellout-cardinal-feminine
+@gender n %spellout-cardinal-neuter
+
+# --- currencies
+€ EUR eur          | m | euro | eura | eura | prefix
+$ USD              | m | dolar | dolara | dolara | prefix
+£ GBP              | f | funta | funte | funti | prefix
+CHF                | m | franak | franka | franaka | prefix
+kn HRK             | f | kuna | kune | kuna
+lp                 | f | lipa | lipe | lipa
+ct                 | m | cent | centa | centi
+
+# --- percent, degrees
+%                  | - | posto | posto | posto
+‰                  | - | promil | promila | promila
+°C                 | m | stupanj Celzija | stupnja Celzija | stupnjeva Celzija
+°F                 | m | stupanj Fahrenheita | stupnja Fahrenheita | stupnjeva Fahrenheita
+°                  | m | stupanj | stupnja | stupnjeva
+
+# --- length, area, volume, mass
+km                 | m | kilometar | kilometra | kilometara
+m                  | m | metar | metra | metara | cs
+cm                 | m | centimetar | centimetra | centimetara
+mm                 | m | milimetar | milimetra | milimetara
+km² km2            | m | četvorni kilometar | četvorna kilometra | četvornih kilometara
+m² m2              | m | četvorni metar | četvorna metra | četvornih metara
+m³ m3              | m | kubni metar | kubna metra | kubnih metara
+l                  | f | litra | litre | litara | cs
+ml                 | m | mililitar | mililitra | mililitara
+kg                 | m | kilogram | kilograma | kilograma
+g                  | m | gram | grama | grama | cs
+dag dkg            | m | dekagram | dekagrama | dekagrama
+t                  | f | tona | tone | tona | cs
+
+# --- speed, time
+km/h               | m | kilometar na sat | kilometra na sat | kilometara na sat
+m/s                | m | metar u sekundi | metra u sekundi | metara u sekundi
+h                  | m | sat | sata | sati | cs
+min                | f | minuta | minute | minuta
+ms                 | f | milisekunda | milisekunde | milisekundi
+
+# --- computing, electricity
+kB KB              | m | kilobajt | kilobajta | kilobajta
+MB                 | m | megabajt | megabajta | megabajta
+GB                 | m | gigabajt | gigabajta | gigabajta
+TB                 | m | terabajt | terabajta | terabajta
+Hz                 | m | herc | herca | herca
+kHz                | m | kiloherc | kiloherca | kiloherca
+MHz                | m | megaherc | megaherca | megaherca
+GHz                | m | gigaherc | gigaherca | gigaherca
+W                  | m | vat | vata | vata | cs
+kW                 | m | kilovat | kilovata | kilovata
+kWh                | m | kilovatsat | kilovatsata | kilovatsati
+V                  | m | volt | volta | volti | cs
+mAh                | m | miliampersat | miliampersata | miliampersati

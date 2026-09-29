@@ -1,0 +1,38 @@
+// MBROLA NG - version resource of MBROLA_NG.dll (ANALYSIS 11.1)
+// Copyright (c) 2026 Darko Milošević
+// SPDX-License-Identifier: GPL-2.0-or-later
+#include <winver.h>
+
+#define MBNG_VER_BIN   MBNG_VER_MAJOR,MBNG_VER_MINOR,MBNG_VER_PATCH,0
+#define MBNG_STR2(x)   #x
+#define MBNG_STR(x)    MBNG_STR2(x)
+#define MBNG_VER_STR   MBNG_STR(MBNG_VER_MAJOR) "." MBNG_STR(MBNG_VER_MINOR) "." MBNG_STR(MBNG_VER_PATCH)
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION MBNG_VER_BIN
+ PRODUCTVERSION MBNG_VER_BIN
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_DLL
+ FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904b0"
+    BEGIN
+      VALUE "CompanyName", L"Darko Milo\x0161evi\x0107"
+      VALUE "FileDescription", "MBROLA NG speech engine (SAPI 5 + C API)"
+      VALUE "FileVersion", MBNG_VER_STR
+      VALUE "InternalName", "MBROLA_NG"
+      VALUE "LegalCopyright", L"Copyright (c) 2026 Darko Milo\x0161evi\x0107"
+      VALUE "OriginalFilename", "MBROLA_NG.dll"
+      VALUE "ProductName", "MBROLA NG"
+      VALUE "ProductVersion", MBNG_VER_STR
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1200
+  END
+END

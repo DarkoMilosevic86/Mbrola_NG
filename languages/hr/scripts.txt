@@ -1,0 +1,226 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - scripts.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Decision D1: Latin and Cyrillic are two spellings of the same sounds.
+# Every letter is mapped to CANONICAL letters; lexicon, G2P rules, lists and
+# abbreviations only ever see canonical text, so "ćirilica" and "ћирилица"
+# give the same phonemes.
+#
+# Canonical alphabet: a b c č ć d đ e f g h i j k l m n o p r s š t u v z ž
+#   plus q w x y (foreign letters) and the single-letter digraphs
+#   ǆ ǉ ǌ used for Cyrillic џ љ њ (one letter = one sound), so that
+#   Cyrillic "нј" (n + j) and "њ" stay different (ANALYSIS 7.6).
+#
+# SECTIONS
+#   [script NAME]      lower [Upper ...] -> canonical letters
+#   [homoglyphs NAME]  x -> y : in a word written mostly in script NAME, a
+#                      look-alike letter x of another script becomes y
+#   [normalize]        text clean-up before anything else: from -> to
+#                      (longest match; "" = delete)
+#   [lexkey]           canonical letter -> letters used for lexicon keys
+# Characters may be written as U+XXXX.
+# =============================================================================
+
+[script latin]
+a A -> a
+b B -> b
+c C -> c
+č Č -> č
+ć Ć -> ć
+d D -> d
+đ Đ -> đ
+e E -> e
+f F -> f
+g G -> g
+h H -> h
+i I -> i
+j J -> j
+k K -> k
+l L -> l
+m M -> m
+n N -> n
+o O -> o
+p P -> p
+r R -> r
+s S -> s
+š Š -> š
+t T -> t
+u U -> u
+v V -> v
+z Z -> z
+ž Ž -> ž
+q Q -> q
+w W -> w
+x X -> x
+y Y -> y
+# single-letter digraphs (Unicode compatibility letters)
+ǆ ǅ Ǆ -> ǆ
+ǉ ǈ Ǉ -> ǉ
+ǌ ǋ Ǌ -> ǌ
+# foreign Latin letters -> nearest Croatian letters
+á Á -> a
+à À -> a
+â Â -> a
+ä Ä -> a
+ã Ã -> a
+å Å -> a
+ă Ă -> a
+ą Ą -> a
+é É -> e
+è È -> e
+ê Ê -> e
+ë Ë -> e
+ě Ě -> e
+ę Ę -> e
+í Í -> i
+ì Ì -> i
+î Î -> i
+ï Ï -> i
+ó Ó -> o
+ò Ò -> o
+ô Ô -> o
+ö Ö -> o
+õ Õ -> o
+ø Ø -> o
+ő Ő -> o
+ú Ú -> u
+ù Ù -> u
+û Û -> u
+ü Ü -> u
+ů Ů -> u
+ű Ű -> u
+ý Ý -> i
+ÿ Ÿ -> i
+ñ Ñ -> ǌ
+ň Ň -> ǌ
+ń Ń -> ǌ
+ç Ç -> s
+ş Ş -> š
+ś Ś -> š
+ţ Ţ -> c
+ť Ť -> ć
+ď Ď -> đ
+ľ Ľ -> ǉ
+ĺ Ĺ -> l
+ł Ł -> l
+ŕ Ŕ -> r
+ř Ř -> r
+ź Ź -> ž
+ż Ż -> ž
+ğ Ğ -> g
+ß -> ss
+æ Æ -> ae
+œ Œ -> oe
+
+[script cyrillic]
+а А -> a
+б Б -> b
+в В -> v
+г Г -> g
+д Д -> d
+ђ Ђ -> đ
+е Е -> e
+ж Ж -> ž
+з З -> z
+и И -> i
+ј Ј -> j
+к К -> k
+л Л -> l
+љ Љ -> ǉ
+м М -> m
+н Н -> n
+њ Њ -> ǌ
+о О -> o
+п П -> p
+р Р -> r
+с С -> s
+т Т -> t
+ћ Ћ -> ć
+у У -> u
+ф Ф -> f
+х Х -> h
+ц Ц -> c
+ч Ч -> č
+џ Џ -> ǆ
+ш Ш -> š
+# Macedonian letters (P8)
+ѓ Ѓ -> đ
+ќ Ќ -> ć
+ѕ Ѕ -> dz
+# Russian, Ukrainian, Belarusian and Bulgarian letters (ы э щ ъ ь ё ю я
+# й і ї є ґ ў) are NOT part of Croatian (r7): unknown, skipped.
+
+[homoglyphs cyrillic]
+a -> а
+b -> в
+c -> с
+e -> е
+h -> н
+j -> ј
+k -> к
+m -> м
+o -> о
+p -> р
+t -> т
+x -> х
+y -> у
+
+[homoglyphs latin]
+а -> a
+в -> b
+с -> c
+е -> e
+н -> h
+ј -> j
+к -> k
+м -> m
+о -> o
+р -> p
+т -> t
+х -> x
+у -> y
+
+[normalize]
+# typographic characters
+U+2018 -> '
+U+2019 -> '
+U+201A -> '
+U+201B -> '
+U+201C -> "
+U+201D -> "
+U+201E -> "
+U+201F -> "
+U+00AB -> "
+U+00BB -> "
+U+2013 -> -
+U+2014 -> -
+U+2015 -> -
+U+2212 -> -
+U+2026 -> ...
+# invisible characters
+U+00AD -> ""
+U+200B -> ""
+U+2060 -> ""
+U+FEFF -> ""
+# decomposed letters (NFC for the letters of this language)
+c U+030C -> č
+C U+030C -> Č
+s U+030C -> š
+S U+030C -> Š
+z U+030C -> ž
+Z U+030C -> Ž
+c U+0301 -> ć
+C U+0301 -> Ć
+e U+0301 -> é
+a U+0301 -> á
+o U+0301 -> ó
+u U+0308 -> ü
+o U+0308 -> ö
+a U+0308 -> ä
+
+[lexkey]
+ǆ -> dž
+ǉ -> lj
+ǌ -> nj

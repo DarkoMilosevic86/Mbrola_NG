@@ -1,0 +1,14 @@
+# =============================================================================
+# MBROLA NG - English (en) - accents.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Word stress. Words of lexicon.txt carry their stress (\ marks from the CMU
+# dictionary). The default below is used only for unknown words.
+#
+# FORMAT (see languages/hr/accents.txt)
+#   @default SYLLABLE falling|rising
+#   word  SYLLABLE  falling|rising|none  [long=N,M]
+# =============================================================================
+
+@default 1 falling

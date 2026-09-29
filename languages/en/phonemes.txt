@@ -1,0 +1,69 @@
+# =============================================================================
+# MBROLA NG - English (en) - phonemes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phoneme inventory = the US English SAMPA symbols of the us1/us2 MBROLA
+# voices (dumped from the databases). us3 and the British en1 voice use
+# some other symbols; their catalog entries map these symbols to theirs.
+#
+# FORMAT:  symbol  type  duration  min-duration  partner  [features] [viseme=N]
+#   type      vowel | consonant | pause   (exactly one pause phoneme)
+#   duration  default duration in ms at normal rate
+#   min       minimum duration in ms at high rates (intelligibility)
+#   partner   voicing partner, "-" if none
+# =============================================================================
+
+# --- vowels and diphthongs
+i    vowel      95  40  -    close front tense       viseme=6
+I    vowel      65  30  -    close front lax         viseme=6
+E    vowel      75  35  -    mid front               viseme=4
+{    vowel     105  45  -    open front              viseme=2
+A    vowel     110  45  -    open back               viseme=2
+O    vowel     110  45  -    mid back rounded        viseme=8
+U    vowel      70  30  -    close back lax          viseme=7
+u    vowel      95  40  -    close back tense        viseme=7
+V    vowel      75  35  -    mid central             viseme=2
+@    vowel      50  25  -    schwa                   viseme=2
+r=   vowel     100  40  -    r-coloured schwa        viseme=13
+EI   vowel     125  50  -    diphthong               viseme=4
+AI   vowel     140  55  -    diphthong               viseme=2
+OI   vowel     150  60  -    diphthong               viseme=8
+@U   vowel     120  50  -    diphthong               viseme=8
+aU   vowel     140  55  -    diphthong               viseme=2
+
+# --- stops (aspirated allophones p_h t_h k_h: postlex.txt)
+p    consonant  75  35  b    obstruent stop labial voiceless     viseme=21
+p_h  consonant  90  40  -    obstruent stop labial aspirated     viseme=21
+b    consonant  70  30  p    obstruent stop labial voiced        viseme=21
+t    consonant  65  30  d    obstruent stop alveolar voiceless   viseme=19
+t_h  consonant  85  40  -    obstruent stop alveolar aspirated   viseme=19
+d    consonant  60  30  t    obstruent stop alveolar voiced      viseme=19
+k    consonant  75  35  g    obstruent stop velar voiceless      viseme=20
+k_h  consonant  90  40  -    obstruent stop velar aspirated      viseme=20
+g    consonant  70  30  k    obstruent stop velar voiced         viseme=20
+
+# --- affricates and fricatives
+tS   consonant 110  50  dZ   obstruent affricate voiceless       viseme=16
+dZ   consonant  90  40  tS   obstruent affricate voiced          viseme=16
+f    consonant  90  40  v    obstruent fricative labiodental     viseme=18
+v    consonant  60  30  f    obstruent fricative labiodental     viseme=18
+T    consonant  85  40  D    obstruent fricative dental          viseme=17
+D    consonant  45  25  T    obstruent fricative dental voiced   viseme=17
+s    consonant 100  45  z    obstruent fricative alveolar        viseme=15
+z    consonant  80  35  s    obstruent fricative alveolar voiced viseme=15
+S    consonant 100  45  Z    obstruent fricative postalveolar    viseme=16
+Z    consonant  80  35  S    obstruent fricative postalveolar voiced viseme=16
+h    consonant  60  30  -    fricative glottal                   viseme=12
+
+# --- sonorants
+m    consonant  70  30  -    nasal labial            viseme=21
+n    consonant  60  30  -    nasal alveolar          viseme=19
+N    consonant  75  35  -    nasal velar             viseme=20
+l    consonant  65  30  -    lateral                 viseme=14
+r    consonant  60  30  -    approximant             viseme=13
+w    consonant  60  30  -    approximant labial      viseme=7
+j    consonant  55  25  -    approximant palatal     viseme=6
+
+# --- silence
+_    pause       0   0  -    silence                 viseme=0

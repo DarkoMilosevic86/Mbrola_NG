@@ -1,0 +1,9 @@
+# =============================================================================
+# MBROLA NG - English (en) - syllables.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Syllable nuclei: all vowels of phonemes.txt, including the r-coloured
+# vowel r= ("bird", "water"). No syllabic consonants are needed: the
+# lexicon writes "bottle" as b A t @ l.
+# =============================================================================

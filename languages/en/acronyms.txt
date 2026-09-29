@@ -1,0 +1,13 @@
+# =============================================================================
+# MBROLA NG - English (en) - acronyms.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Words written in CAPITALS: @words are read as words, @spell are spelled;
+# otherwise spelled when not longer than @spell_max_len or without a vowel.
+# Many acronyms are in lexicon.txt already spelled out (FBI, IBM, USA).
+# =============================================================================
+
+@spell_max_len 2
+@words NASA NATO UNICEF UNESCO NASDAQ AIDS SCUBA LASER RADAR COVID
+@spell URL CPU GPU USB FAQ API CEO CFO EU UK UN

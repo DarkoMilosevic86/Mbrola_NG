@@ -1,0 +1,32 @@
+# =============================================================================
+# MBROLA NG - English (en) - dates.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Dates, years and times. Pattern syntax: see languages/hr/dates.txt
+# (U+0024 is the dollar sign: "$" alone means "end of text").
+# =============================================================================
+
+@list months = january february march april may june july august september october november december jan feb mar apr jun jul aug sep sept oct nov dec
+@list year-preps = in since from until till by before after during circa around year
+@map  month = 1:January 2:February 3:March 4:April 5:May 6:June 7:July 8:August 9:September 10:October 11:November 12:December
+
+# --- ISO date 2026-09-29 -> September twenty ninth twenty twenty six
+( num4 - num2[1-12] - num2[1-31] ) => $2:@month $3:%spellout-ordinal $1:%spellout-numbering-year
+# --- US numeric date 9/29/2026
+( num1-2[1-12] / num1-2[1-31] / num4 ) => $1:@month $2:%spellout-ordinal $3:%spellout-numbering-year
+
+# --- September 29, 2026 / September 29 / 29 September / September 2026
+@months _ ( num1-2[1-31] ,? _ num4 ) => $1:%spellout-ordinal $2:%spellout-numbering-year
+@months _ ( num1-2[1-31] ) => $1:%spellout-ordinal
+( num1-2[1-31] ) _ @months => $1:%spellout-ordinal
+@months _ ( num4 ) => $1:%spellout-numbering-year
+
+# --- years after a preposition: "in 1999", "since 2010"
+@year-preps _ ( num4[1100-2099] ) => $1:%spellout-numbering-year
+
+# --- time 14:30:15 / 7:00 / 2:05 / 2:30
+( num1-2[0-23] : num2[0-59] : num2[0-59] ) => $1 $2 and $3 $3:plural(one=second,other=seconds)
+( num1-2[0-23] : num2[0] ) => $1 o'clock
+( num1-2[0-23] : 0num2 ) => $1 oh $2
+( num1-2[0-23] : num2[10-59] ) => $1 $2

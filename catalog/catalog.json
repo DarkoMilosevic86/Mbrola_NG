@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "generated": "2026-09-29T00:00:00Z",
+  "min_engine": "0.1",
+  "languages": [
+    {
+      "code": "hr",
+      "sapi_lcid": "41A",
+      "android_locale": "hrv-HRV",
+      "names": { "en": "Croatian", "hr": "Hrvatski" },
+      "dat_version": "1.0",
+      "voices": [ "cr1" ]
+    },
+    {
+      "code": "en",
+      "sapi_lcid": "409",
+      "android_locale": "eng-USA",
+      "names": { "en": "English", "hr": "Engleski" },
+      "dat_version": "1.0",
+      "voices": [ "us1", "us2", "us3", "en1" ]
+    }
+  ],
+  "voices": [
+    {
+      "id": "cr1",
+      "language": "hr",
+      "names": { "en": "Croatian male (cr1)", "hr": "Hrvatski muški (cr1)" },
+      "gender": "male",
+      "age": "adult",
+      "sample_rate": 16000,
+      "version": "1998.1",
+      "files": [
+        { "name": "cr1",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/cr1/cr1" ],
+          "size": 3515376,
+          "sha256": "b5f85d7c4a8da013a4916945cb567d67d2731ca74a64c30513baa40f119cec44" },
+        { "name": "license.txt",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/cr1/license.txt" ],
+          "size": 1674,
+          "sha256": "f8896698e35024a6e7b41fcf929e1c4a7ba61b86dcd4aff471c21a04a438c109" }
+      ],
+      "license": {
+        "file": "license.txt",
+        "commercial_use": false,
+        "summary": {
+          "en": "The cr1 voice (University of Zagreb, Department of Phonetics) may be used only with the MBROLA program, free of charge and not for commercial purposes.",
+          "hr": "Glas cr1 (Sveučilište u Zagrebu, Odsjek za fonetiku) smije se koristiti samo s programom MBROLA, besplatno i ne u komercijalne svrhe."
+        }
+      },
+      "voice_config": { "base_pitch": 105, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0, "phoneme_map": {} },
+      "phonemes": "a b d dZ dZ' e f g i j k l m n o p r s t tS tS' ts u v x z S Z J L _"
+    },
+    {
+      "id": "us1",
+      "language": "en",
+      "names": { "en": "American English female (us1)", "hr": "Američki engleski ženski (us1)" },
+      "gender": "female",
+      "age": "adult",
+      "sample_rate": 16000,
+      "version": "1998.1",
+      "files": [
+        { "name": "us1",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us1/us1" ],
+          "size": 7238094,
+          "sha256": "9f1cd90de6334f43cb4f7348cacd0806fb414b0fbc762492bde7000b9e192a9a" },
+        { "name": "license.txt",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us1/license.txt" ],
+          "size": 1651,
+          "sha256": "f9f7a5205240dc9957ba8b336b253a1fccec8627e9d1153e295f8593944ecb7e" }
+      ],
+      "license": {
+        "file": "license.txt",
+        "commercial_use": false,
+        "summary": {
+          "en": "The us1 voice (Babel Technology, Faculte Polytechnique de Mons) may be used only with the MBROLA program; free distribution only, it may not be sold.",
+          "hr": "Glas us1 (Babel Technology, Faculte Polytechnique de Mons) smije se koristiti samo s programom MBROLA; smije se besplatno dijeliti, ali ne i prodavati."
+        }
+      },
+      "voice_config": { "base_pitch": 170, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0, "phoneme_map": {} },
+      "phonemes": "@ @U A AI D E EI I N O OI S T U V Z _ aU b d dZ f g h i j k k_h l m n p p_h r r= s t tS t_h u v w z {"
+    },
+    {
+      "id": "us2",
+      "language": "en",
+      "names": { "en": "American English male (us2)", "hr": "Američki engleski muški (us2)" },
+      "gender": "male",
+      "age": "adult",
+      "sample_rate": 16000,
+      "version": "1998.1",
+      "files": [
+        { "name": "us2",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us2/us2" ],
+          "size": 7080251,
+          "sha256": "75f7f6b605945f4b65713c3ad1fba5be38fb720cde01bdc3d2facf988634c0d5" },
+        { "name": "license.txt",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us2/license.txt" ],
+          "size": 1652,
+          "sha256": "2e3c3d9bc970dc81d99fc1d3d8ab3cb60f50dde60d09e76be599703978c4e76c" }
+      ],
+      "license": {
+        "file": "license.txt",
+        "commercial_use": false,
+        "summary": {
+          "en": "The us2 voice (Babel Technology, Faculte Polytechnique de Mons) may be used only with the MBROLA program; free distribution only, it may not be sold.",
+          "hr": "Glas us2 (Babel Technology, Faculte Polytechnique de Mons) smije se koristiti samo s programom MBROLA; smije se besplatno dijeliti, ali ne i prodavati."
+        }
+      },
+      "voice_config": { "base_pitch": 110, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0, "phoneme_map": {} },
+      "phonemes": "@ @U A AI D E EI I N O OI S T U V Z _ aU b d dZ f g h i j k k_h l m n p p_h r r= s t tS t_h u v w z {"
+    },
+    {
+      "id": "us3",
+      "language": "en",
+      "names": { "en": "American English male (us3)", "hr": "Američki engleski muški (us3)" },
+      "gender": "male",
+      "age": "adult",
+      "sample_rate": 16000,
+      "version": "1999.1",
+      "files": [
+        { "name": "us3",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us3/us3" ],
+          "size": 7410252,
+          "sha256": "7cc5c49e098f80091e34ed0bd50f0af3908ac2427fbbe7d2b16c57defb7611ec" },
+        { "name": "license.txt",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/us3/license.txt" ],
+          "size": 1768,
+          "sha256": "3cc9f62f529c0e4d2652674bb5924d19add30abb92728b08659e41cfdb9d89d1" }
+      ],
+      "license": {
+        "file": "license.txt",
+        "commercial_use": false,
+        "summary": {
+          "en": "The us3 voice (Oregon Graduate Institute, Faculte Polytechnique de Mons) may be used only with the MBROLA program; free distribution only, it may not be sold.",
+          "hr": "Glas us3 (Oregon Graduate Institute, Faculte Polytechnique de Mons) smije se koristiti samo s programom MBROLA; smije se besplatno dijeliti, ali ne i prodavati."
+        }
+      },
+      "voice_config": { "base_pitch": 105, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0,
+                        "phoneme_map": { "k_h": "k", "p_h": "p", "t_h": "t" } },
+      "phonemes": "@ @U A AI D E EI I N O OI S T U V Z _ aU b d dZ f g h i j k l m n p r r= s t tS u v w z {"
+    },
+    {
+      "id": "en1",
+      "language": "en",
+      "names": { "en": "British English male (en1)", "hr": "Britanski engleski muški (en1)" },
+      "gender": "male",
+      "age": "adult",
+      "sample_rate": 16000,
+      "version": "1997.1",
+      "files": [
+        { "name": "en1",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/en1/en1" ],
+          "size": 6716280,
+          "sha256": "edb8eaae6f0e38493d88ed627518632e6ff8a3843bcf08474a1a70aa786fd99f" },
+        { "name": "README.txt",
+          "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/en1/README.txt" ],
+          "size": 11907,
+          "sha256": "aea83c2f1264bd1f769c9074a496015a87e0a8fcab6fd4cf700c1cdf0596c128" }
+      ],
+      "license": {
+        "file": "README.txt",
+        "commercial_use": false,
+        "summary": {
+          "en": "The en1 voice (Roger database, University of Edinburgh; Faculte Polytechnique de Mons) may be used only with the MBROLA program. It reads American English pronunciations with British sounds.",
+          "hr": "Glas en1 (baza Roger, Sveučilište u Edinburghu; Faculte Polytechnique de Mons) smije se koristiti samo s programom MBROLA. Čita američki izgovor britanskim glasovima."
+        }
+      },
+      "voice_config": { "base_pitch": 100, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0,
+                        "phoneme_map": { "A": "A:", "AI": "aI", "E": "e", "EI": "eI", "O": "O:", "i": "i:",
+                                         "u": "u:", "r=": "3:", "k_h": "k", "p_h": "p", "t_h": "t" } },
+      "phonemes": "3: @ @U A: D I N O: OI S T U V Z _ aI aU b d dZ e eI f g h i: j k l m n p r s t tS u: v w z {"
+    }
+  ]
+}

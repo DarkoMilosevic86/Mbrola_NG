@@ -1,0 +1,22 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - clitics.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Unaccented words that lean on a neighbouring word (ANALYSIS 7.5).
+# FORMAT:  @proclitic / @enclitic, then words (any number per line).
+# Vowel-less proclitics (s, k, z) are recognised as words through this
+# list instead of being spelled.
+# =============================================================================
+
+@proclitic
+u na za od do iz s sa k ka o po pri bez kroz pod nad pred uz niz među
+i a ni ne
+
+@enclitic
+je su sam si smo ste
+ću ćeš će ćemo ćete
+bih bi bismo biste
+me te ga ju nas vas ih
+mi ti mu joj nam vam im
+se li

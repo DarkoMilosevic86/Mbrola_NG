@@ -1,0 +1,107 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - tests.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Run by langc through the real core (every compile).
+# FORMAT:  "input" [| "input" ...] => expected words
+#          "input" [| "input" ...] => / expected phonemes /
+# Every input of a line must give the expected result - Latin and Cyrillic
+# spellings of the same text are listed together (decision D1).
+# Phrases are separated by " _ " in phoneme results.
+# =============================================================================
+
+# --- scripts: same phonemes (D1)
+"ćirilica" | "ћирилица"                  => / tS' i r i l i ts a /
+"Dobar dan" | "Добар дан"                => / d o b a r d a n /
+"njiva" | "њива"                         => / J i v a /
+"ljubav" | "љубав"                       => / L u b a v /
+"džep" | "џеп"                           => / dZ e p /
+"đak" | "ђак"                            => / dZ' a k /
+"инјекција" | "injekcija"                => / i n j e k ts i j a /
+# homoglyphs: Latin "c" inside a Cyrillic word is Cyrillic "с"
+"cокол"                                  => / s o k o l /
+
+# --- digraph exceptions
+"nadživjeti"                             => / n a d Z i v j e t i /
+"podžupan"                               => / p o d Z u p a n /
+
+# --- assimilation (post-lexical rules, also across words)
+"predsjednik"                            => / p r e t s j e d n i k /
+"od kuće" | "од куће"                    => / o t k u tS' e /
+"iz šume"                                => / i S u m e /
+"s ženom"                                => / Z e n o m /
+"podcijeniti"                            => / p o ts i j e n i t i /
+"odčepiti"                               => / o tS e p i t i /
+"jedanput"                               => / j e d a m p u t /
+"s bratom"                               => / z b r a t o m /
+"od dana"                                => / o d a n a /
+"iz sobe"                                => / i s o b e /
+"kroz kuću"                              => / k r o s k u tS' u /
+"s čovjekom"                             => / S tS o v j e k o m /
+
+# --- syllabic r is a word, not spelled
+"prst"                                   => prst
+"trg"                                    => trg
+
+# --- numbers (D2: always Croatian)
+"1000" | "1.000"                         => tisuću
+"2026"                                   => dvije tisuće dvadeset šest
+"21000"                                  => dvadeset jedna tisuća
+"1 000 000"                              => milijun
+"2500000"                                => dva milijuna petsto tisuća
+"5000000"                                => pet milijuna
+"101"                                    => sto jedan
+"-5"                                     => minus pet
+"3,14"                                   => tri zarez četrnaest
+"3,05"                                   => tri zarez nula pet
+"3,14159"                                => tri zarez jedan četiri jedan pet devet
+"091"                                    => nula devet jedan
+
+# --- units and plural forms
+"1 euro" | "1 €" | "€1"                  => jedan euro
+"2 eura" | "2 €" | "EUR 2"               => dva eura
+"5 €"                                    => pet eura
+"1000 eura"                              => tisuću eura
+"21 kn"                                  => dvadeset jedna kuna
+"2 kn"                                   => dvije kune
+"5%"                                     => pet posto
+"20 °C"                                  => dvadeset stupnjeva celzija
+"2,5 kg"                                 => dva zarez pet kilograma
+"1000 евра"                              => tisuću evra
+
+# --- dates and times (P1)
+"29. 9. 2026." | "29.09.2026."           => dvadeset devetog rujna dvije tisuće dvadeset šeste
+"Дана 29. 9. 2026. у 14:30"              => dana dvadeset devetog rujna dvije tisuće dvadeset šeste u četrnaest i trideset
+"29. rujna 2026. godine"                 => dvadeset devetog rujna dvije tisuće dvadeset šeste godine
+"2026-09-29"                             => dvadeset devetog rujna dvije tisuće dvadeset šeste
+"3. 1. 2000."                            => trećeg siječnja dvijetisućite
+"14:00"                                  => četrnaest sati
+"1:00"                                   => jedan sat
+"7:05"                                   => sedam i nula pet
+"14:30:15"                               => četrnaest i trideset i petnaest sekundi
+"Rođen je 1986."                         => rođen je tisuću devetsto osamdeset šesta
+"u 2026."                                => u dvije tisuće dvadeset šestoj
+
+# --- ordinals, roman numerals, ranges
+"5. razred"                              => peti razred
+"u 5. razredu"                           => u petom razredu
+"3. mjesto"                              => treće mjesto
+"Ivan Pavao II."                         => ivan pavao drugi
+"XX. stoljeće"                           => dvadeseto stoljeće
+"5-10"                                   => pet do deset
+
+# --- abbreviations, acronyms, spelling
+"npr." | "нпр."                          => na primjer
+"itd. Sutra"                             => i tako dalje sutra
+"HDZ"                                    => ha de ze
+"NATO"                                   => nato
+"EU"                                     => e u
+"5G"                                     => pet ge
+"COVID-19"                               => covid devetnaest
+
+# --- symbols (default level "some"), emoji
+"a & b"                                  => a i be
+"😀"                                     => nasmijano lice
+"😂😂😂"                                  => tri puta lice sa suzama radosnicama
+"👍🏽"                                     => palac gore maslinasta boja kože

@@ -1,0 +1,58 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - phonemes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phoneme inventory = the SAMPA symbols of the cr1 MBROLA voice (ANALYSIS
+# 3.2; symbols dumped from the binary database, not from the README).
+#
+# FORMAT:  symbol  type  duration  min-duration  partner  [features] [viseme=N]
+#   type      vowel | consonant | pause   (exactly one pause phoneme)
+#   duration  default duration in ms at normal rate
+#   min       minimum duration in ms at high rates (intelligibility)
+#   partner   voicing partner (p <-> b ...), "-" if none
+#   features  free words, for documentation
+# =============================================================================
+
+# --- vowels
+a    vowel      95  45  -    open central           viseme=2
+e    vowel      85  40  -    mid front              viseme=4
+i    vowel      75  35  -    close front            viseme=6
+o    vowel      90  45  -    mid back rounded       viseme=8
+u    vowel      80  40  -    close back rounded     viseme=7
+
+# --- sonorants (r is also syllabic: syllables.txt)
+r    consonant  50  25  -    trill alveolar syllabic viseme=13
+l    consonant  60  30  -    lateral alveolar       viseme=14
+L    consonant  70  35  -    lateral palatal        viseme=14
+m    consonant  65  30  -    nasal labial           viseme=21
+n    consonant  60  30  -    nasal alveolar         viseme=19
+J    consonant  75  35  -    nasal palatal          viseme=19
+j    consonant  55  25  -    glide palatal          viseme=6
+v    consonant  60  30  -    approximant labiodental viseme=18
+
+# --- stops
+p    consonant  80  40  b    obstruent stop labial voiceless     viseme=21
+b    consonant  70  35  p    obstruent stop labial voiced        viseme=21
+t    consonant  75  35  d    obstruent stop alveolar voiceless   viseme=19
+d    consonant  65  30  t    obstruent stop alveolar voiced      viseme=19
+k    consonant  80  40  g    obstruent stop velar voiceless      viseme=20
+g    consonant  70  35  k    obstruent stop velar voiced         viseme=20
+
+# --- affricates
+ts   consonant  95  45  -    obstruent affricate alveolar voiceless viseme=15
+tS   consonant  95  45  dZ   obstruent affricate postalveolar voiceless viseme=16
+dZ   consonant  85  40  tS   obstruent affricate postalveolar voiced viseme=16
+tS'  consonant  95  45  dZ'  obstruent affricate palatal voiceless viseme=16
+dZ'  consonant  85  40  tS'  obstruent affricate palatal voiced   viseme=16
+
+# --- fricatives
+f    consonant  90  40  -    obstruent fricative labiodental voiceless viseme=18
+s    consonant  95  45  z    obstruent fricative alveolar voiceless viseme=15
+z    consonant  85  40  s    obstruent fricative alveolar voiced   viseme=15
+S    consonant  95  45  Z    obstruent fricative postalveolar voiceless viseme=16
+Z    consonant  85  40  S    obstruent fricative postalveolar voiced viseme=16
+x    consonant  80  40  -    obstruent fricative velar voiceless  viseme=12
+
+# --- silence
+_    pause       0   0  -    silence                viseme=0

@@ -1,0 +1,41 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - prosody.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Duration and intonation model (ANALYSIS 6.8). FORMAT: key = number
+# Pitch values are relative to the voice's base pitch (1.0 = base pitch);
+# durations are factors on the phoneme durations of phonemes.txt.
+# =============================================================================
+
+# base pitch used when the voice does not give one (cr1: male, ~105 Hz)
+base_pitch = 105
+
+# --- durations
+stressed_vowel    = 1.25
+unstressed_vowel  = 0.9
+long_vowel        = 1.5
+final_lengthening = 1.3
+clitic            = 0.9
+
+# --- pauses (ms at normal rate)
+lead_pause      = 20
+pause_comma     = 180
+pause_dash      = 180
+pause_colon     = 250
+pause_semicolon = 300
+pause_period    = 450
+pause_question  = 450
+pause_exclaim   = 450
+pause_paragraph = 650
+pause_end       = 60
+
+# --- intonation
+f0_start           = 1.12
+f0_end             = 0.9
+accent_falling     = 1.22
+accent_rising      = 1.18
+statement_final    = 0.78
+question_final     = 1.45
+continuation_final = 1.08
+exclaim_boost      = 1.12

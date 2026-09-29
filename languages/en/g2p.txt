@@ -1,0 +1,114 @@
+# =============================================================================
+# MBROLA NG - English (en) - g2p.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# English spelling is not phonemic: pronunciations come from lexicon.txt
+# (about 125,000 words). These rules are only the FALLBACK for words the
+# lexicon does not know (names, new words, typos) - a rough guess.
+#
+# FORMAT:  letters -> phonemes [/ left _ right]   (longest match first)
+#   ^ word start, $ word end, {CLASS} letter class, 0 = nothing
+# =============================================================================
+
+# --- apostrophe
+'s$ -> z
+' -> 0
+
+# --- suffixes and letter groups
+tion -> S @ n
+sion -> Z @ n
+cious -> S @ s
+tious -> S @ s
+ture -> tS r=
+ough$ -> @U
+eigh -> EI
+igh -> AI
+tch -> tS
+dge -> dZ
+^kn -> n
+^wr -> r
+ph -> f
+sh -> S
+ch -> tS
+th -> T
+wh -> w
+ck -> k
+ng -> N
+qu -> k w
+gh -> 0
+
+# --- vowel groups
+ee -> i
+ea -> i
+ie$ -> i
+oo -> u
+ou -> aU
+ow$ -> @U
+ow -> aU
+oa -> @U
+oi -> OI
+oy -> OI
+ai -> EI
+ay -> EI
+au -> O
+aw -> O
+ew -> u
+ey$ -> i
+ar -> A r
+er -> r=
+ir -> r=
+ur -> r=
+or -> O r
+
+# --- "magic e": a_e i_e o_e u_e
+a -> EI / _ {CONS_L} e $
+i -> AI / _ {CONS_L} e $
+o -> @U / _ {CONS_L} e $
+u -> u / _ {CONS_L} e $
+e$ -> 0 / {CONS_L} _
+
+# --- double consonants
+bb -> b
+dd -> d
+ff -> f
+gg -> g
+ll -> l
+mm -> m
+nn -> n
+pp -> p
+rr -> r
+ss -> s
+tt -> t
+zz -> z
+
+# --- single letters
+a -> {
+b -> b
+c -> s / _ {FRONT_L}
+c -> k
+d -> d
+e -> E
+f -> f
+g -> g
+h -> h
+i -> I
+j -> dZ
+k -> k
+l -> l
+m -> m
+n -> n
+o -> A
+p -> p
+q -> k
+r -> r
+s -> s
+t -> t
+u -> V
+v -> v
+w -> w
+x -> k s
+y -> j / ^ _
+y -> i / _ $
+y -> I
+z -> z

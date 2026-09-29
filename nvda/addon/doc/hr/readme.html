@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<title>MBROLA NG</title>
+</head>
+<body>
+<h1>MBROLA NG</h1>
+<p>Hrvatska sinteza govora za NVDA s MBROLA difonskim sintetizatorom i glasom cr1.
+Copyright &copy; 2026 Darko Milošević.</p>
+
+<h2>Glasovi i upravitelj glasova</h2>
+<p>Glasovi nisu dio dodatka, nego se preuzimaju. Otvorite NVDA izbornik,
+Alati, <strong>MBROLA_NG upravitelj glasova</strong> (prečac možete dodijeliti
+u Ulaznim gestama, kategorija MBROLA NG). Upravitelj ima dvije kartice:</p>
+<ul>
+<li><strong>Instalirano</strong>: instalirani glasovi; gumbi Postavi kao
+trenutni glas, Provjeri ažuriranja, Ukloni i Instaliraj iz datoteke
+(bez interneta: datoteka baze glasa ili zip).</li>
+<li><strong>Dostupno</strong>: glasovi iz kataloga. Instaliraj prikazuje
+licencu glasa; nakon prihvaćanja glas se preuzima, provjerava (veličina,
+SHA-256, zaglavlje baze, svi potrebni fonemi) i instalira.</li>
+</ul>
+<p>Glasovi se spremaju u NVDA korisničku konfiguraciju:
+<code>%APPDATA%\nvda\mbrola_ng\voices\&lt;glas&gt;\</code>, pa ih ažuriranje
+dodatka ne briše. Dok nijedan glas nije instaliran, MBROLA NG se ne pojavljuje
+u popisu sintetizatora, pa NVDA nikad ne može ostati bez govora.</p>
+
+<h2>Postavke</h2>
+<ul>
+<li>Brzina (s pojačanjem brzine), visina, intonacija i glasnoća.</li>
+<li>Čitanje emojija i čitanje brojeva znamenku po znamenku.</li>
+<li>Interpunkciju i najavu velikih slova obrađuje sam NVDA.</li>
+</ul>
+
+<h2>Licence</h2>
+<p>MBROLA NG je slobodan softver pod licencom GNU General Public License,
+verzija 2 ili (po vašem izboru) bilo koja kasnija verzija.
+Sintetizator <code>mbrola_ng_synth.exe</code> je zaseban program
+(MBROLA, GNU AGPL v3) &mdash; vidi mapu <code>licenses</code>.
+Hrvatski nazivi emojija: Unicode CLDR (Unicode License v3).
+Glas cr1: Sveučilište u Zagrebu, Odsjek za fonetiku (vlastita licenca glasa).</p>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - numcontext.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Numbers in context: ordinals, roman numerals, ranges, fractions.
+# Syntax: see dates.txt. (Plain numbers, decimals "3,14", negative numbers,
+# thousands separators and number + unit are handled by the engine with
+# the options of language.txt and units.txt.)
+# =============================================================================
+
+@list neuter-nouns = stoljeće desetljeće poglavlje mjesto izdanje
+@list feminine-nouns = godina liga klasa sezona runda etapa strana stranica
+
+# --- ranges 5-10 -> pet do deset
+( num - num ) => $1 do $2
+
+# --- ordinals: a number with a dot before a lowercase word
+@prep-loc _ ( num1-3 . ) _ lower => !nobreak $1:%spellout-ordinal-masculine-locative
+( num1-3 . ) _ @neuter-nouns => !nobreak $1:%spellout-ordinal-neuter
+( num1-3 . ) _ @feminine-nouns => !nobreak $1:%spellout-ordinal-feminine
+( num1-3 . ) _ lower => !nobreak $1:%spellout-ordinal-masculine
+
+# --- roman numerals: "Ivan Pavao II.", "XX. stoljeće", "II. svjetski rat"
+cap _ ( roman . ) => $1:%spellout-ordinal-masculine
+( roman . ) _ @neuter-nouns => !nobreak $1:%spellout-ordinal-neuter
+( roman . ) _ lower => !nobreak $1:%spellout-ordinal-masculine
+
+# --- simple fractions
+( num[1] / num[2] ) => pola
+( num[1] / num[4] ) => četvrtina
+( num[3] / num[4] ) => tri četvrtine

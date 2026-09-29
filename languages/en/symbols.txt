@@ -1,0 +1,54 @@
+# =============================================================================
+# MBROLA NG - English (en) - symbols.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  character | level | name [| break]    (see languages/hr/symbols.txt)
+# The apostrophe is a letter in English (scripts.txt), so it is not here.
+# =============================================================================
+
+.       | all  | period | period
+,       | all  | comma | comma
+;       | most | semicolon | semicolon
+:       | most | colon | colon
+?       | all  | question mark | question
+!       | all  | exclamation mark | exclaim
+-       | most | dash | dash
+(       | most | left paren | comma
+)       | most | right paren | comma
+[       | most | left bracket | comma
+]       | most | right bracket | comma
+{       | most | left brace | comma
+}       | most | right brace | comma
+"       | most | quote
+@       | some | at
+U+0023  | some | number
+$       | some | dollar
+%       | some | percent
+&       | some | and
+*       | some | star
++       | some | plus
+=       | some | equals
+/       | some | slash
+\       | most | backslash
+_       | most | underline
+<       | some | less than
+>       | some | greater than
+U+007C  | most | bar
+~       | most | tilde
+^       | most | caret
+`       | most | grave
+€       | some | euro
+£       | some | pound
+¥       | some | yen
+§       | some | section
+©       | some | copyright
+®       | some | registered
+™       | some | trademark
+°       | some | degree
+×       | some | times
+÷       | some | divided by
+±       | some | plus or minus
+•       | most | bullet
+·       | most | middle dot
+¶       | most | pilcrow

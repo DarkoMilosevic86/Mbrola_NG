@@ -1,0 +1,116 @@
+# =============================================================================
+# MBROLA NG - English (en) - scripts.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Latin letters -> canonical lowercase letters. The apostrophe is treated
+# as a LETTER so that "don't", "it's", "o'clock" stay one word and are found
+# in lexicon.txt; g2p.txt reads it as nothing.
+# Letters of other alphabets are unknown to English and skipped.
+#
+# SECTIONS (see languages/hr/scripts.txt for the full description)
+#   [script NAME]  lower [Upper ...] -> canonical letters
+#   [normalize]    text clean-up: from -> to ("" = delete)
+# =============================================================================
+
+[script latin]
+a A -> a
+b B -> b
+c C -> c
+d D -> d
+e E -> e
+f F -> f
+g G -> g
+h H -> h
+i I -> i
+j J -> j
+k K -> k
+l L -> l
+m M -> m
+n N -> n
+o O -> o
+p P -> p
+q Q -> q
+r R -> r
+s S -> s
+t T -> t
+u U -> u
+v V -> v
+w W -> w
+x X -> x
+y Y -> y
+z Z -> z
+' -> '
+# foreign letters -> nearest English spelling
+á Á -> a
+à À -> a
+â Â -> a
+ä Ä -> a
+ã Ã -> a
+å Å -> a
+ą Ą -> a
+é É -> e
+è È -> e
+ê Ê -> e
+ë Ë -> e
+ę Ę -> e
+í Í -> i
+ì Ì -> i
+î Î -> i
+ï Ï -> i
+ó Ó -> o
+ò Ò -> o
+ô Ô -> o
+ö Ö -> o
+õ Õ -> o
+ø Ø -> o
+ú Ú -> u
+ù Ù -> u
+û Û -> u
+ü Ü -> u
+ý Ý -> y
+ÿ Ÿ -> y
+ñ Ñ -> n
+ç Ç -> c
+č Č -> ch
+ć Ć -> ch
+š Š -> sh
+ž Ž -> z
+đ Đ -> dj
+ł Ł -> l
+ß -> ss
+æ Æ -> ae
+œ Œ -> oe
+
+[normalize]
+# typographic characters (U+2019 is the usual apostrophe in "don’t")
+U+2018 -> '
+U+2019 -> '
+U+201A -> '
+U+201B -> '
+U+201C -> "
+U+201D -> "
+U+201E -> "
+U+201F -> "
+U+00AB -> "
+U+00BB -> "
+U+2013 -> -
+U+2014 -> -
+U+2015 -> -
+U+2212 -> -
+U+2026 -> ...
+# invisible characters
+U+00AD -> ""
+U+200B -> ""
+U+2060 -> ""
+U+FEFF -> ""
+# decomposed letters
+e U+0301 -> é
+e U+0300 -> è
+a U+0301 -> á
+o U+0301 -> ó
+u U+0308 -> ü
+o U+0308 -> ö
+a U+0308 -> ä
+n U+0303 -> ñ
+c U+0327 -> ç

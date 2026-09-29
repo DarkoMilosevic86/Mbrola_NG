@@ -1,0 +1,21 @@
+# =============================================================================
+# MBROLA NG - English (en) - postlex.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phrase-level rules (syntax: see languages/hr/postlex.txt).
+#   |  word boundary required     |?  word boundary allowed
+# =============================================================================
+
+# 1. aspirated p, t, k at the start of a word before a vowel ("pin", "top")
+p -> p_h / | _ VOWEL
+t -> t_h / | _ VOWEL
+k -> k_h / | _ VOWEL
+
+# 2. "the" before a vowel: D @ -> D i ("the apple")
+@ -> i / | D _ | VOWEL
+
+# 3. identical neighbours: one longer consonant ("bus stop"); two identical
+#    vowels across words get a tiny pause
+@identical CONS within=merge:130 across=merge:130
+@identical VOWEL within=merge:150 across=pause:25

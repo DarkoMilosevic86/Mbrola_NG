@@ -1,0 +1,62 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - dates.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Dates and times (P1). Same syntax as numcontext.txt:
+#
+#   @list NAME = words...            (any script; matched in canonical form)
+#   @map  NAME = 1:text 2:text ...   (number -> text, "_" = space)
+#   [left context] ( pattern ) [right context] => output
+#
+# Pattern elements (separated by spaces; the parentheses too):
+#   num  num2  num1-2  num3+   digits (count), optional [min-max] value
+#   0num2                      digits starting with 0
+#   . : , / -  or U+XXXX       one punctuation character
+#   _                          whitespace       ^ $   start / end of text
+#   @list                      a word of a list
+#   word lower upper cap       any / lowercase / ALL CAPS / Capitalised word
+#   roman                      roman numeral in capitals (II, XIV ...)
+#   x?                         element is optional
+# Output: words, and captures ($1 = first num/word element of the pattern):
+#   $1  $1:%ruleset  $1:@map  $1:digits  $1:plural(one=..,few=..,other=..)
+#   !nobreak at the start of the output: a final "." never ends a sentence
+# The first matching rule wins (files in the order of language.txt).
+# =============================================================================
+
+@list months-gen = siječnja veljače ožujka travnja svibnja lipnja srpnja kolovoza rujna listopada studenoga studenog prosinca
+@list months-foreign = januara februara marta aprila maja juna jula augusta avgusta septembra oktobra novembra decembra
+@list year-gen = godine
+@list year-abbr = g god
+@list prep-loc = u na o po pri
+@map  month-gen = 1:siječnja 2:veljače 3:ožujka 4:travnja 5:svibnja 6:lipnja 7:srpnja 8:kolovoza 9:rujna 10:listopada 11:studenoga 12:prosinca
+
+# --- ISO date 2026-09-29
+( num4 - num2[1-12] - num2[1-31] ) => $3:%spellout-ordinal-masculine-genitive $2:@month-gen $1:%spellout-ordinal-feminine-genitive
+
+# --- 29. 9. 2026. / 29.09.2026 -> dvadeset devetog rujna dvije tisuće dvadeset šeste
+( num1-2[1-31] . _? num1-2[1-12] . _? num4 .? ) => $1:%spellout-ordinal-masculine-genitive $2:@month-gen $3:%spellout-ordinal-feminine-genitive
+# --- 29. 9. (no year)
+( num1-2[1-31] . _? num1-2[1-12] . ) => $1:%spellout-ordinal-masculine-genitive $2:@month-gen
+
+# --- 29. rujna (the month word is then read normally)
+( num1-2[1-31] . ) _ @months-gen => $1:%spellout-ordinal-masculine-genitive
+( num1-2[1-31] . ) _ @months-foreign => $1:%spellout-ordinal-masculine-genitive
+
+# --- year after a month name: rujna 2026.
+@months-gen _ ( num4 .? ) => $1:%spellout-ordinal-feminine-genitive
+@months-foreign _ ( num4 .? ) => $1:%spellout-ordinal-feminine-genitive
+
+# --- 2026. godine / 2026. g.
+( num1-4 . ) _ @year-gen => $1:%spellout-ordinal-feminine-genitive
+( num1-4 . _ @year-abbr . ) => $1:%spellout-ordinal-feminine-genitive godine
+# --- u 2026. -> u dvije tisuće dvadeset šestoj
+@prep-loc _ ( num4 . ) => $1:%spellout-ordinal-feminine-locative
+# --- a year alone with a dot: 2026. -> dvije tisuće dvadeset šesta
+( num4[1000-2999] . ) => $1:%spellout-ordinal-feminine
+
+# --- time 14:30:15 / 14:00 / 7:05 / 14:30
+( num1-2[0-23] : num2[0-59] : num2[0-59] ) => $1 i $2 i $3 $3:plural(one=sekunda,few=sekunde,other=sekundi)
+( num1-2[0-23] : num2[0] ) => $1 $1:plural(one=sat,few=sata,other=sati)
+( num1-2[0-23] : 0num2 ) => $1 i $2:digits
+( num1-2[0-23] : num2[10-59] ) => $1 i $2

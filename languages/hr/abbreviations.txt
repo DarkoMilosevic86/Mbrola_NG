@@ -1,0 +1,49 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - abbreviations.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  abbreviation | expansion [| flags]
+#   The abbreviation may be written in any script ("npr." also matches
+#   "нпр."). Flags:  cs  case-sensitive
+#                    end the final "." may also end the sentence
+# =============================================================================
+
+npr.     | na primjer
+tj.      | to jest
+itd.     | i tako dalje | end
+i sl.    | i slično | end
+sl.      | slično
+odn.     | odnosno
+tzv.     | takozvani
+usp.     | usporedi
+dr.      | doktor
+mr.      | magistar
+prof.    | profesor
+ing.     | inženjer
+dipl.    | diplomirani
+gđa      | gospođa
+gđa.     | gospođa
+gđica    | gospođica
+gosp.    | gospodin
+sv.      | sveti
+br.      | broj
+str.     | stranica
+čl.      | članak
+ul.      | ulica
+tel.     | telefon
+mob.     | mobitel
+fax.     | faks
+god.     | godine
+st.      | stoljeće
+pr. Kr.  | prije Krista
+po. Kr.  | poslije Krista
+d.o.o.   | de o o | end
+d.d.     | de de | end
+j.d.o.o. | je de o o | end
+engl.    | engleski
+hrv.     | hrvatski
+njem.    | njemački
+tal.     | talijanski
+fr.      | francuski
+lat.     | latinski

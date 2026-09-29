@@ -1,0 +1,41 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - lexicon.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Exceptions: words whose pronunciation the G2P rules do not produce
+# (morpheme boundaries, foreign words, "dj" for đ ...).
+#
+# FORMAT:  word  phonemes...
+#   The word may be written in any script (one entry serves Latin and
+#   Cyrillic: keys are canonical, see scripts.txt [lexkey]).
+#   Phoneme marks:  a:  long vowel     a\  falling accent    a/  rising accent
+#   (a:\  a:/  both). Words without marks get their accent from accents.txt.
+# =============================================================================
+
+# --- n + j / l + j across a morpheme boundary (not the digraph nj / lj)
+injekcija      i n j e k ts i j a
+injekcije      i n j e k ts i j e
+injektirati    i n j e k t i r a t i
+konjunkcija    k o n j u n k ts i j a
+konjunktura    k o n j u n k t u r a
+konjugacija    k o n j u g a ts i j a
+
+# --- "dj" written for đ
+djakovo        dZ' a k o v o
+djurdjevac     dZ' u r dZ' e v a ts
+
+# --- foreign words (common in everyday text)
+facebook       f e j s b u k
+google         g u g l
+youtube        j u t j u b
+iphone         a j f o n
+windows        v i n d o u s
+email          i m e j l
+wifi           v a j f a j
+online         o n l a j n
+software       s o f t v e r
+hardware       x a r d v e r
+jazz           dZ e s
+show           S o u
+weekend        v i k e n d

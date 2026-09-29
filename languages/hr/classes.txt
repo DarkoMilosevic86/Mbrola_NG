@@ -1,0 +1,29 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - classes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Named sets used by the rule files.
+# FORMAT:  [phonemes] / [letters] section, then  NAME = items
+#   NAME   CAPITALS, at least 2 characters, must not be a phoneme symbol
+#   items  phoneme symbols / canonical letters, or names of earlier classes
+# =============================================================================
+
+[phonemes]
+VOWEL     = a e i o u
+SONORANT  = r l L m n J j v
+OBS_VL    = p t k ts tS tS' f s S x
+OBS_VD    = b d g dZ dZ' z Z
+OBS       = OBS_VL OBS_VD
+CONS      = SONORANT OBS
+# obstruents that have a voicing partner (f, x and ts have none in cr1)
+PAIRED_VL = p t k tS tS' s S
+PAIRED_VD = b d g dZ dZ' z Z
+AFFRICATE = ts tS tS' dZ dZ'
+PALATAL   = tS tS' dZ dZ' L J
+LABIAL_STOP = p b
+ANY       = VOWEL CONS
+
+[letters]
+# canonical letters (scripts.txt)
+VOWEL_L   = a e i o u

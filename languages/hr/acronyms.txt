@@ -1,0 +1,15 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - acronyms.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Words written in CAPITALS (ANALYSIS 7.11):
+#   listed in @words  -> read as a word
+#   listed in @spell  -> spelled (HDZ -> ha de ze)
+#   otherwise: spelled if not longer than @spell_max_len or without a vowel,
+#   else read as a word.
+# =============================================================================
+
+@spell_max_len 2
+@words NATO UNICEF UNESCO NASA INA HAZU FINA HINA MUP HEP OIB
+@spell USA SAD BBC CNN DNK

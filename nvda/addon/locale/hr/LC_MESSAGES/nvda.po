@@ -1,0 +1,194 @@
+# MBROLA NG - Croatian translation of the NVDA add-on
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+msgid ""
+msgstr ""
+"Project-Id-Version: mbrolaNG 0.1.0\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# --- synthesizer driver
+msgid "Read &emoji"
+msgstr "Čitaj &emoji"
+
+msgid "Read numbers &digit by digit"
+msgstr "Čitaj brojeve &znamenku po znamenku"
+
+# --- menu
+msgid "MBROLA_NG &Voice Manager..."
+msgstr "MBROLA_NG &upravitelj glasova..."
+
+msgid "Download, update and remove MBROLA NG voices"
+msgstr "Preuzimanje, ažuriranje i uklanjanje MBROLA NG glasova"
+
+msgid "Opens the MBROLA_NG Voice Manager"
+msgstr "Otvara MBROLA_NG upravitelj glasova"
+
+# --- Voice Manager
+msgid "MBROLA_NG Voice Manager"
+msgstr "MBROLA_NG upravitelj glasova"
+
+msgid "Installed"
+msgstr "Instalirano"
+
+msgid "Available"
+msgstr "Dostupno"
+
+msgid "&Installed voices:"
+msgstr "&Instalirani glasovi:"
+
+msgid "&Available voices:"
+msgstr "&Dostupni glasovi:"
+
+msgid "Voice"
+msgstr "Glas"
+
+msgid "Language"
+msgstr "Jezik"
+
+msgid "Version"
+msgstr "Verzija"
+
+msgid "Size"
+msgstr "Veličina"
+
+msgid "Location"
+msgstr "Mjesto"
+
+msgid "Status"
+msgstr "Stanje"
+
+msgid "system"
+msgstr "sustav"
+
+msgid "this user"
+msgstr "ovaj korisnik"
+
+msgid "not installed"
+msgstr "nije instaliran"
+
+msgid "update available"
+msgstr "dostupno ažuriranje"
+
+msgid "installed"
+msgstr "instaliran"
+
+msgid "{voice} - current"
+msgstr "{voice} - trenutni"
+
+msgid "{size:.1f} MB"
+msgstr "{size:.1f} MB"
+
+msgid "No voices are installed. Open the Available tab to download a voice."
+msgstr "Nema instaliranih glasova. Otvorite karticu Dostupno i preuzmite glas."
+
+msgid "The online catalog is not available; showing the voices known to this version."
+msgstr "Mrežni katalog nije dostupan; prikazani su glasovi poznati ovoj verziji."
+
+msgid "No voice catalog is available."
+msgstr "Katalog glasova nije dostupan."
+
+msgid "Set as &current voice"
+msgstr "Postavi kao &trenutni glas"
+
+msgid "Check for &updates"
+msgstr "Provjeri &ažuriranja"
+
+msgid "&Remove"
+msgstr "&Ukloni"
+
+msgid "Install from &file..."
+msgstr "Instaliraj iz &datoteke..."
+
+msgid "&Install"
+msgstr "&Instaliraj"
+
+msgid "&Close"
+msgstr "&Zatvori"
+
+msgid "Cancel"
+msgstr "Odustani"
+
+msgid "Cancelling..."
+msgstr "Prekidam..."
+
+msgid "Connecting..."
+msgstr "Povezivanje..."
+
+msgid "Installing {voice}"
+msgstr "Instaliranje: {voice}"
+
+msgid "Downloading: {done} of {total}"
+msgstr "Preuzimanje: {done} od {total}"
+
+msgid "Verifying..."
+msgstr "Provjera..."
+
+msgid "License of {voice}"
+msgstr "Licenca: {voice}"
+
+msgid "The voice has its own license. Read it and accept it to install the voice."
+msgstr "Glas ima vlastitu licencu. Pročitajte je i prihvatite da biste instalirali glas."
+
+msgid "License &text:"
+msgstr "&Tekst licence:"
+
+msgid "I &accept"
+msgstr "&Prihvaćam"
+
+msgid "&Decline"
+msgstr "&Ne prihvaćam"
+
+msgid "Remove the voice {voice}?"
+msgstr "Ukloniti glas {voice}?"
+
+msgid "This is the only voice of MBROLA NG, which NVDA is speaking with now. Choose another synthesizer first, then remove the voice."
+msgstr "Ovo je jedini glas MBROLA NG-a, kojim NVDA upravo govori. Najprije odaberite drugi sintetizator, a zatim uklonite glas."
+
+msgid "The voice could not be removed: {error}"
+msgstr "Glas nije moguće ukloniti: {error}"
+
+msgid "The voice {voice} is not in the voice catalog."
+msgstr "Glas {voice} nije u katalogu glasova."
+
+msgid "The voice {voice} is up to date."
+msgstr "Glas {voice} je ažuran."
+
+msgid "Version {version} of {voice} is available. Install it now?"
+msgstr "Dostupna je verzija {version} glasa {voice}. Instalirati je sada?"
+
+msgid "The voice {voice} is installed."
+msgstr "Glas {voice} je instaliran."
+
+msgid "The voice {voice} is installed. MBROLA NG is ready.\n\nSwitch to MBROLA NG now?"
+msgstr "Glas {voice} je instaliran. MBROLA NG je spreman.\n\nPrebaciti se na MBROLA NG sada?"
+
+msgid "MBROLA NG could not be started. See the NVDA log for details."
+msgstr "MBROLA NG nije moguće pokrenuti. Pojedinosti su u NVDA zapisniku."
+
+msgid "The voice could not be installed: {error}"
+msgstr "Glas nije moguće instalirati: {error}"
+
+msgid "download failed: {error}"
+msgstr "preuzimanje nije uspjelo: {error}"
+
+msgid "{file} has the wrong size"
+msgstr "{file} ima pogrešnu veličinu"
+
+msgid "{file} is damaged (checksum mismatch)"
+msgstr "{file} je oštećen (kontrolni zbroj se ne podudara)"
+
+msgid "Choose an MBROLA voice (database file or zip)"
+msgstr "Odaberite MBROLA glas (datoteku baze ili zip)"
+
+msgid "MBROLA voices"
+msgstr "MBROLA glasovi"
+
+msgid "Zip archives"
+msgstr "Zip arhive"
+
+msgid "This file is not a voice known to this version of MBROLA NG ({voices})."
+msgstr "Ova datoteka nije glas poznat ovoj verziji MBROLA NG-a ({voices})."

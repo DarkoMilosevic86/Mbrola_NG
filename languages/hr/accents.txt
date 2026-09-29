@@ -1,0 +1,36 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - accents.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Accent (ANALYSIS 7.5, P4).
+#   Stage 1 (now): default rule - first syllable, falling; never on the last
+#     syllable of a word with two or more syllables; clitics unaccented.
+#   Stage 2 (to do): the ~3,000-5,000 most frequent word forms, entered by a
+#     native speaker (own data - no copying from dictionaries, P4).
+#
+# FORMAT
+#   @default SYLLABLE falling|rising
+#   @never_last
+#   word  SYLLABLE  falling|rising|none  [long=N,M]
+#     SYLLABLE: 1 = first, 2 = second ..., -1 = last, -2 = second to last
+#     long=     syllables (1-based) with a long vowel
+# =============================================================================
+
+@default 1 falling
+@never_last
+
+# --- a few frequent words (rising accents are not predictable)
+žena        1 rising
+voda        1 rising
+noga        1 rising
+sestra      1 rising
+jezik       1 rising
+pitanje     1 rising
+govoriti    2 rising
+ruka        1 falling
+danas       1 falling
+kuća        1 falling
+zemlja      1 falling
+hrvatska    1 falling long=2,3
+hrvatski    1 falling long=2

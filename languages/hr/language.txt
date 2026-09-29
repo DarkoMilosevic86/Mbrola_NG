@@ -1,0 +1,42 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - language.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Language metadata and global options.  FORMAT:  key = value
+# =============================================================================
+
+code          = hr
+name          = Hrvatski
+name_en       = Croatian
+iso639_1      = hr
+iso639_3      = hrv
+android_locale = hrv-HRV
+sapi_lcid     = 041A
+version       = 0.1
+author        = Darko Milošević
+copyright     = Copyright (c) 2026 Darko Milošević
+license       = GPL-2.0-or-later
+voice         = cr1
+
+# Number reading (numbers.txt rulesets)
+default_cardinal   = %spellout-cardinal-masculine
+digit_ruleset      = %spellout-cardinal-masculine
+decimal_separator  = ,
+decimal_word       = zarez
+# up to this many digits after the comma are read as a number ("3,14" ->
+# "zarez četrnaest"), longer ones digit by digit (P1)
+decimal_max_digits = 2
+# longer numbers are read digit by digit
+max_number_digits  = 15
+# numbers starting with 0 (phone numbers, codes) are read digit by digit
+leading_zero_digits = 1
+# "1.000.000" and "1 000 000"
+thousands_separators = . space
+
+# Emoji: 3 or more identical emoji in a row are collapsed (P5)
+emoji_repeat_min = 3
+emoji_repeat     = $n puta $name
+
+# Pattern files, applied in this order (first matching rule wins)
+normalize_files = dates.txt numcontext.txt

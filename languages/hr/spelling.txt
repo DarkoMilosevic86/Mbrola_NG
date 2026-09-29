@@ -1,0 +1,65 @@
+# =============================================================================
+# MBROLA NG - Croatian (hr) - spelling.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Character names for spelling / character mode (ANALYSIS 7.10). Cyrillic
+# letters have the same Croatian names as their Latin counterparts.
+#
+# FORMAT:  characters | name       (lowercase; upper case is found through
+#                                   scripts.txt)
+#   @capital TEXT   said before a capital letter (host setting)
+#   @unknown TEXT   said for a character without a name
+# =============================================================================
+
+@capital veliko
+@unknown nepoznat znak
+
+a а     | a
+b б     | be
+c ц     | ce
+č ч     | če
+ć ћ     | će
+d д     | de
+ǆ џ     | dže
+đ ђ     | đe
+e е     | e
+f ф     | ef
+g г     | ge
+h х     | ha
+i и     | i
+j ј     | je
+k к     | ka
+l л     | el
+ǉ љ     | elj
+m м     | em
+n н     | en
+ǌ њ     | enj
+o о     | o
+p п     | pe
+r р     | er
+s с     | es
+š ш     | eš
+t т     | te
+u у     | u
+v в     | ve
+z з     | ze
+ž ж     | že
+q       | kve
+w       | dvostruko ve
+x       | iks
+y       | ipsilon
+ѓ       | makedonsko đe
+ќ       | makedonsko će
+ѕ       | makedonsko dze
+
+0       | nula
+1       | jedan
+2       | dva
+3       | tri
+4       | četiri
+5       | pet
+6       | šest
+7       | sedam
+8       | osam
+9       | devet

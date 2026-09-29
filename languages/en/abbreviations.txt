@@ -1,0 +1,50 @@
+# =============================================================================
+# MBROLA NG - English (en) - abbreviations.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  abbreviation | expansion [| flags]
+#   flags:  cs  case-sensitive     end  the final "." may also end the sentence
+# =============================================================================
+
+Mr.      | mister
+Mrs.     | missus
+Ms.      | miz
+Dr.      | doctor
+Prof.    | professor
+St.      | saint
+Jr.      | junior | end
+Sr.      | senior | end
+vs.      | versus
+etc.     | et cetera | end
+e.g.     | for example
+i.e.     | that is
+approx.  | approximately
+dept.    | department
+Inc.     | incorporated | end
+Ltd.     | limited | end
+Co.      | company | end
+Corp.    | corporation | end
+No.      | number | cs
+Ave.     | avenue | end
+Rd.      | road | end
+Blvd.    | boulevard | end
+a.m.     | a m | end
+p.m.     | p m | end
+Jan.     | January
+Feb.     | February
+Mar.     | March
+Apr.     | April
+Aug.     | August
+Sep.     | September
+Sept.    | September
+Oct.     | October
+Nov.     | November
+Dec.     | December
+Mon.     | Monday
+Tue.     | Tuesday
+Tues.    | Tuesday
+Thu.     | Thursday
+Thurs.   | Thursday
+Fri.     | Friday
+# (Wed., Sat., Sun. are left out: "he sat." / "the sun." would be misread)
