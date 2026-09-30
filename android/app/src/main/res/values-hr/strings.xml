@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MBROLA NG - Copyright (c) 2026 Darko Milošević
+     SPDX-License-Identifier: GPL-2.0-or-later -->
+<resources>
+    <!-- Voice manager -->
+    <string name="installed_voices">Instalirani glasovi</string>
+    <string name="no_voice_installed">Još nije instaliran nijedan glas. Odaberite jezik ispod i instalirajte glas.</string>
+    <string name="install_voices">Instalacija glasova</string>
+    <string name="choose_language_hint">Odaberite jezik da vidite njegove glasove.</string>
+    <plurals name="voice_count">
+        <item quantity="one">%d glas</item>
+        <item quantity="few">%d glasa</item>
+        <item quantity="other">%d glasova</item>
+    </plurals>
+    <string name="installed_count">instalirano: %d</string>
+    <string name="installed">Instaliran</string>
+    <string name="voice_settings">Postavke glasa</string>
+    <string name="try_voice">Isprobaj</string>
+    <string name="stop">Zaustavi</string>
+    <string name="remove">Ukloni</string>
+    <string name="install">Instaliraj</string>
+    <string name="cancel">Odustani</string>
+    <string name="back">Natrag</string>
+    <string name="remove_title">Uklanjanje glasa</string>
+    <string name="remove_message">Ukloniti glas %s s ovog uređaja?</string>
+    <string name="license_title">Licenca glasa %s</string>
+    <string name="accept_and_install">Prihvati i instaliraj</string>
+    <string name="decline">Odbij</string>
+    <string name="downloading">Preuzimanje: %1$s od %2$s</string>
+    <string name="voice_installed">Glas %s je instaliran.</string>
+    <string name="error_download">Preuzimanje nije uspjelo. Provjerite internetsku vezu i pokušajte ponovno.</string>
+    <string name="error_damaged">Preuzeta datoteka je oštećena. Pokušajte ponovno.</string>
+    <string name="error_not_mbrola">Preuzeta datoteka nije MBROLA glas.</string>
+    <string name="error_generic">Glas nije moguće instalirati: %s</string>
+    <string name="error_speak">Glas ne može govoriti: %s</string>
+    <string name="system_engine_title">Korištenje kao glas sustava</string>
+    <string name="system_engine_text">Da bi TalkBack i druge aplikacije govorile glasom MBROLA NG, odaberite ga kao željeni modul u postavkama pretvaranja teksta u govor.</string>
+    <string name="open_tts_settings">Otvori postavke pretvaranja teksta u govor</string>
+    <string name="about_text">MBROLA NG %s. Slobodan softver pod licencom GNU GPL, verzija 2 ili novija. Sintetizator MBROLA je pod licencom GNU AGPL v3. Svaki glas ima svoju licencu.</string>
+    <string name="source_code">Izvorni kod i licence</string>
+
+    <!-- Voice settings -->
+    <string name="voice">Glas</string>
+    <string name="no_voice_for_settings">Još nije instaliran nijedan glas. Prvo instalirajte glas.</string>
+    <string name="open_voice_manager">Otvori MBROLA NG</string>
+    <string name="always_use_voice">Uvijek koristi ovaj glas, za svaki jezik</string>
+    <string name="always_use_voice_hint">Uključite ako je telefon postavljen na jezik koji MBROLA NG nema: TalkBack i druge aplikacije tada govore ovim glasom koji god jezik zatraže.</string>
+    <string name="use_own_rate">Koristi ovu brzinu umjesto brzine sustava</string>
+    <string name="rate_from_system">Brzinu određuje TalkBack ili postavke pretvaranja teksta u govor.</string>
+    <string name="speed">Brzina</string>
+    <string name="pitch">Visina</string>
+    <string name="modulation">Modulacija</string>
+    <string name="use_own_volume">Koristi ovu jačinu umjesto jačine sustava</string>
+    <string name="volume_from_system">Jačinu određuje TalkBack ili aplikacija koja govori.</string>
+    <string name="volume">Jačina</string>
+    <string name="read_emoji">Čitaj emoji</string>
+    <string name="numbers">Način čitanja brojeva</string>
+    <string name="numbers_whole">Kao cijeli broj</string>
+    <string name="numbers_digits">Znamenku po znamenku</string>
+    <string name="numbers_pairs">U parovima</string>
+    <string name="reset">Vrati zadano</string>
+    <string name="percent">%d %%</string>
+</resources>

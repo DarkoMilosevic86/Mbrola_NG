@@ -25,6 +25,11 @@ linux/**  text eol=lf
 *.png     binary
 *.ico     binary
 *.zip     binary
+*.jar     binary
+*.jks     binary
+*.wav     binary
+*.webp    binary
+gradlew   text eol=lf
 *.nvda-addon binary
 
 # Statistics: vendored MBROLA and the big language data are not "our" code

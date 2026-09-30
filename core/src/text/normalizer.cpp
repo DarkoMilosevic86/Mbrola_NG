@@ -350,6 +350,23 @@ std::string Normalizer::digits_text(const u32str& digits) const {
   return s;
 }
 
+// "0911234567" -> 09 11 23 45 67: pairs from the left (a pair with a leading
+// zero is two digits), an odd last digit alone - the way phone numbers are said.
+std::string Normalizer::pairs_text(const u32str& digits) const {
+  std::string s;
+  u32str d;
+  for (char32_t ch : digits)
+    if (is_digit(ch)) d.push_back(ch);
+  for (size_t i = 0; i < d.size(); i += 2) {
+    if (!s.empty()) s.push_back(' ');
+    if (i + 1 >= d.size() || d[i] == '0')
+      s += digits_text(d.substr(i, 2));
+    else
+      s += number_text((d[i] - '0') * 10 + (d[i + 1] - '0'), L.default_cardinal());
+  }
+  return s;
+}
+
 bool Normalizer::next_starts_sentence(const Ctx& c, size_t i) const {
   while (i < c.tk.size() && c.tk[i].k == TK::Space) {
     if (c.tk[i].nl) return true;
@@ -501,9 +518,10 @@ size_t Normalizer::number(Ctx& c, size_t i, bool negative, size_t first) const {
   int ruleset = unit && unit->ruleset >= 0 ? unit->ruleset : L.default_cardinal();
 
   std::string s;
-  bool as_digits = c.opt.digits || t.val < 0 || t.nd > max_digits_ || (zero_lead_digits_ && t.zlead && t.nd > 1);
+  const bool as_pairs = c.opt.digits == 2 && t.nd > 2;
+  bool as_digits = c.opt.digits == 1 || as_pairs || t.val < 0 || t.nd > max_digits_ || (zero_lead_digits_ && t.zlead && t.nd > 1);
   if (as_digits) {
-    s = digits_text(t.canon);
+    s = as_pairs ? pairs_text(t.canon) : digits_text(t.canon);
     const Symbol* m = negative ? L.symbol('-') : nullptr;
     if (m && !m->name.empty()) s = m->name + " " + s;
   } else {

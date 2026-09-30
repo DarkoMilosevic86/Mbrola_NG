@@ -1,0 +1,2190 @@
+===============================================================================
+ MBROLA NG
+ Multi-platform text-to-speech built on the MBROLA diphone synthesizer
+ Croatian first, more languages later
+ Analysis and design document - revision 16
+ Author: Darko Milošević
+ Copyright (c) 2026 Darko Milošević
+ SPDX-License-Identifier: GPL-2.0-or-later
+ Date: 2026-09-29
+===============================================================================
+
+REVISION HISTORY
+  r1  2026-09-29  First analysis (SAPI 5 only).
+  r2  2026-09-29  Project named MBROLA NG. Targets: SAPI 5, NVDA add-on,
+                  Speech Dispatcher, Android. Script principle fixed: Latin
+                  and Cyrillic are only two spellings of the same phonemes;
+                  cr1 is a Croatian voice and all expansions (numbers, dates,
+                  symbols ...) are Croatian regardless of script.
+  r3  2026-09-29  MBROLA NG is a PROPRIETARY (closed-source) product by
+                  Darko Milošević; only the language format is open so that
+                  anyone can build languages. One Windows binary
+                  MBROLA_NG.dll = SAPI 5 engine + C API for the NVDA add-on.
+                  We build Croatian only; other languages are made by third
+                  parties. Licensing (section 4) rewritten: MBROLA runs as a
+                  separate AGPL process, not linked into MBROLA_NG.dll.
+  r4  2026-09-29  Distribution and licensing model NOT decided yet - all
+                  options stay open (free or paid, closed or open source,
+                  Google Play / F-Droid / NVDA add-on store / own website).
+                  Nothing is published now (no GitHub). Copyright year 2026
+                  confirmed. The architecture must work for every option.
+  r5  2026-09-29  Android versions fixed (minSdk 29 / Android 10, targetSdk
+                  = latest required by Google Play). languages/hr/emoji.txt
+                  CREATED from Unicode CLDR 48.2 (hr) + Unicode Emoji 17.0:
+                  3944 emoji, all with Croatian names. Emoji names are plain
+                  language data - each language author takes them from any
+                  source; no CLDR dependency in the engine or compiler.
+  r6  2026-09-29  Proposed defaults P1-P8 for all remaining open technical
+                  questions (section 19). They are proposals: they apply
+                  unless the author rejects them.
+  r7  2026-09-29  Voices are no longer bundled: languages ship in every
+                  package, voices are DOWNLOADED on demand from a JSON voice
+                  catalog (10.4-10.9). Android main screen and NVDA
+                  "MBROLA_NG Voice Manager" (Installed / Available tabs,
+                  localized English + Croatian), SAPI installer with
+                  language checkboxes that downloads the voices, Linux
+                  proposal. Russian/Ukrainian/Belarusian/Bulgarian Cyrillic
+                  removed from Croatian (P8).
+  r8  2026-09-29  CODING STARTED (D4): core + language. Implemented:
+                  portable C++17 core (core/: canonical script mapping,
+                  normalizer with data-driven patterns, RBNF numbers + CLDR
+                  plurals, units, abbreviations, symbols, emoji, spelling,
+                  lexicon/G2P/syllables/accent/post-lexical rules, prosody,
+                  .pho + events, C API mbrola_ng.h), .dat format 1.0 with
+                  CRC per section, langc + mbtts (tools/), full Croatian
+                  source folder (languages/hr, 89 tests passing). Not yet:
+                  mbrola_ng_synth (Phase 0) - mbng_read() returns
+                  MBNG_ERR_SYNTH, mbng_read_pho() gives the .pho chunks.
+                  Deviations from the sketches in Appendix B: word boundary
+                  in postlex/syllables is "|" / "|?" ("#" starts comments);
+                  normalization patterns use num/num2/num1-2[1-12]; .dat is
+                  validated and deserialized at load (~230 KB, fast) rather
+                  than used zero-copy; developer source mode = a loader the
+                  tool/host registers (mbng::set_source_loader).
+                  Open from listening: cr1 gaps n-j/l-j ("on je") and
+                  p-ts/p-tS' ("opcija", "opći") still produce the voice's
+                  silence alias (risk 3) - needs the voice check (9.1 step 7)
+                  once cr1 is available locally.
+  r9  2026-09-29  First sound + NVDA add-on for listening tests (no git, by
+                  the author's decision). external/mbrola = upstream MBROLA
+                  source (unmodified, no .git). synth/mbrola_ng_synth.c =
+                  pipe loop (AGPL, protocol in its header); core/src/engine/
+                  synthproc.cpp starts it; mbng_read() now delivers PCM +
+                  events. CMake builds MBROLA_NG.dll (static CRT) and
+                  mbrola_ng_synth.exe for x64 and x86. nvda/: addon/ (driver
+                  sources), build_addon.py (build + stage + zip), output
+                  nvda/mbrolaNG-0.1.0.nvda-addon. Voice cr1 is installed by
+                  hand into %APPDATA%\nvda\mbrola_ng\voices\cr1 (no Voice
+                  Manager yet). The NVDA add-on lives in nvda/ (not
+                  hosts/nvda as proposed in 15.2).
+  r10 2026-09-29  NVDA Voice Manager (12.5) implemented, add-on 0.2.0:
+                  globalPlugins/mbrola_ng_voice_manager (NVDA menu -> Tools
+                  -> "MBROLA_NG Voice Manager...", optional gesture in Input
+                  gestures, category MBROLA NG). Tabs Installed / Available,
+                  license dialog before download, HTTPS download with
+                  progress + cancel, verification: size, SHA-256, database
+                  header and every language phoneme present in the diphone
+                  index (10.7); install from file (database or zip), check
+                  for updates, remove, set as current voice, "switch to
+                  MBROLA NG now?" after the first install. Files: <id>.voice
+                  + installed.json (10.3, 10.6) in <NVDA config>\mbrola_ng\
+                  voices. Shared code synthDrivers/mbrola_ng/_voices.py; the
+                  driver now takes voices, names and base pitch from it.
+                  Catalog source: catalog/catalog.json, bundled into the
+                  add-on (CATALOG_URL stays empty until a server exists;
+                  <NVDA config>\mbrola_ng\catalog.json overrides it for
+                  testing). UI English + Croatian (locale/hr nvda.po, .mo
+                  compiled by build_addon.py).
+  r11 2026-09-29  ENGLISH added by the author's decision (extends D6: we now
+                  ship hr + en). languages/en: US pronunciation with the
+                  SAMPA symbols of us1/us2 (44 phonemes); lexicon.txt =
+                  CMU Pronouncing Dictionary (124,909 words, BSD-style
+                  license, reproduced in licenses/CMUDICT-LICENSE.txt) +
+                  manual entries, converted by tools/cmudict_to_lexicon.py;
+                  G2P rules are only a fallback; emoji.txt from CLDR 48.2
+                  "en" by tools/cldr_emoji.py; apostrophe is a letter
+                  ("don't"); years via RBNF radix rules ("twenty twenty
+                  six"). Voices in catalog.json: us1 (female - the README
+                  wrongly says male), us2, us3, en1 (British). Voice
+                  phoneme_map (10.3) implemented: mbng_config.phoneme_map
+                  (API 1.1, appended field), .voice "phoneme_map = a=b ...";
+                  us3 maps k_h p_h t_h, en1 maps the vowels to British
+                  symbols. Core: thousands separator may be any symbol
+                  (","). langc: "base/radix" RBNF rules. build.cmd and
+                  build_addon.py compile/pack every folder of languages\.
+                  Known gaps: us3 lacks 47 diphones of the set (short
+                  silences); en1 reads US pronunciations with British
+                  sounds (rhotic r kept). Add-on 0.3.0.
+  r12 2026-09-29  Add-on version reset to 0.1.0 (first official version).
+                  SAPI 5 engine (section 11) implemented INSIDE
+                  MBROLA_NG.dll (core/src/sapi: ISpTTSEngine +
+                  ISpObjectWithToken, CLSID {BBA01711-0D0F-4406-81B4-
+                  E5D4833986C0}, word/sentence/bookmark events, abort,
+                  sentence skip, rate/volume actions; version resource).
+                  Loading the DLL registers nothing (NVDA add-on unaffected);
+                  only DllRegisterServer, called by the installer's
+                  regsvr32 for each bitness, writes the COM class and one
+                  token MBROLA-NG-<id> per voice in %ProgramData%\MBROLA NG\
+                  voices whose language .dat is installed (token values
+                  VoicePath, LanguagePath, BasePitch, PhonemeMap; localized
+                  names per LANGID). Windows installer: installer/
+                  mbrola_ng.iss (Inno Setup 6, English + Croatian) built by
+                  installer/build_installer.py -> installer/MBROLA_NG-0.1.0-
+                  setup.exe. Voice checkbox page from the embedded catalog
+                  .json (Pascal JSON reader), voice license page, download
+                  with SHA-256 check, .voice (+ sapi_lcid) and installed.json
+                  written; re-run = add/remove voices; /VOICES= /LANGS= for
+                  silent installs; /DTestMode for developer tests without
+                  admin rights.
+  r13 2026-09-29  LICENSE DECIDED (ends D5 / r3 / r4): MBROLA NG is published
+                  as an open-source repository under GPL-2.0-or-later
+                  (LICENSE in the repository root; every own source file
+                  carries "SPDX-License-Identifier: GPL-2.0-or-later"; the
+                  language.txt files say license = GPL-2.0-or-later).
+                  Reasons: compatible with NVDA (GPL v2) and, through "or
+                  later", with MBROLA (AGPL v3). mbrola_ng_synth + external/
+                  mbrola stay AGPL-3.0 (synth/LICENSE). Voices are not
+                  redistributed (downloaded, own non-commercial licenses).
+                  Sections 1 (D5), 4 and 4.10 describe the earlier
+                  proprietary plan and are kept for history; where they say
+                  "proprietary" or "closed-source", r13 applies.
+  r14 2026-09-29  LINUX / ORCA (section 13) implemented, not yet tested on
+                  a Linux machine: linux/speechd/sd_mbrola_ng (own
+                  implementation of the speechd output module protocol - no
+                  speechd development files needed; audio goes to the server,
+                  "705" blocks, speechd 0.11+; SSML parser linux/speechd/
+                  ssml.cpp with tests; voice search 10.9 incl. distribution
+                  voices /usr/share/mbrola/<id> described by
+                  share/mbrola-ng/voices.d/<id>.voice), linux/mbrola-ng-voices
+                  (13.4, terminal voice manager, en + hr messages),
+                  linux/build.sh (--user into ~/.local without root, --system,
+                  --deb via CPack), linux/test_module.py (plays the server
+                  side of the protocol, writes a WAV). Punctuation: Speech
+                  Dispatcher's symbol preprocessing by default (option
+                  MbrolaNgPunctuation "module").
+  r15 2026-09-29  Published on GitHub (the author creates the repository).
+                  One build entry point: python build.py [all|core|nvda|
+                  sapi|orca|android|clean] (outputs in dist/); .gitignore,
+                  .gitattributes, .editorconfig; README rewritten. Android
+                  (section 14) is the next host.
+  r16 2026-09-30  ANDROID (section 14) implemented in android/: Kotlin +
+                  Jetpack Compose (Material 3, own theme), application id
+                  io.github.darkomilosevic86.mbrolang, minSdk 29, target 36.
+                  TextToSpeechService over a JNI bridge to the core;
+                  mbrola_ng_synth packaged as libmbrola_ng_synth.so and run
+                  as a child process. DIRECT BOOT: service directBootAware,
+                  voices + language data + voice settings in device-protected
+                  storage, so TalkBack speaks before the first unlock.
+                  Home screen = installed voices + languages (language ->
+                  its voices); per-voice settings (= the engine settings
+                  screen of the system): speed / volume with "use instead of
+                  the system's", pitch, modulation, emoji, numbers. NEW core
+                  value MBNG_PARAM_DIGITS = 2: numbers in pairs. "Try": an
+                  installed voice speaks, others play a bundled recorded
+                  sample (tools/make_voice_samples.py). Catalog bundled (no
+                  server yet); install from file and background download
+                  (14.4) not done yet. Signing: android/create_keystore.py.
+                  Tested on the emulator (API 35), not on real devices.
+                  Build fix found on the way (also needed for Linux): outside
+                  Visual C++ MBROLA is built as its single translation unit
+                  LibOneChannel/lib1.c (cmake/sources.cmake).
+  r17 2026-09-30  Android, phone language not covered by a voice (a Serbian
+                  phone was silent): catalog "android_also_for" - the hr
+                  voices are also offered for srp-SRB, bos-BIH, cnr-MNE; and
+                  the engine setting "Always use this voice, for every
+                  language" (EngineSettings.forcedVoice): every language is
+                  reported available and spoken with that voice.
+
+CONTENTS
+  1.  Goal, scope and fixed decisions
+  2.  Findings: the MBROLA engine source code
+  3.  Findings: the cr1 Croatian diphone database (SAMPA inventory)
+  4.  Licensing
+  5.  Overall architecture (portable core + four hosts)
+  6.  The text-to-speech pipeline inside the core
+  7.  Croatian language specifics (what the language data must describe)
+  8.  Language source files (the "hr" folder)
+  9.  The language compiler (langc) and the binary format (hr.dat)
+ 10.  Voices and how they bind to languages
+ 11.  Host 1: Windows SAPI 5
+ 12.  Host 2: NVDA add-on
+ 13.  Host 3: Speech Dispatcher (Linux)
+ 14.  Host 4: Android
+ 15.  Build system, repository layout, distribution packages
+ 16.  Testing strategy
+ 17.  Risks and open problems
+ 18.  Proposed implementation phases
+ 19.  Decisions already made / open questions
+ Appendix A. Full cr1 diphone inventory facts
+ Appendix B. Example snippets of proposed source-file syntax
+
+
+===============================================================================
+1. GOAL, SCOPE AND FIXED DECISIONS
+===============================================================================
+
+Build MBROLA NG: a text-to-speech system that uses the open-source MBROLA
+diphone synthesizer as its sound generator, with our own language front end,
+available on four platforms:
+
+  P1. Windows SAPI 5 voice (any SAPI 5 client: JAWS, Balabolka, Office,
+      System.Speech, NVDA's SAPI 5 driver ...).
+  P2. NVDA add-on with a NATIVE NVDA synthesizer driver (not going through
+      SAPI) for the lowest latency and best index/marker support.
+  P3. Speech Dispatcher output module (Linux: Orca and everything else that
+      uses speech-dispatcher).
+  P4. Android TTS engine (TextToSpeechService: TalkBack and all apps).
+
+Requirements:
+
+  R1. Croatian first; more languages later WITHOUT changing or recompiling
+      the engine, as long as the language fits the rule mechanisms.
+  R2. Text normalization: numbers, Latin and Cyrillic script, emoji, and
+      everything a real TTS needs (abbreviations, symbols, dates, units ...).
+  R3. Language rules live OUTSIDE the engine binaries, as data.
+  R4. Language data is shipped compiled (hr.dat), read by the engine.
+  R5. Each language has a human-readable source folder (hr\numbers.txt,
+      hr\spelling.txt, hr\phonemes.txt ...).
+  R6. A compiler program (langc) turns the source folder into the .dat file.
+  R7. Neither the language sources nor the compiler are part of any end-user
+      package (Windows installer, NVDA add-on, Linux package, Android APK).
+  R8. The phoneme notation matches the MBROLA voice (SAMPA as used in cr1).
+
+FIXED DECISIONS (from your guidelines, r2):
+
+  D1. SCRIPT IS NOT LANGUAGE. Latin and Cyrillic are just two ways of
+      writing the same sounds. Both are converted to the SAME SAMPA phonemes
+      of the active language. "ćirilica" and "ћирилица" produce exactly the
+      same phoneme string: tS' i r i l i ts a. There is no script-based
+      language switching.
+  D2. cr1 IS A CROATIAN VOICE. Everything it speaks is read with the Croatian
+      language data: Croatian number words (tisuća, milijun ...), Croatian
+      month names, Croatian symbol names, Croatian letter names - also when
+      the input text is written in Cyrillic or is Serbian/Bosnian text.
+      "1000" is always "tisuću", never "hiljadu".
+  D3. Project name: MBROLA NG. Author: Darko Milošević.
+      Copyright (c) 2026 Darko Milošević.
+  D4. Analysis only for now; coding starts only on your instruction.
+  D5. The license and distribution model is NOT decided yet and must stay
+      open: MBROLA NG may become closed-source or open-source, free or paid,
+      and may be distributed through Google Play, F-Droid, the NVDA add-on
+      store, an own website - or not at all. For now nothing is distributed
+      and nothing is published (no public repository).
+      The architecture is chosen so that EVERY one of these options remains
+      possible without redesign (see 4.10). The engine code is written as
+      proprietary code of Darko Milošević (the author can later still decide
+      to open it; the reverse - closing code once published under an open
+      license - is not possible for already published versions).
+  D6. We (the MBROLA NG author) build and ship ONLY the Croatian language.
+      Everybody else must be able to build their own languages without us:
+      the language source format, the phoneme model and the binary .dat
+      format are publicly documented, and the compiler is distributed free
+      (as a separate "Language SDK"), but none of it is in the end-user
+      installer.
+  D7. Nothing about a specific language is hard-coded in the engine. The
+      phoneme inventory itself (a, b, ts, tS, tS', dZ ...) is defined by
+      each language in its own phonemes.txt, using the SAMPA symbols of the
+      MBROLA voice it targets. For Croatian these are the symbols of the cr1
+      README / database (section 3.2). A third party making, e.g., a Polish
+      language writes phonemes.txt with the SAMPA symbols of the pl1 voice.
+  D8. On Windows there is ONE engine binary, MBROLA_NG.dll, which contains
+      both the SAPI 5 engine (COM) and the plain C API that the NVDA add-on
+      calls. (x86 and x64 builds of the same DLL.)
+
+What MBROLA itself provides: ONLY the last step - it turns a list of
+phonemes with durations and pitch targets into audio. Everything else
+(reading text, deciding pronunciation, durations and intonation) is our job:
+about 80-90 % of the work is the language front end and the four host
+integrations, not MBROLA.
+
+
+===============================================================================
+2. FINDINGS: THE MBROLA ENGINE SOURCE CODE
+===============================================================================
+
+Source analysed: https://github.com/numediart/MBROLA
+(commit 274dead, July 2025, version string "3.4-dev").
+
+2.1 Language and size
+  - Plain ANSI C, roughly 7,200 lines. Small, no dependencies.
+  - Builds with make/gcc on Linux and has Visual Studio projects
+    (VisualC/mbrola.sln, VS 2015+). It will also compile with the Android
+    NDK (Clang) - it uses only the standard C library.
+
+2.2 Input format (.pho)
+  One phoneme per line:  <phoneme> <duration ms> [<pos %> <F0 Hz>]...
+      _ 50
+      Z 143 11 90        ; phoneme Z, 143 ms, pitch 90 Hz at 11 %
+  - Comments start with ';'; commands with ';;' (";; T=1.2" time ratio,
+    ";; F=0.8" pitch ratio, ";; FLUSH x").
+  - '#' is the flush command: forces synthesis of everything buffered. Needed
+    at the end of every chunk so the last phoneme is not held back.
+  - Pitch targets are piecewise linear; pitch on unvoiced phonemes is ignored
+    automatically.
+  - Buffer limit: MAXNPHONESINONESHOT = 250 phonemes without a pitch point.
+    Our prosody always emits pitch points, so no problem in practice.
+  - Maximum phoneme duration depends on F0 (~7.5 s at 133 Hz): long silences
+    requested by a host (SSML <break>, SAPI <silence>) are produced by us as
+    zero samples, not as one huge "_" phoneme.
+
+2.3 Output
+  - 16-bit linear PCM, mono, at the database sample rate (cr1 = 16,000 Hz).
+    8-bit, u-law and a-law are also available.
+  - Volume ratio and output frequency can be changed.
+
+2.4 Library APIs (two exist)
+  a) "One channel" API (LibOneChannel/onechannel.c: init_MBR, write_MBR,
+     read_MBR ...). Keeps its state in GLOBAL variables (my_fifo, my_parse,
+     my_dba, my_brole): only ONE synthesis stream per process.
+     NOT usable: SAPI may create several engine instances in one process,
+     Android may run synthesis for several clients, NVDA may be combined with
+     another consumer in the same process.
+  b) "Multi channel" API (LibMultiChannel/multichannel.c):
+     init_DatabaseMBR2, copyconstructor_DatabaseMBR2, init_MBR2(Database*,
+     Parser*) ... Every engine instance owns its objects.
+     -> THIS is the one to use: one Database per loaded voice, one copy
+        (copyconstructor duplicates the file handle) per engine instance, one
+        Mbrola object per instance.
+  c) Custom Parser: the Parser struct is a small "virtual" interface (reset /
+     close / nextphone). Our front end can feed Phone objects directly,
+     without formatting .pho text and parsing it back. Recommendation: start
+     with .pho text through the FIFO parser (easy to debug, .pho dumps can be
+     played with the standalone mbrola program), switch to a custom Parser
+     later if profiling shows a benefit.
+
+2.5 Error behaviour that matters to us
+  - A diphone missing from the database is either a fatal error or - in
+    "no error" mode (setNoError / -e) - a warning plus substitution by
+    silence "_-_". We MUST run in no-error mode (a failing synthesizer
+    inside a screen reader is unacceptable), and design the front end so
+    this almost never happens (see 3.4).
+  - fatal_message / warning_message (Misc/vp_error.c) must never call exit()
+    or print to a console in library builds; errors must be returned to the
+    host. To be verified (and patched minimally if needed) in Phase 0.
+
+2.6 How we will build it (changed in r3 - see section 4)
+  - MBROLA is NOT linked into MBROLA_NG.dll (that would make the DLL AGPL).
+    Instead MBROLA runs as a separate program, "mbrola_ng_synth.exe"
+    (Linux: mbrola_ng_synth), which is MBROLA's own code plus a small pipe
+    front end, published as open source under AGPL v3. MBROLA_NG.dll starts
+    it and talks to it through pipes (5.9).
+  - Inside that separate program we can use either API (it is one process
+    per engine instance, so even the one-channel API would work), but the
+    multichannel API is still the cleaner choice.
+  - Keep upstream MBROLA source unmodified in its own folder; our pipe front
+    end is a separate small source file in the same AGPL package.
+
+2.7 Portability notes found in the code
+  - Database access is FILE*-based (fopen/fseek). On Windows and Linux this
+    is fine. On Android the voice is downloaded into app-private storage
+    (r7, 10.9), so it is a normal file too; MBROLA's ROM database mode
+    (Database/rom_database.c) is not needed.
+  - Data is little-endian in the database file; all our target CPUs (x86,
+    x64, ARM64, ARMv7) are little-endian.
+
+
+===============================================================================
+3. FINDINGS: THE cr1 CROATIAN DIPHONE DATABASE
+===============================================================================
+
+Source: https://github.com/numediart/MBROLA-voices, folder data/cr1.
+I parsed the binary header and the complete diphone table (format from
+Database/database.c) instead of trusting only the README, because the README
+and a sample file disagree (see 3.5).
+
+3.1 Header
+  Magic "MBROLA", database format 2.060, 16,000 Hz, MBR period 160 samples,
+  coding 1, 931 diphone entries (882 real + 49 "replacement" entries),
+  silence phoneme "_". Built Oct 28 1998 by Juraj Bakran and Nikolaj Lazic,
+  Department of Phonetics, University of Zagreb. Male voice. Sample .pho files
+  use F0 of about 80-125 Hz -> neutral base pitch ~100-110 Hz.
+
+3.2 The exact phoneme set in the database (31 symbols, case-sensitive)
+
+  SAMPA  Latin   Cyrillic  Example       Type
+  -----  -----   --------  -------       ---------------------------------
+  a      a       а         sat           vowel
+  e      e       е         pet           vowel
+  i      i       и         sir           vowel
+  o      o       о         bol           vowel
+  u      u       у         put           vowel
+  r      r       р         ruka, prst    sonorant; ALSO syllabic (vocalic) r
+  p      p       п         pas           voiceless stop
+  b      b       б         bas           voiced stop
+  t      t       т         tip           voiceless stop
+  d      d       д         dan           voiced stop
+  k      k       к         kap           voiceless stop
+  g      g       г         gol           voiced stop
+  ts     c       ц         cura          voiceless affricate
+  tS     č       ч         čar           voiceless affricate
+  dZ     dž      џ         džep          voiced affricate
+  tS'    ć       ћ         noć           voiceless palatal affricate
+  dZ'    đ       ђ         đak           voiced palatal affricate
+  f      f       ф         fonetika      voiceless fricative
+  s      s       с         sat           voiceless fricative
+  z      z       з         zid           voiced fricative
+  S      š       ш         šef           voiceless fricative
+  Z      ž       ж         žena          voiced fricative
+  x      h       х         hod           voiceless fricative
+  v      v       в         vid           approximant (NOT an obstruent in
+                                         voicing assimilation)
+  m      m       м         most          nasal
+  n      n       н         noga          nasal
+  J      nj      њ         njiva         palatal nasal
+  l      l       л         lud           lateral
+  L      lj      љ         ljut          palatal lateral
+  j      j       ј         ja            glide
+  _      (pause)                         silence
+
+  Notes:
+  - Multi-character symbols (ts, tS, dZ, tS', dZ') are single phonemes; the
+    apostrophe is part of the symbol. Internally phonemes are IDs (small
+    integers), never characters.
+  - NO long-vowel symbols, NO accent marks and NO separate syllabic-r symbol
+    in the database (the README's transcriptions use " and : but the
+    database does not). Length and accent are expressed only through duration
+    and pitch (prosody).
+  - Foreign letters (q, w, x, y) and the Macedonian Cyrillic letters are
+    mapped to the nearest of these sounds.
+
+3.3 Diphone coverage
+  - 31 x 31 = 961 pairs. 882 recorded + 49 aliases; the 30 missing pairs are
+    exactly the identical pairs a-a, e-e, i-i, o-o, u-u, r-r, p-p, b-b, t-t,
+    d-d, k-k, g-g, ts-ts, tS-tS, dZ-dZ, tS'-tS', dZ'-dZ', f-f, s-s, z-z,
+    S-S, Z-Z, x-x, v-v, m-m, n-n, J-J, l-l, L-L, j-j.
+  - Consequences:
+      * Identical-vowel hiatus ("poopćiti", "kooperacija", "na avion",
+        "je eto") cannot be synthesized directly: merge into one longer vowel
+        inside a word (duration x ~1.6), insert a very short "_" (15-30 ms)
+        across word boundaries.
+      * Double consonants ("od dana", "iz zemlje") are merged into ONE
+        phoneme with increased duration (degemination) - which is also what
+        native speakers do.
+
+3.4 The 49 replacement ("alias") diphones - VERY important
+  Consonant pairs the database authors deliberately map to silence "_-_",
+  because in correct Croatian pronunciation they are changed by assimilation:
+
+    Mixed voicing:
+      b-p p-b d-t t-d g-k k-g s-z z-s f-v v-f S-Z Z-S z-S z-Z s-S s-Z
+    Stop/affricate + affricate (merge into the affricate):
+      d-ts t-ts d-tS t-tS d-tS' t-tS' d-dZ t-dZ d-dZ' t-dZ'
+      p-ts p-tS p-tS'
+      ts-tS ts-tS' ts-dZ ts-dZ' tS-dZ tS'-dZ tS'-dZ' tS'-tS
+      dZ-d dZ-dZ' dZ'-dZ dZ'-Z dZ'-tS dZ'-ts Z-dZ Z-dZ'
+    Palatal combinations:
+      n-J n-j l-L l-j J-j
+
+  Consequences for the front end (rules in 7.3):
+    - Regressive voicing assimilation: an obstruent takes the voicing of the
+      following obstruent (v does not trigger it). "predsjednik" ->
+      p r e t s j e d n i k.
+    - s/z + š/ž -> š/ž ("iz šume" -> i S u m e, "s ženom" -> Z e n o m).
+    - t/d + c/č/ć/dž/đ -> affricate only ("podcijeniti" ->
+      p o ts i j e n i t i, "odčepiti" -> o tS e p i t i).
+    - n + j, l + j inside a word (injekcija, konjunkcija) need lexicon
+      entries, otherwise the voice produces a silence gap.
+    - These rules must also apply ACROSS WORD BOUNDARIES ("od sada",
+      "kroz kuću", "s bratom"), because MBROLA sees one continuous stream.
+      The compiler/runtime verifies that no alias pair is left (9.1 step 7).
+    - "p-ts", "p-tS", "p-tS'" look like database defects: common words such
+      as "opcija" (p-ts) and "opći" (p-tS') would produce a gap. Needs
+      listening tests and a workaround rule (very short "_" between them, or
+      a shortened p) -> risk list, section 17.
+
+3.5 Discrepancy found in the sample files
+  KANTICA.PHO uses the symbol "c", which does NOT exist in the database (the
+  database uses "ts"); it only plays in no-error mode with a silence gap.
+  => We use ONLY the symbols dumped from the binary (3.2); the compiler
+     validates all phonemes against the voice's real inventory.
+
+3.6 Quality expectations
+  cr1 is a 1998, 16 kHz, single-speaker diphone voice: robotic by modern
+  standards, but intelligible and extremely fast and light - ideal for screen
+  readers and for low-end Android phones. Intelligibility at high speed
+  depends mostly on our duration model, not on MBROLA.
+
+
+===============================================================================
+4. LICENSING
+===============================================================================
+
+NOTE: this is a technical analysis, not legal advice. Before selling or
+publishing a proprietary product, have the final setup checked by a lawyer
+who knows software licensing.
+
+4.1 The question: may MBROLA NG be closed-source and licensed by its author?
+  YES for everything Darko Milošević writes himself (core, language runtime,
+  SAPI engine, NVDA driver, Android/Linux hosts, compiler, the Croatian
+  language data). That is new, original work and its author decides its
+  license - including a proprietary license.
+  BUT the MBROLA engine is NOT his work. Its copyright holder is the
+  Faculte Polytechnique de Mons (TCTS lab), today the University of Mons
+  (UMONS / numediart), and it is licensed under the GNU AGPL v3. The AGPL
+  says: whoever distributes a program that INCLUDES or LINKS MBROLA
+  (statically, or dynamically as a DLL loaded into the same process) must
+  release that whole combined program under AGPL v3 with source code.
+  => If MBROLA is compiled into MBROLA_NG.dll (as proposed in r1/r2), the
+     DLL can NOT be closed-source. This is also true if MBROLA_NG.dll just
+     loads an unmodified mbrola.dll: the FSF treats dynamic linking into one
+     process as one combined program.
+
+4.2 Legal ways to have a closed-source MBROLA NG
+  Option A - Separate MBROLA process (RECOMMENDED)
+    MBROLA runs as its own executable (mbrola_ng_synth.exe = MBROLA +
+    a small pipe front end), shipped together with MBROLA NG but as a
+    separate program, under AGPL v3, with its full source published (only
+    that small program). MBROLA_NG.dll (closed) starts it and sends it
+    phoneme commands in MBROLA's standard, public .pho format through a
+    pipe, and reads 16-bit PCM back.
+    The GPL/AGPL FAQ describes communication through pipes, sockets or
+    command-line arguments as the normal way two SEPARATE programs talk,
+    with the combination being "mere aggregation" - each program keeps its
+    own license. Using MBROLA's own documented input format (.pho) and plain
+    PCM output keeps the interface generic ("arm's length"), which supports
+    this interpretation. The standalone mbrola program has always been used
+    this way by other TTS front ends.
+    Obligations: ship the AGPL license text with mbrola_ng_synth.exe, offer
+    its source (e.g. a public repository or a source zip), keep it a
+    separate file that users could replace with their own build.
+    Cost: one child process per engine instance, startup of a few ms (the
+    3.5 MB cr1 database loads quickly), and a pipe protocol (5.9). Audio
+    latency is essentially the same as in-process.
+  Option B - Commercial license from the copyright holder
+    Only UMONS (Faculte Polytechnique de Mons, TCTS lab / numediart) can
+    grant a non-AGPL license for MBROLA. Then MBROLA could be linked into
+    MBROLA_NG.dll directly. Worth asking (contact via the MBROLA GitHub
+    project), but may be slow, uncertain or costly. Option A does not
+    depend on it.
+  Option C - Own synthesis engine (clean-room MBROLA-compatible)
+    Technically possible (MBR-PSOLA / overlap-add of diphones; the
+    database format is simple), but: (1) it must be written without
+    copying AGPL code, and (2) the cr1 license allows cr1 to be used "with
+    and only with the Mbrola program" - an own engine would need extra
+    permission from the cr1 owners (Bakran & Lazić). Not recommended now.
+  => Recommended: Option A. It is the only architecture that keeps ALL
+     future choices open (see 4.10). Option B can be asked for later if a
+     paid product is ever planned.
+
+4.3 cr1 voice: its own license (University of Zagreb / FPMs)
+  - Use only with the MBROLA program: satisfied by Option A (the real MBROLA
+    program does the synthesis).
+  - Free distribution allowed only if NO CHARGE is made; it "may not be sold
+    or incorporated into any product which is sold without prior permission"
+    of the Diphone Database Owners (juraj.bakran@ffzg.hr,
+    nikolaj.lazic@ffzg.hr - addresses from 1998, may need updating).
+  - Closed source is NOT a problem for cr1. SELLING is: if MBROLA NG (or a
+    paid edition, or a paid add-on containing cr1) is to be sold, written
+    permission from the cr1 owners (University of Zagreb, Department of
+    Phonetics) is required. Distributing MBROLA NG for free, closed-source,
+    is allowed as long as cr1's license.txt is shipped with it.
+  - r7: voices are downloaded by the user from the official MBROLA voice
+    repository (10.4), not shipped inside MBROLA NG packages; the license is
+    shown and accepted before download. This further reduces MBROLA NG's own
+    redistribution obligations for cr1 (the "no charge / not sold" terms
+    still matter if MBROLA NG is ever sold, because it is "used with" the
+    product - ask the cr1 owners in that case).
+  - Same applies to any other MBROLA voice a third-party language uses:
+    each voice has its own license, usually non-commercial. The language SDK
+    documentation must warn language authors about this.
+
+4.4 Our own licenses (all by Darko Milošević)
+  - MBROLA_NG.dll, NVDA driver code, Android and Linux host code, langc
+    compiler, mbtts: proprietary, "Copyright (c) 2026 Darko Milošević. All
+    rights reserved.", distributed under an end-user license agreement
+    (EULA) written for MBROLA NG.
+  - The language source format and .dat format specifications: published
+    documents (so anyone can build languages); may stay copyrighted text
+    but freely usable.
+  - Croatian language data (languages/hr): proprietary, not published (D6
+    only requires that OTHERS can build languages, not that our Croatian
+    source is open). Optionally it could be published later as an example.
+  - Third-party languages belong to their authors; the SDK license should
+    state that MBROLA NG claims no rights over languages built with it and
+    that the author of a language is responsible for its content.
+
+4.5 NVDA add-on (answer to "why can't the add-on be included regardless of
+    the license")
+  It can. NVDA itself is GPL v2, but NVDA add-ons with closed-source native
+  synthesizer DLLs already exist and are widely used (for example the
+  commercial Vocalizer Expressive and Eloquence-based add-ons). The problem
+  raised in r2 existed only because MBROLA (AGPL v3) would have been linked
+  into the DLL loaded by NVDA; with Option A MBROLA runs in its own process,
+  so the DLL NVDA loads contains no AGPL code. The small Python driver file
+  (which must import NVDA modules) is plain source by nature; it can carry
+  our copyright notice. Publishing through the official NV Access add-on
+  store requires following its submission rules (to be checked at release
+  time); distributing the .nvda-addon from our own website is always
+  possible.
+
+4.6 Other platforms under Option A
+  - Speech Dispatcher (Linux): our module is already a separate program;
+    it is closed-source and dynamically links only speechd's helper library
+    (LGPL parts are fine for closed programs; any GPL-only helper code must
+    NOT be linked - to be checked when implementing, otherwise implement the
+    module protocol ourselves, it is a simple text protocol over stdin/out).
+    MBROLA again runs as the separate mbrola_ng_synth process (or the
+    distribution's own "mbrola" package binary).
+  - Android: executables can be shipped inside an APK (packaged as
+    lib<name>.so in the native library folder and started from
+    nativeLibraryDir). mbrola_ng_synth runs as a child process of the TTS
+    service; the rest of the app is closed-source.
+  - Windows SAPI and NVDA: MBROLA_NG.dll starts mbrola_ng_synth.exe.
+
+4.7 Third-party data
+  - Unicode CLDR (emoji names in Croatian - already used for
+    languages/hr/emoji.txt, CLDR 48.2 - and possibly number spell-out and
+    plural rules): Unicode License v3 - permissive, allows use in closed-
+    source products; attribution notice required in the documentation/about
+    box and kept in the header of emoji.txt.
+
+4.8 eSpeak NG
+  eSpeak NG (GPL v3) has a Croatian front end and MBROLA voice support. For
+  a proprietary product its code must NOT be copied or linked. It may only
+  be used as an independent reference (listening/comparing output).
+
+4.9 Summary of obligations in the end-user packages
+  - EULA of MBROLA NG (Copyright (c) 2026 Darko Milošević).
+  - mbrola_ng_synth(.exe) + AGPL v3 text + where to get its source.
+  - cr1 license.txt - shown and saved when the voice is downloaded (r7:
+    voices are no longer inside the packages).
+  - CLDR / Unicode attribution.
+  - If anything is ever SOLD: written permission of the cr1 owners first.
+
+4.10 Keeping all options open (decision D5)
+  Nothing is distributed now. License obligations (AGPL source offer, cr1
+  notice, EULA ...) only arise when something is DISTRIBUTED to other
+  people. Private development and personal use have no obligations, so
+  nothing has to be published on GitHub or anywhere else now.
+  How the architecture (Option A: MBROLA in a separate process) covers every
+  possible future decision:
+    Future choice                      What it requires then
+    ---------------------------------  -----------------------------------
+    Free, closed-source                EULA; publish only mbrola_ng_synth
+                                       source (AGPL) at release; cr1 notice.
+    Paid, closed-source                As above + written permission of the
+                                       cr1 owners (+ optionally a UMONS
+                                       license). Protection/licensing
+                                       mechanism can be added later (4.11).
+    Open source (any license           Publish the code under a license
+      compatible with AGPL v3,         of the author's choice; MBROLA could
+      or AGPL v3 itself)               then even be linked in directly, but
+                                       the separate process also still works.
+    Google Play                        Works with any of the above.
+    F-Droid                            Requires the Android app to be fully
+                                       open source (F-Droid builds from
+                                       source) - only possible if that
+                                       choice is made for the app.
+    NVDA add-on store                  Closed or open both possible; follow
+                                       the store's submission rules then.
+    Own website                        Works with any of the above.
+  Consequences for development now:
+    - Never copy or link MBROLA code into MBROLA_NG.dll or other own
+      binaries (keeps "closed" possible).
+    - Never copy code from GPL/AGPL projects such as eSpeak NG into our own
+      code (keeps "closed" possible).
+    - Only use third-party libraries/data with permissive licenses (MIT,
+      BSD, Apache 2.0, zlib, Unicode License) (keeps every option possible,
+      including F-Droid).
+    - Keep the private repository clean and complete so it could be
+      published at any time if the open-source route is chosen.
+
+4.11 Copy protection / license keys (undecided, optional)
+  Whether any protection (license key, activation, trial) will be added is
+  undecided. The design must not block it:
+    - All licensing checks, if ever added, live in MBROLA_NG.dll / the app,
+      never in mbrola_ng_synth (AGPL) and never in the language .dat files.
+    - Languages made by third parties must keep working independently of any
+      protection of the engine (the documented .dat format stays open).
+    - Screen-reader rule: protection must never block speech (e.g. no
+      dialogs from the speech engine, no silent failure at Windows logon
+      screen); an unlicensed state should degrade gracefully (e.g. a
+      spoken reminder), not mute the user.
+
+
+===============================================================================
+5. OVERALL ARCHITECTURE (PORTABLE CORE + FOUR HOSTS)
+===============================================================================
+
+5.1 Components
+
+   SAPI client     NVDA            Orca / speechd clients   TalkBack / apps
+       |             |                    |                        |
+       v             v                    v                        v
+  +-----------------------------+ +-------------------+ +-------------------+
+  | Windows: MBROLA_NG.dll      | | sd_mbrola_ng      | | Android app       |
+  | (x86 and x64 builds)        | | (speechd output   | | TextToSpeech-     |
+  |  - SAPI 5 COM engine        | |  module, own      | | Service (Kotlin)  |
+  |  - C API used by the NVDA   | |  process)         | | + JNI             |
+  |    add-on (Python ctypes)   | |                   | |                   |
+  +--------------+--------------+ +---------+---------+ +---------+---------+
+                 |                          |                     |
+                 +------------+-------------+---------------------+
+                              |  core compiled INTO each host binary
+                              v  (same source; C API mbrola_ng.h)
+  +-----------------------------------------------------------------------+
+  | MBROLA NG core (portable C++17, proprietary, no OS-specific code)     |
+  |   Input model  : text segments + commands (marks, breaks, rate, ...)  |
+  |   Language runtime: generic interpreter of the language data         |
+  |     tokenizer, script mapping, normalizer, RBNF numbers, G2P,         |
+  |     post-lexical rules, syllabifier, prosody - NO language knowledge  |
+  |   Voice layer  : voice config, phoneme mapping, .pho generation,      |
+  |                  synth-process client, PCM + event timeline           |
+  +----------------------------------+------------------------------------+
+            ^                        |  pipes: .pho text in, PCM out
+            | memory-mapped          v
+        hr.dat (compiled    +----------------------------------------+
+        language)           | mbrola_ng_synth(.exe) - SEPARATE       |
+                            | PROCESS, AGPL v3, source published:    |
+                            | unmodified MBROLA + small pipe loop    |
+                            +-------------------+--------------------+
+                                                | reads
+                                        cr1 database (+ cr1.voice read
+                                        by the core)
+
+  Developer side only (never in the end-user installer; free "Language
+  SDK" for third-party language authors):
+        languages/<code>/*.txt  --langc.exe-->  <code>.dat
+        mbtts.exe (command-line tool: text -> words / phonemes / .pho / .wav)
+        Language format specification + "How to make a language" guide
+
+5.2 Key principle: "code = algorithms, data = language"
+  The core knows HOW to apply rewrite rules, map scripts, look up lexicons,
+  run a number grammar, match emoji sequences. It does not know WHAT Croatian
+  words, numbers or rules are - that is all in hr.dat. A new language = a new
+  source folder + compile, as long as it fits the rule mechanisms. A future
+  language needing a new MECHANISM requires a core update; the binary format
+  is versioned for that (9.3).
+
+5.3 One core, identical behaviour everywhere
+  All hosts use the SAME core and the SAME hr.dat / cr1 files. A sentence
+  sounds identical on Windows (SAPI and NVDA), Linux and Android. Language
+  data is written and tested once. Host code is thin: it only translates the
+  platform's input, settings, audio output and events to/from the core API.
+  On Windows, SAPI and NVDA share even the same binary: MBROLA_NG.dll.
+
+5.4 The core C API (mbrola_ng.h) - the most important interface
+  Exported by MBROLA_NG.dll next to the COM entry points
+  (DllGetClassObject, DllCanUnloadNow, DllRegisterServer,
+  DllUnregisterServer). The NVDA add-on loads the same DLL with ctypes and
+  calls these functions; SAPI clients never see them. On Linux/Android the
+  same API exists inside the module / JNI library.
+  Must be plain C (usable from C++, Python ctypes, C and JNI) and ABI-stable.
+  Functions are prefixed mbng_ and use __cdecl on Windows.
+  Sketch (names illustrative):
+    mbng_engine* mbng_create(const mbng_config*)   voice + language paths or
+                                                   memory buffers, settings
+    void  mbng_destroy(mbng_engine*)
+    int   mbng_get_audio_format(...)               rate, bits, channels
+    int   mbng_set_param(engine, id, value)        rate, pitch, pitch range,
+                                                   volume, punctuation level,
+                                                   emoji on/off, ...
+    int   mbng_begin(engine, const mbng_segment*, count)  start an utterance
+    int   mbng_read(engine, int16* buf, int max_samples,
+                    mbng_event* events, int max_events, int* n_events)
+                                                   PULL model: returns PCM and
+                                                   the events that fall inside
+                                                   that audio block
+    void  mbng_cancel(engine)                      thread-safe, immediate
+    const char* mbng_last_error(engine)
+  Why a pull model: every host has a different threading and audio model
+  (SAPI writes to a site, NVDA feeds a WavePlayer, speechd sends audio to the
+  server, Android pushes into SynthesisCallback). With pull, the host decides
+  block size and can stop at any block boundary - trivial and safe
+  cancellation everywhere.
+
+5.5 Neutral input model (segments)
+  Each host converts its own input format to a list of segments:
+    TEXT(text, source offset base)   MARK(name/index)   BREAK(ms)
+    SET_RATE / SET_PITCH / SET_VOLUME (absolute or relative)
+    SPELL_ON / SPELL_OFF (character mode)   SAY_AS(type: characters, digits,
+    date, ...)   PHONEMES(SAMPA string - raw phoneme input for experts)
+  - SAPI: SPVTEXTFRAG list -> segments.
+  - NVDA: speech sequence (strings + IndexCommand, CharacterModeCommand,
+    BreakCommand, PitchCommand ...) -> segments.
+  - Speech Dispatcher: SSML -> segments (a small SSML parser in the core
+    helpers, reusable later for Android/others).
+  - Android: plain text + request rate/pitch -> segments (later TtsSpans).
+
+5.6 Events and text positions (different on every platform)
+  Events produced by the core: WORD(start, length in source units),
+  SENTENCE(start, length), MARK(name), PHONEME(id, duration),
+  END_OF_UTTERANCE, each with its sample position.
+  Hosts need text positions in different units:
+    SAPI and Android: UTF-16 code-unit offsets; NVDA: index marks (not
+    offsets); Speech Dispatcher: index marks from SSML <mark>.
+  => The core tracks, for every token, its position in the ORIGINAL input
+     and reports offsets in the unit the host asked for (UTF-8 bytes,
+     UTF-16 units or code points). This tracking must survive all
+     normalization steps (a number expanded into five words still reports
+     the offset/length of the original digits).
+
+5.7 Threading and memory
+  - Language data (hr.dat) is loaded once per process, read-only, shared by
+    all engine instances (reference counted).
+  - Each engine instance owns its buffers, state and its own
+    mbrola_ng_synth child process (which loads the voice database). No
+    global mutable state anywhere in the core.
+  - mbng_cancel may be called from another thread; everything else is
+    called from one thread per instance.
+
+5.8 File access abstraction
+  The core never opens files by itself except through a small interface:
+  "open file by path" (Windows, Linux) or "use this memory buffer"
+  (Android assets, embedded tests). hr.dat is always accessed as one
+  read-only memory block (memory-mapped file or asset buffer).
+
+5.9 The synthesis process (mbrola_ng_synth) and its pipe protocol
+  Why: licensing (section 4.2, Option A). Design goals: low latency, instant
+  stop, robust against crashes.
+  - Started lazily by the core when an engine instance first speaks, with
+    arguments: path of the voice database, output sample format. Windows:
+    CreateProcess with CREATE_NO_WINDOW, redirected stdin/stdout, handles
+    not inherited by anything else; Linux/Android: fork/exec (posix_spawn).
+  - Input (stdin): MBROLA's standard .pho text, one utterance chunk at a
+    time, each chunk ending with the flush command "#". Only MBROLA's public
+    input format is used (keeps the interface arm's-length, 4.2).
+  - Output (stdout): raw 16-bit PCM in small framed blocks
+    ([length][samples]), plus an end-of-chunk frame after each flush, so the
+    core knows exactly which audio belongs to which chunk and can place
+    events on the timeline.
+  - Stop/cancel: the core stops reading and discards audio; to guarantee
+    instant silence and a clean state it either sends a reset command (our
+    pipe loop calls MBROLA's reset between chunks) or, if the process does
+    not answer within a few ms, kills and restarts it (restart = loading a
+    3.5 MB database: a few milliseconds). Audio already handed to the host
+    is stopped by the host itself.
+  - Errors: if the process crashes or the pipe breaks, the core restarts it
+    once and reports an error for the current utterance only. The host
+    application (screen reader) never crashes because of MBROLA.
+  - Security: the process only reads the database path it was given and
+    writes to stdout; no network, no other files.
+  - Cost: one small process per engine instance (a few MB RAM). A future
+    optimization is one shared synth server per user session, if needed.
+
+
+===============================================================================
+6. THE TEXT-TO-SPEECH PIPELINE INSIDE THE CORE
+===============================================================================
+
+ 6.1 Input and offset tracking
+     - Accept UTF-8 or UTF-16 text; decode to Unicode code points (surrogate
+       pairs handled), remembering the original position of each code point.
+     - Unicode normalization to NFC (e.g. "c" + combining caron -> "č"). No
+       ICU dependency (too big for Android/NVDA packages): the compiler puts
+       the needed composition/decomposition tables into the .dat file.
+     - Clean-up: soft hyphens, zero-width characters, non-breaking spaces,
+       typographic quotes/dashes -> canonical forms (table in data).
+
+ 6.2 Tokenization
+     Character classes from language data: word (letters of ANY supported
+     script), number, punctuation, symbol, emoji sequence, whitespace, URL,
+     e-mail, other. Emoji recognized as whole sequences (7.8).
+     A word may be Latin, Cyrillic or mixed (homoglyph cleanup, 7.6).
+
+ 6.3 Sentence and phrase segmentation
+     - Sentence ends: . ! ? ... and newlines; "." after known abbreviations or
+       ordinal numbers is not a sentence end (flags in abbreviations.txt,
+       heuristics in data).
+     - Phrase breaks: , ; : - ( ) and very long sentences (break at
+       conjunctions after N words).
+     - Sentence-by-sentence processing -> the first audio is ready while the
+       rest is not yet processed (low latency for screen readers).
+
+ 6.4 Token classification and expansion (text normalization)
+     Driven by data. Order of attempts per token:
+       a) exact lexicon / abbreviation entries
+       b) patterns: date, time, ordinal, cardinal, decimal, fraction, percent,
+          currency, unit, range, phone number, roman numeral, URL, e-mail,
+          hashtag, @mention, version numbers
+       c) emoji / symbol tables
+       d) acronyms (ALL CAPS: read as word or spell - rules in data)
+       e) mixed tokens ("COVID-19", "5G", "mp3") split into parts
+     All generated words are Croatian (D2), e.g. a number inside Cyrillic
+     text is expanded with the same Croatian number grammar. Each generated
+     word keeps the source position of the token it came from.
+
+ 6.5 Script mapping (D1)
+     Letters of every script the language accepts (Latin, Cyrillic, and
+     approximate tables for other alphabets) are mapped by the language data
+     into ONE common representation, and from there into the SAME phonemes.
+     Cyrillic has one letter per phoneme (љ, њ, џ are single letters), so it
+     maps unambiguously; Latin digraphs (lj, nj, dž) need rules and
+     exceptions (7.2). See 7.6 for details.
+
+ 6.6 Grapheme-to-phoneme (G2P)
+     - Lexicon lookup first (exceptions, foreign words, n+j / d+ž words). The
+       lexicon is looked up by the common (script-independent) form, so one
+       entry serves both scripts.
+     - Otherwise ordered context-sensitive rewrite rules (Croatian is nearly
+       phonemic, so the rule set is small).
+     - Output: phoneme IDs + syllables + accent (lexicon or default rule).
+
+ 6.7 Post-lexical (phrase-level) rules
+     Across word boundaries: voicing assimilation, s/z palatalization,
+     n -> m before b/p, degemination, identical-vowel hiatus, clitic grouping.
+     Then an automatic "legal diphone" pass: any pair the voice lacks is
+     repaired by a generic fallback (short silence), and logged in debug mode.
+
+ 6.8 Prosody
+     - Duration per phoneme: base duration x factors (accent, vowel length,
+       position, phrase-final lengthening, rate, emphasis), with minimum
+       durations to keep intelligibility at very high rates.
+     - F0 contour: declination, accent peaks, sentence-type final contour
+       (statement fall, yes/no question rise, wh-question, exclamation,
+       continuation rise at commas); parameters in prosody.txt, scaled by
+       the voice's base pitch and the host's pitch setting.
+     - Pauses per punctuation type, from data, scaled by rate.
+
+ 6.9 Voice mapping and synthesis
+     - Language phoneme IDs -> voice symbols (identity for cr1).
+     - Feed MBROLA sentence by sentence (flush '#'), deliver PCM through
+       mbng_read in host-sized blocks, apply volume.
+
+ 6.10 Events
+     Word / sentence / mark / phoneme events placed on the sample timeline
+     (5.6).
+
+
+===============================================================================
+7. CROATIAN LANGUAGE SPECIFICS
+===============================================================================
+
+7.1 Alphabet and basic grapheme -> phoneme mapping
+     a->a  b->b  c->ts  č->tS  ć->tS'  d->d  dž->dZ  đ->dZ'  e->e  f->f
+     g->g  h->x  i->i  j->j  k->k  l->l  lj->L  m->m  n->n  nj->J  o->o
+     p->p  r->r  s->s  š->S  t->t  u->u  v->v  z->z  ž->Z
+     Foreign letters: q->k (qu->kv), w->v, x->ks, y->i (j before a vowel).
+     Text written without diacritics: "dj" often means "đ" (Djakovo) -
+     lexicon/rule-controlled; other foreign clusters via lexicon.
+
+7.2 Latin digraph ambiguity (dž, lj, nj)
+     Usually one phoneme, but two across a morpheme boundary:
+       nadživjeti, podžupan, odžaliti (d + Z); injekcija, konjunkcija (n + j)
+       (but tanjur, konj: true digraph J).
+     -> prefix rules ("nad", "pod", "od" + ž = d + Z) and lexicon exceptions.
+     n+j and l+j are aliases (silence) in cr1: the lexicon must give a
+     pronunciation the voice can actually produce.
+     Cyrillic text does not have this problem (нј vs њ are written
+     differently) - one advantage of mapping each script separately.
+
+7.3 Assimilation rules (post-lexical, see 3.4)
+     - Voicing (regressive): pairs p/b t/d k/g s/z S/Z tS/dZ tS'/dZ'; f, x
+       and ts have no phonemic voiced partner; v, sonorants and vowels do not
+       trigger. Spelling usually already shows it (vrabac -> vrapca) but not
+       in "predsjednik", "podcijeniti", "odšetati", "podsjetiti", and never
+       across word boundaries ("od kuće" -> o t k u tS' e, "iz sobe" ->
+       i s s o b e -> degeminated i s o b e).
+     - s, z before č, ć, dž, đ, lj, nj -> š, ž (natural speech; a rule with a
+       strength/enable flag).
+     - n before b, p -> m ("jedanput" -> j e d a m p u t).
+     - t/d + affricate -> affricate; identical consonants -> one consonant.
+     Rules are ordered, written in the language files, applied by the
+     generic rule engine.
+
+7.4 Vocalic (syllabic) r
+     r between two consonants, or word-initially before a consonant, is a
+     syllable nucleus (prst, vrt, trg, crkva, rđa, grm, grlo). Same symbol
+     "r", but the syllabifier treats it as a vowel: it can carry the accent,
+     gets a vowel-like duration and pitch targets. Purely positional rule ->
+     data (syllables.txt).
+
+7.5 Accent (stress, pitch, length)
+     Standard Croatian has 4 pitch accents (short/long, falling/rising) plus
+     post-accentual length - not written and not predictable from spelling.
+       Stage 1 (default rule in data): the accent is practically never on
+         the last syllable and falling accents occur only on the first
+         syllable. Default = first syllable, short falling. Simple, right for
+         many words, wrong for many rising-accent words.
+       Stage 2: accent lexicon (accents.txt) for the most frequent few
+         thousand words (accent type + long vowels, e.g. "rúka", "žèna").
+         Needs a frequency list and a source of accented forms with a usable
+         license (open question).
+       Stage 3 (optional): suffix rules for inflected forms.
+     Clitics (je, su, sam, si, smo, ste, ću, ćeš, će, ćemo, ćete, bih, bi,
+     bismo, biste, me, te, ga, ju, nas, vas, ih, mi, ti, mu, joj, nam, vam,
+     im, se, li; proclitics: prepositions, "ne", conjunctions) are unaccented
+     and grouped with the neighbouring word (clitics.txt).
+
+7.6 Scripts: Latin and Cyrillic -> same phonemes (decision D1)
+     Principle: the script is only a spelling. Both scripts are mapped by
+     the Croatian language data into the same phoneme set and then go
+     through the same lexicon, rules, prosody, number grammar and voice.
+       ćirilica  -> tS' i r i l i ts a
+       ћирилица  -> tS' i r i l i ts a      (identical)
+     Serbian / Montenegrin / Bosnian Cyrillic (1 letter = 1 phoneme):
+       а a   б b   в v   г g   д d   ђ dZ'  е e   ж Z   з z   и i
+       ј j   к k   л l   љ L   м m   н n   њ J   о o   п p   р r
+       с s   т t   ћ tS' у u   ф f   х x   ц ts  ч tS  џ dZ  ш S
+     Macedonian letters (close South Slavic alphabet, kept - P8):
+       ѓ -> dZ', ќ -> tS', ѕ -> d z (cr1 has no dz phoneme; the d-z diphone
+       exists, so "d z" is the closest sayable form).
+     Russian, Ukrainian, Belarusian and Bulgarian Cyrillic are NOT part of
+     the Croatian language (r7): letters such as ы, э, щ, ъ, ь, ё, ю, я, й,
+     і, ї, є, ґ, ў are treated as unknown characters (default: skipped
+     silently; in spelling mode spoken by a generic "nepoznat znak").
+     A future Russian/Bulgarian/... language (with its own voice) would
+     define them in its own data.
+     Design points:
+       - Cyrillic letters map to phonemes directly (not via Latin strings), so
+         "нј" in "инјекција" correctly stays n + j and њ is always J.
+       - For lexicon lookup, words are keyed by a common script-independent
+         form (a phoneme-level or "canonical letter" key), so a lexicon entry
+         written in Latin also matches the same word written in Cyrillic.
+       - Mixed-script words (Latin "a", "o", "e", "c", "p", "x" homoglyphs
+         inside a Cyrillic word, or the reverse) are normalized to the
+         majority script of the word before mapping.
+       - Upper/lower case is irrelevant for phonemes, but kept for acronym
+         detection and the capital-letter indication in spelling.
+       - Spelling mode (7.10) names Cyrillic letters by their phoneme
+         (њ -> "enj", same as nj), so letter names are also Croatian.
+       - Numbers, dates, symbols, emoji and abbreviations inside Cyrillic text
+         are expanded with the SAME Croatian data (D2). Cyrillic
+         abbreviations (e.g. "нпр.", "тј.", "итд.") are listed in
+         abbreviations.txt in both scripts or matched via the common form.
+
+7.7 Numbers - always Croatian (decision D2)
+     Croatian numerals depend on gender, case and the following noun.
+       - Cardinals: jedan/jedna/jedno, dva/dvije, tri, četiri, pet ... deset,
+         jedanaest ... devetnaest, dvadeset, trideset, četrdeset, pedeset,
+         šezdeset, sedamdeset, osamdeset, devedeset, sto, dvjesto, tristo,
+         četiristo, petsto, šesto, sedamsto, osamsto, devetsto.
+       - tisuća (f.): tisuću, dvije tisuće, pet tisuća, dvadeset jedna
+         tisuća; milijun (m.): milijun, dva milijuna, pet milijuna; milijarda
+         (f.): dvije milijarde, pet milijardi; bilijun ...
+       - Agreement by the last two digits: ends in 1 (not 11) -> singular;
+         ends in 2, 3, 4 (not 12-14) -> "few" form; otherwise genitive plural:
+         "1 euro / 2 eura / 5 eura", "1 kuna / 2 kune / 5 kuna". These are the
+         CLDR plural categories one / few / other for Croatian.
+       - Ordinals: prvi, drugi, treći, četvrti, peti ... dvadeset prvi,
+         stoti, tisućiti; they decline (prvi, prvog(a), prvom(u), prva,
+         prve, prvoj ...); written "1." in text. Case/gender by context
+         heuristics in data: "29. rujna" -> genitive "dvadeset devetog",
+         "u 5. razredu" -> locative "petom", default nominative masculine.
+       - Dates: "29. 9. 2026." / "29.09.2026." / "29. rujna 2026." ->
+         "dvadeset devetog rujna dvije tisuće dvadeset šeste (godine)".
+         Croatian months: siječanj, veljača, ožujak, travanj, svibanj,
+         lipanj, srpanj, kolovoz, rujan, listopad, studeni, prosinac
+         (genitive: siječnja, veljače, ožujka, travnja, svibnja, lipnja,
+         srpnja, kolovoza, rujna, listopada, studenoga, prosinca).
+         Non-Croatian month names in input (januar, februar ..., јануар ...)
+         are recognized as month words for date parsing and, being normal
+         words, are read as written.
+       - Time: "14:30" -> "četrnaest i trideset" or "četrnaest sati i
+         trideset minuta" (style option).
+       - Decimals: comma = decimal separator ("3,14" -> "tri cijela
+         četrnaest" / "tri zarez četrnaest", style option); dot or space =
+         thousands separator ("1.000.000", "1 000 000"); heuristics for
+         English-formatted numbers ("1,000", "3.5").
+       - Also: negatives ("minus pet"), ranges ("5-10" -> "pet do deset"),
+         fractions ("1/2" -> "pola"/"jedna polovina", "3/4" -> "tri
+         četvrtine"), percent ("pet posto"), degrees ("20 °C"), currency
+         ("5 €", "EUR 5", "$10"), phone numbers (digit groups), long digit
+         strings (digit by digit), roman numerals ("Ivan Pavao II." ->
+         "drugi", "XX. stoljeće" -> "dvadeseto").
+     MECHANISM: a rule-based number formatter compatible with ICU/CLDR RBNF
+     syntax. CLDR publishes Croatian RBNF (cardinal/ordinal, genders, cases)
+     and plural rules, so numbers.txt is seeded from CLDR and written in a
+     documented syntax; the same interpreter serves every future language.
+     Context rules (which case/gender) live in numcontext.txt.
+
+7.8 Emoji
+     - Full sequences by longest match (trie in hr.dat): base emoji + FE0F,
+       skin tones (U+1F3FB..1F3FF), ZWJ sequences, flags (regional indicator
+       pairs, tag sequences), keycaps (digit + FE0F + 20E3).
+     - DONE (r5): languages/hr/emoji.txt already exists in the Croatian
+       source folder. Source of the names:
+         Unicode CLDR release 48.2 (latest CLDR release, 2025), locale "hr":
+           common/annotations/hr.xml          (base emoji)
+           common/annotationsDerived/hr.xml   (skin tones, ZWJ sequences,
+                                               flags, keycaps ...)
+           only the type="tts" short names are used.
+         Emoji list and order: Unicode Emoji 17.0, emoji-test.txt, fully-
+           qualified sequences (the Emoji version that CLDR 48 covers; Emoji
+           18.0 exists but has no Croatian CLDR names yet).
+       Result: 3944 emoji and sequences, ALL with a Croatian name (0
+       missing), grouped by Unicode groups/subgroups as comments, e.g.
+         😀  nasmijano lice
+         😂  lice sa suzama radosnicama
+         👍🏽  palac gore: maslinasta boja kože
+         👨‍👩‍👧  obitelj: muškarac, žena i djevojčica
+         🇭🇷  zastava: Hrvatska
+         1️⃣  tipka: 1      (the "1" is then read by normal number rules)
+       License: CLDR data is under the Unicode License v3 (permissive; also
+       fine in closed-source products); the attribution header at the top of
+       emoji.txt must be kept, and the product's About/licenses text must
+       name Unicode CLDR.
+     - emoji.txt is ORDINARY LANGUAGE DATA, hand-editable, one file (no
+       separate "custom" file): a name can be changed directly in the file.
+       Format: <emoji sequence><TAB><text to speak>; "#" comments; the name
+       text is normal text of the language (goes through normalization).
+       langc does not know or care where the names came from.
+     - Other languages: each language author takes emoji names from wherever
+       they want (CLDR has annotations for ~100 locales, or their own list);
+       only the file format is fixed. The CLDR conversion script used for
+       Croatian is a private helper, not part of the product or SDK (it may
+       be offered in the SDK later as a convenience).
+     - Updating: when a new CLDR/Emoji version appears, regenerate or add
+       new lines by hand; old lines stay valid.
+     - Options (defaults proposed in P5): read emoji on/off, skin tone
+       on/off, collapse repeats
+       ("😂😂😂" -> "3 puta lice sa suzama radosnicama").
+     - Hosts that already describe emoji themselves (NVDA symbol
+       dictionaries, TalkBack) can switch our emoji reading off.
+
+7.9 Abbreviations, symbols, punctuation
+     - abbreviations.txt: npr. -> na primjer, tj. -> to jest, itd. -> i tako
+       dalje, dr. -> doktor, br. -> broj, god. -> godine, ul. -> ulica,
+       units km, kg, m², °C, € ... Flags: case-sensitive, may end a sentence,
+       takes number agreement. Cyrillic spellings covered (7.6).
+     - symbols.txt: & i, @ et, # ljestve, % posto, + plus, = jednako,
+       / kosa crta, * zvjezdica ... with reading levels (none/some/most/all):
+       screen readers sometimes handle punctuation themselves (NVDA always
+       does; its symbol processing happens before text reaches the synth).
+     - URLs and e-mails: "točka", "et", "kosa crta", known TLDs and "www".
+
+7.10 Spelling (character mode)
+     Screen readers constantly send single characters: must be FAST.
+     Croatian letter names: a, be, ce, če, će, de, dže, đe, e, ef, ge, ha, i,
+     je, ka, el, elj, em, en, enj, o, pe, er, es, eš, te, u, ve, ze, že;
+     foreign: ku (q), dvostruko ve (w), iks (x), ipsilon (y).
+     Cyrillic letters get the same Croatian names (б "be", њ "enj" ...);
+     Macedonian ѓ, ќ, ѕ get descriptive names; other Cyrillic letters are
+     not part of Croatian (7.6).
+     Digits, punctuation, symbols; capital letters indicated by "veliko"
+     prefix or higher pitch (host/NVDA setting).
+
+7.11 Foreign words and acronyms
+     Exceptions lexicon (lexicon.txt) plus acronym rules: ALL CAPS without
+     vowels -> spelled (HDZ -> ha de ze), listed acronyms read as words
+     (NATO, UNICEF), otherwise heuristic (pronounceable -> read, else spell).
+
+
+===============================================================================
+8. LANGUAGE SOURCE FILES (THE "hr" FOLDER)
+===============================================================================
+
+All files UTF-8, '#' comments, one entry per line, syntax editable by a
+non-programmer.
+
+  languages/hr/
+    language.txt      Metadata: code "hr", name "Hrvatski", ISO 639-1/3
+                      codes (hr / hrv, needed by Android and speechd), SAPI
+                      LCID 0x041A, version, author, license, file list,
+                      default style options (time, decimals ...).
+    phonemes.txt      Phoneme inventory: symbol, type, features (voiced,
+                      place, manner, sonorant, syllabic-capable), voicing
+                      partner, default and minimum duration, viseme id.
+    classes.txt       Named sets of letters/phonemes for rules.
+    scripts.txt       All scripts the language accepts and their letters:
+                      Latin table, Cyrillic table (7.6), other alphabets,
+                      upper/lower pairs, homoglyph table, NFC tables.
+    g2p.txt           Grapheme -> phoneme rewrite rules (ordered), for the
+                      letters that need context (Latin digraphs, foreign
+                      letters); plain 1:1 letters come from scripts.txt.
+    postlex.txt       Phrase-level phoneme rules (assimilation,
+                      degemination, hiatus) (ordered).
+    syllables.txt     Syllabification (incl. syllabic r).
+    lexicon.txt       Exceptions: word -> phonemes (+ accent), any script.
+    accents.txt       Accent lexicon + default accent rule.
+    clitics.txt       Proclitics and enclitics.
+    numbers.txt       RBNF number grammar (cardinal, ordinal, genders, cases,
+                      digit-by-digit, roman).
+    numcontext.txt    Context rules choosing gender/case; plural categories.
+    dates.txt         Month/day names, date and time patterns and templates.
+    units.txt         Units and currencies with plural forms (one/few/other).
+    abbreviations.txt Abbreviations (both scripts).
+    symbols.txt       Symbol and punctuation names with reading levels.
+    emoji.txt         Emoji names (EXISTS: 3944 entries from CLDR 48.2,
+                      hand-editable; format in 7.8).
+    spelling.txt      Character names for spell mode (all scripts).
+    acronyms.txt      Acronyms read as words / spelled.
+    prosody.txt       Duration factors, pause lengths, F0 model, contours.
+    tests.txt         Test cases: input -> expected words and/or phonemes,
+                      run by the compiler (both scripts tested).
+
+A folder = a language. New language: copy the folder, edit, compile.
+Voice-specific settings (base pitch, database path) are NOT here (section 10).
+
+8.1 Languages are made by third parties (decisions D6, D7)
+  We build and maintain only "hr". Anyone else can build a language with the
+  free Language SDK (langc.exe, mbtts.exe, specification, guide, and a small
+  documented EXAMPLE language folder - not our full Croatian source).
+  The engine contains no phoneme list: a language author
+    1. picks an MBROLA voice for the language (e.g. pl1 for Polish) and reads
+       its README / phoneme table - exactly as done for cr1 in section 3
+       (cr1 README: a e i o u r p b t d k g ts tS dZ tS' dZ' f s z S Z x m n
+       J l L r v j, silence _);
+    2. writes phonemes.txt with exactly those SAMPA symbols and their
+       features;
+    3. writes scripts/g2p/postlex rules, numbers, spelling ... in terms of
+       these symbols;
+    4. runs "langc <folder> --voice <voice>": the compiler checks every
+       symbol against the real diphone table of the database and reports
+       missing/aliased pairs (as found for cr1: 30 identical pairs, 49
+       aliases), then writes <code>.dat;
+    5. writes a <voice>.voice file and installs both files into MBROLA NG's
+       languages/ and voices/ folders; MBROLA NG registers the new voice
+       (SAPI token, NVDA voice list) automatically on next start or through a
+       small "register voices" function of the installer/settings tool.
+  The .dat format has a version number; a language compiled with an SDK
+  version is accepted by every MBROLA NG version with the same major format
+  version.
+
+
+===============================================================================
+9. THE LANGUAGE COMPILER (langc) AND THE BINARY FORMAT (hr.dat)
+===============================================================================
+
+9.1 What the compiler does
+     langc languages/hr -o hr.dat [--voice voices/cr1/cr1.voice]
+     (portable command-line program: Windows langc.exe and Linux langc)
+       1. Parse all source files; errors with file:line:column.
+       2. Resolve classes and phoneme symbols -> IDs; validate every symbol.
+       3. Compile rewrite rules into tables (grouped by focus symbol,
+          precomputed class bitsets).
+       4. Build lookup structures: sorted tables / tries for lexicon,
+          abbreviations, emoji, script tables.
+       5. Compile the number grammar.
+       6. Run tests.txt through the real core code; fail on any mismatch.
+       7. Voice check (--voice): run a large word list, the lexicon and the
+          tests through G2P + postlex, and report every phoneme pair that
+          the voice lacks or aliases to silence (for cr1: 30 identical pairs
+          + 49 aliases). Finds rule gaps automatically.
+       8. Write hr.dat.
+
+9.2 Why binary (and what it does NOT do)
+     Fast loading (memory-mapped, no parsing - matters because SAPI and
+     Android create engines often and NVDA starts with the synth), guaranteed
+     consistency (only validated data reaches users), smaller files.
+     It is not meant as copy protection: the format is documented so that
+     third parties can build languages. Our own Croatian SOURCE files are
+     not published (only hr.dat ships).
+     Developer mode: the core can load a SOURCE folder directly and compile
+     it in memory (enabled by a setting only in developer builds/config), so
+     rule writers test in NVDA/SAPI without running the compiler each time.
+     End-user packages never use it.
+
+9.3 Binary layout (little-endian, offsets from file start, same file on all
+    platforms and CPU types)
+     Header (64 bytes): magic "MBNGLANG", format major/minor (uint16 each),
+       language code, compiler version, build timestamp, flags, section
+       count, section directory offset, CRC32 of the file.
+     Section directory: { fourcc id ('PHON','CLAS','SCRP','G2PR','PLEX',
+       'SYLL','LEXI','ACCN','CLIT','NUMB','NCTX','DATE','UNIT','ABBR',
+       'SYMB','EMOJ','SPEL','ACRO','PROS','UNIC','META','STRS'), offset,
+       size, CRC32 }.
+     Rules:
+       - Unknown sections ignored (newer compilers may add optional data).
+       - The core refuses a higher MAJOR version with a clear error; minor
+         versions are compatible.
+       - UTF-8 string pool; no pointers; explicit field sizes, no padding
+         dependence.
+       - Every section validated (CRC, bounds) before use: a corrupt .dat
+         must never crash the host (screen readers, Android system service).
+
+9.4 Location per platform
+     Windows: <InstallDir>\languages\hr.dat
+     NVDA add-on: <addon>\synthDrivers\mbrola_ng\languages\hr.dat
+     Linux: /usr/share/mbrola-ng/languages/hr.dat
+     Android: APK assets (stored uncompressed so it can be memory-mapped).
+
+
+===============================================================================
+10. VOICES AND HOW THEY BIND TO LANGUAGES
+===============================================================================
+
+10.1 Separation
+     Language = how text becomes canonical phonemes + prosody.
+     Voice    = MBROLA database + mapping of canonical phonemes to the
+                database's symbols + voice prosody settings.
+     This allows more Croatian MBROLA voices later, and voices for new
+     languages, without duplicating language data.
+
+10.2 cr1 is a Croatian voice (decision D2)
+     cr1 is bound to exactly one language: hr. There are no Serbian or
+     Bosnian cr1 voices; Serbian/Bosnian/Montenegrin text (Latin or
+     Cyrillic) is simply read by the Croatian voice with Croatian rules and
+     Croatian number words.
+
+10.3 Voice description file (next to the database)
+     voices/cr1/cr1.voice (plain text, tiny, read at start):
+       name = MBROLA NG Hrvatski (cr1)
+       database = cr1
+       language = hr
+       gender = male ; age = adult
+       base_pitch = 105     (Hz)
+       pitch_range = ...
+       rate_factor = 1.0
+       volume = 1.0
+       phoneme_map: differences from canonical symbols (none for cr1)
+     (r7: this information is delivered inside the voice catalog entry and
+     written to the .voice file when the voice is installed - see 10.5.)
+
+10.4 Distribution model (r7): languages bundled, voices downloaded
+     - LANGUAGES (.dat files, small, our own data) are INSIDE every package:
+       APK, NVDA add-on, Windows installer, Linux package.
+     - VOICES (MBROLA databases, several MB each, third-party licensed) are
+       NOT inside any package. They are downloaded on demand, when the user
+       chooses a language, from the location given in a voice catalog.
+     - Advantages: small packages; the user gets only what he needs; new
+       voices for existing languages can appear without a new package;
+       voices can be downloaded directly from the official MBROLA voice
+       repository (numediart/MBROLA-voices), so MBROLA NG itself does not
+       redistribute cr1 (reduces license obligations, 4.3), and the voice
+       license is shown to the user before download.
+     - First start on any platform: "no voices installed" -> the user picks
+       a language (e.g. Hrvatski) -> the matching voice (cr1) is downloaded,
+       verified and installed -> the voice is immediately usable.
+
+10.5 The voice catalog (catalog.json)
+     One JSON file on a web server (location decided at release time; the
+     URL is a setting built into each package, with a developer override,
+     e.g. a local file for testing). HTTPS only. Structure (example):
+
+     {
+       "schema": 1,
+       "generated": "2026-09-29T00:00:00Z",
+       "min_engine": "1.0",
+       "languages": [
+         {
+           "code": "hr",
+           "sapi_lcid": "41A",
+           "android_locale": "hrv-HRV",
+           "names": { "en": "Croatian", "hr": "Hrvatski" },
+           "dat_version": "1.0",
+           "voices": [ "cr1" ]
+         }
+       ],
+       "voices": [
+         {
+           "id": "cr1",
+           "language": "hr",
+           "names": { "en": "Croatian male (cr1)",
+                      "hr": "Hrvatski muški (cr1)" },
+           "gender": "male",
+           "age": "adult",
+           "sample_rate": 16000,
+           "version": "1998.1",
+           "files": [
+             { "name": "cr1",
+               "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/cr1/cr1",
+                         "<mirror URL>" ],
+               "size": 3515376,
+               "sha256": "<hash>" },
+             { "name": "license.txt",
+               "urls": [ "https://raw.githubusercontent.com/numediart/MBROLA-voices/master/data/cr1/license.txt" ],
+               "size": 1674,
+               "sha256": "<hash>" }
+           ],
+           "license": { "file": "license.txt",
+                        "commercial_use": false,
+                        "summary": { "en": "...", "hr": "..." } },
+           "voice_config": { "base_pitch": 105, "pitch_range": 1.0,
+                             "rate_factor": 1.0, "volume": 1.0,
+                             "phoneme_map": {} },
+           "phonemes": "a b d dZ dZ' e f g i j k l m n o p r s t tS tS' ts u v x z S Z J L _"
+         }
+       ]
+     }
+
+     Rules:
+     - The client shows only languages whose .dat is present in its own
+       package; catalog languages without a local .dat are shown as "needs
+       a newer version of MBROLA NG" (or hidden - UI choice), and entries
+       with min_engine newer than the client are ignored.
+     - A language may list several voices later (e.g. a female Croatian
+       voice); the first one is the default.
+     - Names are localized per UI language, with English as fallback.
+     - Multiple URLs = mirrors, tried in order.
+     - Optional (recommended before public release): catalog.json.sig, an
+       Ed25519 signature checked with a public key built into the packages,
+       so a hacked web server cannot push a manipulated catalog.
+
+10.6 Installed-voices registry (installed.json, local)
+     Kept next to the installed voices on each platform:
+       { "voices": [ { "id": "cr1", "language": "hr", "version": "1998.1",
+                       "path": "<folder>", "sha256": "<hash>",
+                       "installed": "2026-09-29T10:00:00Z" } ] }
+     The engine, the Voice Managers and the SAPI token registration all read
+     this file (plus a scan of the voices folder as fallback, so manual
+     installs also work).
+
+10.7 Download and install procedure (same on all platforms)
+     1. Show voice name, size and license text; the user must accept.
+     2. Download every file to a temporary folder (HTTPS, resume if
+        interrupted, progress reported and spoken/announced accessibly).
+     3. Verify size + SHA-256; verify the database header (magic "MBROLA")
+        and that every phoneme of the language exists in the database's
+        diphone table (the same check langc does, 9.1 step 7).
+     4. Write <id>.voice from voice_config, move the folder into place
+        atomically, update installed.json.
+     5. Platform step: register SAPI token / refresh NVDA voice list /
+        notify Android TTS framework / refresh speechd voice list.
+     Also: "Remove voice", "Check for updates" (version or hash changed),
+     and "Install from file" (offline: the user supplies the database file
+     or a zip; same verification) - important for users without internet
+     or on restricted networks.
+
+10.8 Behaviour when no voice is installed (accessibility-critical)
+     A blind user must NEVER be left without speech:
+     - NVDA: the driver's check() returns False while no voice is installed,
+       so NVDA never switches to MBROLA NG and keeps the current synthesizer;
+       after a successful install the Voice Manager offers "Switch to
+       MBROLA NG now?".
+     - SAPI: no voice token is registered for a language whose voice is not
+       installed, so applications cannot pick a silent voice.
+     - Android: onIsLanguageAvailable returns LANG_MISSING_DATA, the system
+       TTS settings then offer "install voice data", which opens our main
+       screen; TalkBack keeps using the previous engine meanwhile.
+     - Linux: the module lists only installed voices.
+
+10.9 Where voices are stored
+     Windows (SAPI installer): %ProgramData%\MBROLA NG\voices\<id>\
+       (machine-wide, shared by x86/x64 and usable by the NVDA add-on).
+     NVDA add-on: <NVDA user config folder>\mbrola_ng\voices\<id>\ -
+       NOT inside the add-on folder (NVDA replaces that folder on every
+       add-on update, which would delete the voices). Works for portable
+       NVDA as well (its config folder is portable). The add-on also uses
+       voices found in %ProgramData%\MBROLA NG\voices (read-only) if the
+       Windows version is installed.
+     Linux: ~/.local/share/mbrola-ng/voices/<id>/ (per user) or
+       /usr/local/share/mbrola-ng/voices/<id>/ (system-wide); existing
+       distribution voices in /usr/share/mbrola/<id>/ are detected and used
+       without downloading.
+     Android: app-private storage (filesDir/voices/<id>/): a normal file,
+       so MBROLA reads it directly - no asset extraction or ROM mode needed.
+
+
+===============================================================================
+11. HOST 1: WINDOWS SAPI 5
+===============================================================================
+
+11.1 COM object
+     Lives in MBROLA_NG.dll (together with the C API of 5.4). File version
+     resource: CompanyName/LegalCopyright "Copyright (c) 2026 Darko
+     Milošević", ProductName "MBROLA NG".
+     In-process COM server implementing ISpTTSEngine (Speak,
+     GetOutputFormat) and ISpObjectWithToken. Headers sapi.h + sapiddk.h
+     (Windows SDK). ThreadingModel "Both". C++, no ATL needed.
+
+11.2 Output format
+     16 kHz, 16-bit, mono PCM (from mbng_get_audio_format).
+
+11.3 Speak()
+     SPVTEXTFRAG list -> segments: SPVA_Speak -> TEXT, SPVA_SpellOut ->
+     SPELL, SPVA_Silence -> BREAK, SPVA_Bookmark -> MARK, SPVA_Pronounce ->
+     limited (SAPI has no Croatian phone converter; low priority).
+     Rate (-10..+10) -> speed factor 3^(rate/10) (Microsoft convention),
+     applied in our duration model; configurable extra "rate boost" for
+     screen-reader users. Pitch, volume and emphasis per fragment.
+     Loop: mbng_read blocks of ~10-20 ms -> ISpTTSEngineSite::Write, calling
+     GetActions() between blocks (ABORT -> mbng_cancel and return; SKIP ->
+     skip sentences, CompleteSkip; RATE/VOLUME -> re-read).
+
+11.4 Events
+     SPEI_WORD_BOUNDARY, SPEI_SENTENCE_BOUNDARY (UTF-16 offsets from the
+     core), SPEI_TTS_BOOKMARK, SPEI_PHONEME/SPEI_VISEME (optional). Only
+     events in GetEventInterest.
+
+11.5 Registration and bitness
+     COM registration per bitness; voice token in
+     HKLM\SOFTWARE\Microsoft\Speech\Voices\Tokens\MBROLA-NG-hr-cr1
+     (Attributes: Name, Gender, Age, Language=41A, Vendor=MBROLA NG), in both
+     64-bit and 32-bit registry views, with VoiceFile and LanguageFile paths.
+     Both x86 and x64 DLLs are shipped (a 32-bit host loads only 32-bit
+     DLLs). Windows on ARM64: native ARM64 build added in the release
+     phase (P7).
+     Windows Narrator uses OneCore voices and does not load third-party SAPI 5
+     engines -> out of scope.
+
+11.6 Robustness and settings
+     No exception escapes COM methods; failures -> HRESULT + optional log.
+     Settings in HKCU\Software\MBROLA NG\ (emoji, punctuation level, number
+     style, rate boost, capitals, log).
+
+11.7 Windows installer with language selection (r7)
+     Inno Setup (P3), UI in English and Croatian (chosen from the Windows
+     language, switchable on the first page).
+     - Contains: engine binaries (x86 + x64), ALL language .dat files of
+       the release, licenses. No voices.
+     - "Select languages" page: one checkbox per language from the
+       installer's own list (updated from catalog.json at install time if
+       online), e.g.
+           [x] Hrvatski / Croatian - voice cr1 (3.4 MB)
+       Checking a language = its default voice will be downloaded.
+     - License page for the selected voices (cr1 license text).
+     - Download page (Inno Setup's built-in download support, with SHA-256
+       verification), progress and error messages accessible to screen
+       readers; on failure: retry, skip, or "install from file".
+     - Install to %ProgramData%\MBROLA NG\voices, update installed.json,
+       register SAPI tokens only for installed voices (both registry views).
+     - Adding/removing languages later: run the installer again
+       ("Modify" from Apps & features) - the same page with checkboxes.
+       A small Windows Voice Manager (same UI as the NVDA one) can be added
+       later if wanted.
+     - Silent install for administrators: /LANGS=hr /SILENT.
+
+
+===============================================================================
+12. HOST 2: NVDA ADD-ON
+===============================================================================
+
+12.1 Why a native NVDA driver (not SAPI 5 through NVDA)
+     NVDA's SAPI 5 driver adds latency and its index/marker handling is
+     limited. A native driver talks to our core directly: faster response
+     to keystrokes, precise index reporting (say-all, cursor tracking),
+     immediate cancel.
+
+12.2 Structure
+     A .nvda-addon package:
+       manifest.ini                 name "mbrolaNG", author "Darko
+                                    Milošević", summary, version,
+                                    minimum/last tested NVDA version
+       synthDrivers/mbrola_ng/__init__.py      SynthDriver (Python)
+       synthDrivers/mbrola_ng/x86/MBROLA_NG.dll      (32-bit)
+       synthDrivers/mbrola_ng/x86/mbrola_ng_synth.exe
+       synthDrivers/mbrola_ng/x64/MBROLA_NG.dll      (64-bit)
+       synthDrivers/mbrola_ng/x64/mbrola_ng_synth.exe
+       synthDrivers/mbrola_ng/languages/hr.dat  (all languages bundled)
+       globalPlugins/mbrola_ng_voice_manager/   Voice Manager (12.5)
+       locale/en/..., locale/hr/LC_MESSAGES/nvda.po/.mo  translations
+       locale/hr/manifest.ini                   translated summary
+       doc/en/readme.html, doc/hr/readme.html   user guides
+       EULA, AGPL text for mbrola_ng_synth, CLDR attribution
+       (NO voices inside the add-on - downloaded, 10.4, 10.9)
+     It is the SAME MBROLA_NG.dll as in the Windows installer (D8); in the
+     add-on it is only loaded through the C API, not registered for SAPI.
+     If MBROLA NG is also installed system-wide, the add-on may use the
+     installed copy and its extra languages instead of its own (setting).
+     NVDA is moving from a 32-bit to a 64-bit process in its newer releases:
+     the driver loads the DLL matching the running NVDA (check
+     sys.maxsize / platform) - both are shipped.
+
+12.3 Driver behaviour
+     - speak(sequence): convert NVDA's speech sequence to segments:
+       strings -> TEXT, IndexCommand -> MARK(index), CharacterModeCommand ->
+       SPELL on/off, BreakCommand -> BREAK, PitchCommand / RateCommand /
+       VolumeCommand -> SET_*, LangChangeCommand -> ignored for now (only
+       one language) or later language switch, PhonemeCommand -> PHONEMES.
+     - A background thread pulls audio with mbng_read and feeds
+       nvwave.WavePlayer; MARK events -> synthIndexReached notifications at
+       the right audio position; end -> synthDoneSpeaking.
+     - cancel(): mbng_cancel + stop the player immediately.
+     - pause(switch): pause the player.
+     - Settings exposed in NVDA's voice settings and settings ring: voice,
+       rate, rate boost, pitch, volume, inflection (pitch range); extra
+       driver settings: emoji reading, number style.
+     - supportedCommands / supportedNotifications declared accordingly.
+     - NVDA already performs symbol/punctuation processing and character
+       descriptions; our punctuation level should default to "none" inside
+       NVDA to avoid double reading.
+
+12.4 Notes
+     - ctypes callbacks or polling; no Python code in the audio hot path
+       except moving buffers.
+     - License: see 4.5 - a closed-source add-on is possible because MBROLA
+       runs in its own process.
+
+12.5 MBROLA_NG Voice Manager (r7)
+     A global plugin inside the same add-on.
+     - Menu: NVDA menu -> "MBROLA_NG Voice Manager..." (in Croatian
+       "MBROLA_NG upravitelj glasova..."; placed in the Tools submenu or
+       directly in the NVDA menu - final place to be chosen; an optional
+       input gesture can be assigned in Input gestures).
+     - Dialog (wx, fully keyboard- and screen-reader-accessible, NVDA GUI
+       helpers used for labels) with two tabs:
+         "Installed" / "Instalirano":
+           list: voice, language, version, size, location
+           buttons: Remove, Check for updates / Update, Set as current
+           voice, Install from file..., Close
+           empty state: "No voices are installed. Open the Available tab to
+           download a voice."
+         "Available" / "Dostupno":
+           list of languages from catalog.json that this add-on version
+           supports, with their voice(s) and size, e.g.
+             "Hrvatski - cr1, muški glas, 3,4 MB"
+           button: Install (download) -> license dialog -> progress dialog
+           (progress bar with value announced, Cancel button) -> result.
+     - Downloads run in a background thread; the UI is updated through
+       wx.CallAfter; NVDA stays responsive; errors are shown in clear
+       messages (no network, checksum mismatch, disk full).
+     - After the first voice is installed: "MBROLA NG is ready. Switch to
+       MBROLA NG now?" (Yes switches the synthesizer; the settings dialog is
+       NOT forced).
+     - Localization: all strings through NVDA's gettext (_()), source
+       strings in English, Croatian translation (hr) delivered from the
+       start; more UI languages are added later simply as new .po files
+       (locale/<code>/LC_MESSAGES/nvda.po) - they appear automatically
+       according to NVDA's interface language. Language and voice names come
+       from catalog.json "names" in the NVDA interface language (English
+       fallback). User guide in doc/en and doc/hr.
+     - The synth driver itself refuses to load while no voice is installed
+       (10.8).
+
+
+===============================================================================
+13. HOST 3: SPEECH DISPATCHER (LINUX)
+===============================================================================
+
+13.1 Output module
+     Speech Dispatcher runs output modules as separate processes speaking a
+     text protocol over stdin/stdout. We provide "sd_mbrola_ng", written in
+     C/C++ using the module helper library shipped with speech-dispatcher
+     (module_main / module_utils; modern versions offer a simplified module
+     API where the module implements init, speak, stop, pause, set-parameter
+     callbacks).
+
+13.2 Behaviour
+     - Input is SSML (speechd wraps text in <speak>, inserts <mark name=..>
+       for index marks). The module converts SSML -> segments (small SSML
+       parser in core helpers: speak, mark, break, prosody, say-as
+       characters, sub).
+     - Message types: TEXT, CHAR (single character -> spell), KEY (key names
+       -> spelling/data table), SOUND_ICON (ignore or short tone), SPELL mode.
+     - Parameters: rate (-100..+100), pitch, pitch range, volume, punctuation
+       mode (none/some/most/all), cap-let-recogn, spelling, voice/language.
+     - Audio: send PCM to the server (module_tts_output_server) so the server
+       handles the audio backend (PulseAudio/PipeWire/ALSA); report events
+       BEGIN, END, STOP, PAUSE and INDEX_MARK at the correct audio time.
+     - LIST_VOICES: "hr" voice "cr1" (MBROLA NG Hrvatski).
+
+13.3 Packaging
+     /usr/lib/speech-dispatcher-modules/sd_mbrola_ng,
+     /usr/lib/mbrola-ng/mbrola_ng_synth,
+     /etc/speech-dispatcher/modules/mbrola_ng.conf (+ AddModule line),
+     /usr/share/mbrola-ng/languages/hr.dat, /usr/share/mbrola-ng/voices/cr1/.
+     Target systems (P6): Debian 13, Ubuntu 24.04 LTS and 26.04 LTS,
+     current Fedora, Arch; speech-dispatcher 0.11 or newer.
+     Distribution: source tarball + .deb first; others (rpm, AUR, Flatpak
+     is not suitable for a speechd module) later.
+     Note: many distributions already package MBROLA voices under
+     /usr/share/mbrola/cr1; we can use that path if present to avoid
+     duplicating the database.
+
+13.4 Voices on Linux (proposal, r7)
+     Same model: languages in the package, voices downloaded.
+     1. First choice: use a distribution voice package if installed
+        (/usr/share/mbrola/<id>/) - no download, updates via the system.
+     2. Otherwise a command-line voice manager "mbrola-ng-voices" using the
+        same catalog.json (terminal tools are fully accessible with Orca and
+        braille, and scriptable):
+          mbrola-ng-voices list              installed voices
+          mbrola-ng-voices available         languages/voices in catalog
+          mbrola-ng-voices install hr        downloads cr1 (license prompt)
+          mbrola-ng-voices remove cr1
+          mbrola-ng-voices update
+          mbrola-ng-voices install-file <file>
+        Per-user install into ~/.local/share/mbrola-ng/voices by default;
+        --system (with sudo) for /usr/local/share/mbrola-ng/voices.
+        Messages localized (gettext: English + Croatian).
+        After install it tells speech-dispatcher to reload the module
+        voice list (or advises "systemctl --user restart speech-dispatcher").
+     3. Optional later: a small GTK dialog with the same two tabs as the
+        NVDA Voice Manager, for desktop users (accessible via Orca).
+     4. The .deb package can suggest the distribution voice package
+        (Suggests: mbrola-cr1) where it exists.
+
+
+===============================================================================
+14. HOST 4: ANDROID
+===============================================================================
+
+14.1 Structure
+     Android app (Kotlin) with:
+       - a TextToSpeechService subclass (the system TTS engine interface);
+       - mbrola_ng_synth built for each ABI, packaged as a native library
+         file and started as a child process (4.6);
+       - a JNI bridge to the core (C++ built with the NDK via Gradle +
+         CMake) for arm64-v8a (practically all current phones), armeabi-v7a
+         (cheap Android Go phones with 32-bit system), x86_64 (emulator,
+         Chromebooks). No 32-bit x86 build;
+       - a main activity = voice manager (14.4), a settings screen (engine
+         settings), and the activities the TTS framework calls
+         (CHECK_TTS_DATA, INSTALL_TTS_DATA -> opens the main activity,
+         GET_SAMPLE_TEXT);
+       - assets: all language .dat files (uncompressed), licenses.
+         NO voices in the APK (downloaded, 10.4).
+
+14.2 Behaviour
+     - onIsLanguageAvailable / onLoadLanguage / onGetLanguage: "hrv"/"HRV"
+       (ISO 639-3/3166 alpha-3, as Android uses); also accept requests for
+       "hr".
+     - onGetVoices: one voice "hr-HR-x-mbrola_ng-cr1" (network not required,
+       low latency, quality normal).
+     - onSynthesizeText(request, callback): request text + speech rate
+       (100 = normal) + pitch (100 = normal) -> segments; callback.start(
+       16000, ENCODING_PCM_16BIT, 1); loop mbng_read -> audioAvailable in
+       blocks no larger than callback.getMaxBufferSize(); callback.done().
+     - onStop(): mbng_cancel (called from another thread).
+     - Word highlighting / progress: callback.rangeStart(start, end, frame)
+       using UTF-16 offsets from the core (Android 8+).
+     - Engine instances per service; the service lives in its own process.
+
+14.3 Notes
+     - Android versions (decided r5, no museum phones):
+         minSdk    = 29 (Android 10, 2019). Covers the vast majority of
+                     phones in use today, including cheap devices still
+                     sold/used in the region, while dropping truly old ones.
+                     Everything we need exists at this level: rangeStart
+                     word progress (API 26), Voice API, modern
+                     TextToSpeechService behaviour, scoped storage, and
+                     reliable execution of bundled native executables from
+                     nativeLibraryDir (needed for mbrola_ng_synth).
+         targetSdk = the latest API level required by Google Play at build
+                     time (API 36 / Android 16 as of 2026); raised every
+                     year as Play requires.
+         compileSdk = latest stable SDK.
+       - NDK: current LTS NDK (r28 or newer) so native libraries are built
+         with 16 KB page alignment (required by Google Play for apps
+         targeting Android 15+ and needed on new 16 KB-page devices).
+       - Language: Kotlin for the app, C++17 for JNI/core; Gradle with the
+         Android Gradle Plugin's externalNativeBuild (CMake).
+     - The cr1 database is downloaded to filesDir/voices/cr1 (10.9) - a
+       normal file, so no asset extraction or ROM mode is needed.
+     - Distribution: undecided (Google Play, direct APK, or F-Droid - the
+       last one only if the app is made open source, 4.10). Free of charge
+       unless the cr1 owners permit selling. No ads/paid features (cr1 license).
+     - TalkBack speaks through the TTS engine; TalkBack handles most
+       punctuation/emoji verbosity itself -> sensible defaults.
+
+14.4 Main app screen = voice manager (r7)
+     UI in English and Croatian (Android string resources: values/ and
+     values-hr/; more UI languages later as new values-<code>/ folders),
+     language names from catalog.json "names". Built with standard
+     accessible components (TalkBack labels, headings, live region for
+     progress, large touch targets).
+     - Top: status - "Installed voices: none" / "Instalirani glasovi: nema"
+       or the list of installed voices (voice, language, version, size) with
+       Remove / Update actions, and a "Test voice" button that speaks the
+       sample sentence.
+     - Below: "Available languages" - languages whose .dat is in the APK,
+       from catalog.json, e.g. "Hrvatski - glas cr1 (3,4 MB)" with an
+       Install button.
+     - Install: license dialog -> download (WorkManager job, continues if
+       the app is closed, notification with progress; Wi-Fi-only option) ->
+       verification (10.7) -> installed; the TTS framework is informed so the
+       voice appears in the system TTS settings immediately.
+     - First start: the screen shows that no voices are installed and
+       invites the user to choose a language; optionally the device's own
+       language is pre-selected if a voice for it exists (Croatian phone ->
+       "Hrvatski" suggested).
+     - "Set as system TTS engine" shortcut: opens Android's TTS settings
+       (Android does not allow apps to switch the engine themselves).
+     - Permissions: INTERNET only (plus POST_NOTIFICATIONS for download
+       progress on Android 13+).
+     - The catalog is fetched when the screen opens and cached (offline:
+       the cached copy is shown; install-from-file via the system file
+       picker is also available).
+
+
+===============================================================================
+15. BUILD SYSTEM, REPOSITORY LAYOUT, DISTRIBUTION PACKAGES
+===============================================================================
+
+15.1 Build system
+     CMake for everything native (core, MBROLA_NG.dll, mbrola_ng_synth,
+     langc, mbtts, speechd module, Android JNI via Gradle
+     externalNativeBuild).
+     Toolchains: MSVC (VS 2022) for Windows x86/x64 (optionally ARM64),
+     GCC/Clang for Linux, NDK Clang for Android. Gradle for the Android app.
+     NVDA add-on packaged by a script (zip + manifest) using the Windows DLLs.
+     Continuous integration builds all targets, runs unit tests and
+     compiles/tests languages on every commit (local build scripts are
+     enough while the project is private). The source repository of MBROLA
+     NG is PRIVATE and nothing is published now. If and when something is
+     distributed, the mbrola_ng_synth source (AGPL part) must be made
+     available together with it (4.10).
+     Code signing: MBROLA_NG.dll, mbrola_ng_synth.exe and the installer
+     should be signed with a code-signing certificate (avoids SmartScreen
+     and antivirus warnings, important for a program that starts a child
+     process).
+
+15.2 Repository layout (proposed)
+     MBROLA/                         (repository root, "MBROLA NG")
+       ANALYSIS.txt                  this document
+       external/mbrola/              upstream MBROLA (unmodified)
+       core/                         portable C++ core + mbrola_ng.h C API
+       synth/                        mbrola_ng_synth (AGPL, published
+                                     separately: MBROLA + pipe loop)
+       tools/langc/                  language compiler
+       tools/mbtts/                  developer CLI
+       tools/                        private helper scripts (e.g. CLDR ->
+                                     emoji.txt), not shipped
+       hosts/windows/                MBROLA_NG.dll: SAPI 5 COM engine + C
+                                     API exports for the NVDA add-on
+       hosts/nvda/                   NVDA add-on (Python driver + packaging)
+       hosts/speechd/                Speech Dispatcher module
+       hosts/android/                Android Studio project (app + JNI)
+       languages/hr/                 Croatian source files
+       catalog/                      catalog.json (+ signature) source,
+                                     published at release time
+       (no voices in the repository - downloaded from the catalog; a local
+       copy for tests lives outside the repository)
+       installer/windows/            Windows installer script
+       packaging/linux/              deb packaging
+       tests/                        unit tests, regression corpus, audio
+                                     smoke tests
+
+15.3 End-user packages (none contains language sources or langc)
+     Windows installer : x86\MBROLA_NG.dll + x86\mbrola_ng_synth.exe,
+                         x64\MBROLA_NG.dll + x64\mbrola_ng_synth.exe,
+                         languages\*.dat (all languages), EULA, AGPL
+                         text + source link for mbrola_ng_synth, CLDR
+                         attribution, readme. NO voices: the language
+                         checkboxes download them (11.7) and register SAPI
+                         voices for both bitnesses.
+                         Tool: Inno Setup (P3).
+     NVDA add-on       : .nvda-addon (12.2) with the same binaries, all
+                         languages, Voice Manager; no voices.
+     Linux             : .deb / tarball (13.3) with all languages and
+                         mbrola-ng-voices; no voices.
+     Android           : APK / AAB (14) with all languages; no voices.
+     Voice catalog     : catalog.json on a web server (10.5) - location
+                         decided at release time.
+     Language SDK      : free separate download for third-party language
+                         authors: langc.exe, mbtts.exe, format specification,
+                         "How to make a language" guide, small example
+                         language. Not part of any end-user package; our
+                         Croatian source is not included.
+
+
+===============================================================================
+16. TESTING STRATEGY
+===============================================================================
+     - Core unit tests (rule engine, RBNF, tokenizer, script mapping, offset
+       tracking, cancellation) on Windows and Linux in CI.
+     - Script equivalence tests: every tests.txt entry automatically run in
+       both Latin and Cyrillic spelling must give identical phonemes (D1).
+     - Language tests (tests.txt) run by the compiler.
+     - Voice coverage check against a large Croatian word list.
+     - Golden-file regression: sentences -> expected .pho; diffs reviewed.
+     - Host tests:
+         SAPI: harness speaking with events (offsets, abort latency, rate),
+               32- and 64-bit hosts, JAWS/Balabolka/System.Speech manually.
+         NVDA: say-all index tracking, cancel on keypress, character echo,
+               rate boost; both 32- and 64-bit NVDA builds.
+         speechd: spd-say, Orca; index marks, stop, punctuation modes.
+         Android: TalkBack navigation, stop latency, rangeStart, low-end
+               devices, all ABIs.
+     - Listening tests by native speakers (prosody, assimilation, cr1 gaps).
+
+
+===============================================================================
+17. RISKS AND OPEN PROBLEMS
+===============================================================================
+     1. Accent/prosody quality: accents are not written; without an accent
+        lexicon the voice is intelligible but monotonous and sometimes wrongly
+        stressed. Licensed source of accented forms needed.
+     2. Number case/gender guessed by context heuristics; sometimes wrong.
+     3. cr1 gaps: identical pairs and 49 aliases, especially the suspicious
+        p-ts, p-tS, p-tS' ("opcija", "opći") - listening tests + workaround.
+     4. Old 16 kHz voice; quality ceiling fixed by the database.
+     5. Licensing: keeping the closed-source option open depends on MBROLA
+        staying in a separate process (4.2 Option A, 4.10). MBROLA code must never be copied or
+        linked into MBROLA_NG.dll or any other closed binary. Have the final
+        setup reviewed by a lawyer before release.
+        cr1: free distribution OK; SELLING requires permission of the cr1
+        owners (4.3).
+     6. Separate process: small extra latency on first use and antivirus
+        heuristics (a DLL starting an .exe) - mitigated by code signing and
+        keeping the process alive while the engine instance lives.
+     7. Four platforms = four integration efforts, four release channels and
+        four sets of platform changes (NVDA API versions, Android API levels,
+        speechd module API). Keeping hosts thin and the core API stable is
+        the main mitigation.
+     8. Narrator (OneCore) not supported.
+     9. "Any language by data only" works best for languages with phonemic
+        spelling; English/French-like languages need large lexicons and
+        maybe new mechanisms (format versioning covers it).
+    10. Serbian/Bosnian/Montenegrin text is read with Croatian number words,
+        month names etc. (by design, D2). Words themselves are pronounced as
+        written (ekavian stays ekavian) - expected and correct for a
+        Croatian voice, but worth stating in the documentation.
+    11. Emoji data must be regenerated for new Unicode versions (scripted).
+    12. No ICU: NFC and character-class data must come from our own tables in
+        the .dat (compiler generates them from Unicode data files).
+
+
+===============================================================================
+18. PROPOSED IMPLEMENTATION PHASES
+===============================================================================
+     Phase 0 - Foundations
+       CMake skeleton; mbrola_ng_synth (MBROLA + pipe loop) on Windows and
+       Linux; cr1 plays the sample .pho files through the pipe protocol
+       (latency and stop/restart measured); core C API header drafted.
+     Phase 1 - Core skeleton + developer CLI
+       mbng_create/begin/read/cancel with a hard-coded trivial letter ->
+       phoneme mapping and flat prosody; mbtts writes .wav. Proves the core
+       end to end on Windows and Linux.
+     Phase 2 - MBROLA_NG.dll (minimal): SAPI 5 engine + C API, and the
+       minimal NVDA add-on using it, so real screen-reader testing starts
+       early (latency, cancel, index marks).
+     Phase 3 - Language data system
+       Source parsers, langc, hr.dat format, loader, developer source mode,
+       tests.txt, voice coverage check; move the trivial mapping into data.
+     Phase 4 - Croatian scripts and G2P
+       Latin + Cyrillic tables (D1), digraphs, lexicon, syllabic r,
+       assimilation, degemination, hiatus; script-equivalence tests.
+     Phase 5 - Text normalization
+       Tokenizer with offsets, sentences, abbreviations, symbols, RBNF
+       numbers + context, dates/times/units/currency, URLs, emoji (CLDR),
+       spelling mode.
+     Phase 6 - Prosody
+       Durations, F0 model, sentence types, clitics, accent lexicon (as data
+       allows), high-rate behaviour.
+     Phase 7 - Speech Dispatcher module + Linux packaging.
+     Phase 8 - Android app (JNI, TextToSpeechService, settings, assets).
+     Phase 9 - Complete events/settings on all hosts; voice catalog +
+       download/verify library (shared C++ code, 10.5-10.7); Windows
+       installer with language checkboxes; NVDA Voice Manager (en + hr);
+       Android main screen; mbrola-ng-voices for Linux; user guides.
+       (During development voices are installed from a local test catalog.)
+     Phase 10 - Language SDK for third parties: format specification, "How
+       to make a language" guide, example language, SDK package.
+
+
+===============================================================================
+19. DECISIONS ALREADY MADE / OPEN QUESTIONS
+===============================================================================
+  Made:
+     D1. Latin and Cyrillic -> the same SAMPA phonemes; no language switching
+         by script.
+     D2. cr1 is Croatian; all expansions (numbers, dates, symbols, letter
+         names) are Croatian regardless of script or origin of the text.
+     D3. Project name MBROLA NG; author Darko Milošević; Copyright (c) 2026
+         Darko Milošević. Hosts: SAPI 5, NVDA add-on, Speech Dispatcher,
+         Android.
+     D4. Language source and compiler not included in end-user packages.
+     D5. License/distribution model undecided - all options kept open
+         (4.10); nothing is distributed or published now. MBROLA runs as a
+         separate AGPL process (mbrola_ng_synth) so every option remains
+         possible.
+     D6. We make only Croatian; third parties make other languages with the
+         free Language SDK and the documented format.
+     D7. Phoneme inventory is defined by each language (phonemes.txt, SAMPA
+         of its MBROLA voice) - nothing language-specific in the engine.
+     D8. Windows: one binary MBROLA_NG.dll = SAPI 5 engine + C API for the
+         NVDA add-on (x86 and x64).
+
+  Proposed defaults (r6) - valid unless the author rejects them:
+
+     P1. Numbers, decimals and time (replaces Q1)
+         - Decimal numbers: "3,14" -> "tri zarez četrnaest". Short, the way
+           people actually read numbers aloud, fast for screen readers.
+           Style option "cijela": "tri cijela četrnaest".
+           Digits after the comma: up to 2 digits read as a number ("3,14"
+           -> "zarez četrnaest"), 3 or more digits read digit by digit
+           ("3,14159" -> "zarez jedan četiri jedan pet devet"); a leading
+           zero is read ("3,05" -> "zarez nula pet").
+         - Time: "14:30" -> "četrnaest i trideset"; "14:00" -> "četrnaest
+           sati"; "7:05" -> "sedam i nula pet"; "14:30:15" -> "četrnaest i
+           trideset i petnaest sekundi". Style option "long": "četrnaest
+           sati i trideset minuta".
+         - Dates: "29. 9. 2026." -> "dvadeset devetog rujna dvije tisuće
+           dvadeset šeste" (month by NAME even when written as a number;
+           the word "godine" only if it is written in the text: "2026. g.",
+           "2026. godine").
+         - Years alone: "2026." -> ordinal "dvije tisuće dvadeset šesta"
+           (nominative feminine, as for "godina"); "2026" without a dot ->
+           cardinal "dvije tisuće dvadeset šest".
+         - Thousands separators: "1.000.000" and "1 000 000" accepted;
+           numbers with more than 15 digits and numbers starting with 0
+           (phone numbers, codes) are read digit by digit or in groups.
+         - Reading all numbers digit by digit is also a user option (useful
+           for proofreading).
+
+     P2. Punctuation level defaults
+         - SAPI 5: "some" (@ # $ % & * + = / etc. spoken; . , ; : ! ? only as
+           pauses and intonation).
+         - NVDA add-on: "none" (NVDA does its own symbol processing).
+         - Speech Dispatcher: follows the level the client sends.
+         - Android: "some" (TalkBack sends mostly plain text).
+
+     P3. Windows installer tool: Inno Setup (replaces Q3)
+         Free, simple text script, handles 32/64-bit registry views,
+         per-CPU files, code signing, silent install, clean uninstall.
+         WiX/MSI only if a corporate MSI package is ever needed.
+
+     P4. Accent data (replaces Q4) - own data, no copying
+         - Stage 1: default rule (7.5): accent on the first syllable, never
+           on the last; clitics unaccented. Works from day one.
+         - Stage 2: accents.txt created BY US: the ~3,000-5,000 most frequent
+           Croatian word forms (frequencies counted from openly licensed
+           text - frequency counts are facts), accents entered by a native
+           speaker and checked by listening.
+         - Do NOT bulk-copy accent dictionaries (Hrvatski jezični portal,
+           printed dictionaries: copyright + EU database right). Wiktionary
+           (CC BY-SA) only as a reference for single words; bulk extraction
+           would force accents.txt under CC BY-SA and limit the closed
+           option (4.10).
+         - Stage 3 (later): suffix rules for inflected forms.
+
+     P5. Emoji defaults (replaces Q5)
+         - Read emoji: ON on all platforms. In NVDA the user can switch ours
+           off if NVDA's own symbol level already speaks them.
+         - Skin tone: ON (full CLDR name, "palac gore: maslinasta boja kože")
+           - same behaviour as NVDA and TalkBack; option to drop it.
+         - Repeats: 3 or more identical emoji in a row are collapsed:
+           "😂😂😂😂" -> "4 puta lice sa suzama radosnicama"; 2 are read twice.
+         - Emoji inside words/URLs are read as separate words.
+
+     P6. Minimum platform versions (replaces Q7)
+         - NVDA: minimumNVDAVersion = 2025.1, lastTestedNVDAVersion = newest
+           NVDA at release time; 32-bit and 64-bit NVDA builds supported
+           (add-on ships x86 and x64 DLLs). Updated yearly when NVDA's
+           add-on API changes (x.1 releases).
+         - Windows: Windows 10 22H2 and Windows 11.
+         - Linux: Debian 13, Ubuntu 24.04 LTS / 26.04 LTS, current Fedora,
+           Arch; speech-dispatcher 0.11+.
+         - Android: minSdk 29 (decided in r5, 14.3).
+
+     P7. Windows ARM64 (replaces Q8)
+         Later, in the release phase: native ARM64 MBROLA_NG.dll +
+         mbrola_ng_synth.exe (native ARM64 apps load only ARM64 SAPI
+         engines; x64 apps on ARM64 keep using the x64 DLL). Cheap to add
+         because the code is portable; not needed for early development.
+
+     P8. Cyrillic in the Croatian language (changed in r7 by the author)
+         - Serbian / Montenegrin / Bosnian Cyrillic: yes (exact).
+         - Macedonian extra letters ѓ, ќ, ѕ: yes (proposal - tiny table,
+           close South Slavic alphabet; can be dropped on request).
+         - Russian, Ukrainian, Belarusian, Bulgarian: NO - not needed in
+           Croatian. Their extra letters are unknown characters (skipped).
+         All with Croatian phonemes, number words and voice (D1, D2).
+
+  Deferred (decided later, all options kept open):
+     Q2. (DEFERRED) Free or paid, closed or open source - decided later
+         (4.10). If ever sold: permission from the cr1 owners first.
+     Q6. (DEFERRED) Where to publish the mbrola_ng_synth source - only
+         needed when something is distributed; nothing is published now.
+     Q9. (DEFERRED) Distribution channels (Google Play, F-Droid, NVDA
+         add-on store, own website) - decided later; all kept possible.
+     Q11. (DEFERRED) Copy protection / license keys - maybe later (4.11).
+
+
+===============================================================================
+APPENDIX A. FULL cr1 DIPHONE INVENTORY FACTS (from the binary)
+===============================================================================
+  Header: magic MBROLA, version 2.060, nb_diphone 931, SizeMrk 10116,
+          SizeRaw 3504000, Freq 16000, MBRPeriod 160, Coding 1.
+  Silence symbol: _
+  Phonemes (31): J L S Z _ a b d dZ dZ' e f g i j k l m n o p r s t tS tS'
+                 ts u v x z
+  Real diphones: 882. Replacement (alias to _-_): 49:
+    J-j S-Z Z-S Z-dZ Z-dZ' b-p d-dZ d-dZ' d-tS d-tS' d-ts dZ-d dZ-dZ'
+    dZ'-Z dZ'-dZ dZ'-tS dZ'-ts f-v g-k k-g l-L l-j n-J n-j p-b p-tS
+    p-tS' p-ts s-S s-Z s-z t-d t-dZ t-dZ' t-tS t-tS' t-ts tS-dZ tS'-dZ
+    tS'-dZ' tS'-tS ts-dZ ts-dZ' ts-tS ts-tS' v-f z-S z-Z z-s
+  Missing entirely (30): all identical pairs X-X for every phoneme except _.
+  Every other combination exists, including every phoneme next to silence.
+  Info strings: "CR1 a Croatian Male Voice", the SAMPA table (same as the
+  README), authors, "Built on Wed Oct 28 16:47:48 MET 1998", analysis
+  parameters, "Copyright (c) 1998 Faculte Polytechnique de Mons - TCTS lab".
+
+
+===============================================================================
+APPENDIX B. EXAMPLE SNIPPETS OF PROPOSED SOURCE-FILE SYNTAX
+===============================================================================
+(Illustrative only - final syntax fixed in Phase 3.)
+
+phonemes.txt
+  # symbol  type       features                         dur  pair  viseme
+  a         vowel      open central                     85   -     2
+  r         consonant  sonorant trill alveolar syllabic 45   -     13
+  p         consonant  obstruent stop labial voiceless  75   b     21
+  b         consonant  obstruent stop labial voiced     70   p     21
+  tS'       consonant  obstruent affricate palatal vl   95   dZ'   16
+  _         pause      silence                          0    -     0
+
+scripts.txt
+  [latin]
+  a A  -> a
+  č Č  -> tS
+  ć Ć  -> tS'
+  đ Đ  -> dZ'
+  (digraphs dž, lj, nj and foreign letters handled in g2p.txt)
+  [cyrillic]
+  а А  -> a
+  ћ Ћ  -> tS'
+  ђ Ђ  -> dZ'
+  љ Љ  -> L
+  њ Њ  -> J
+  џ Џ  -> dZ
+  ц Ц  -> ts
+  [cyrillic-macedonian]
+  ѓ Ѓ  -> dZ'
+  ќ Ќ  -> tS'
+  ѕ Ѕ  -> d z
+  [homoglyphs]               # Latin letter inside a Cyrillic word
+  a -> а   e -> е   o -> о   c -> с   p -> р   x -> х
+
+classes.txt
+  VOWEL     = a e i o u
+  OBS_VL    = p t k ts tS tS' f s S x
+  OBS_VD    = b d g dZ dZ' z Z
+  OBS       = OBS_VL OBS_VD
+
+g2p.txt   (Latin only; longest match, ordered; ^ = word start)
+  dž  -> dZ
+  lj  -> L
+  nj  -> J
+  h   -> x
+  x   -> k s
+  qu  -> k v
+  ^nadž -> n a d Z           # morpheme boundary exception
+
+postlex.txt   (SPE style: A -> B / left _ right; # = word boundary)
+  OBS_VL -> voiced(.)    / _ #? OBS_VD
+  OBS_VD -> voiceless(.) / _ #? OBS_VL
+  s -> S / _ #? (tS tS' dZ dZ' L J)
+  z -> Z / _ #? (tS tS' dZ dZ' L J)
+  n -> m / _ #? (p b)
+  (t d) -> 0 / _ #? (ts tS tS' dZ dZ')
+  X X -> X:long                 # degemination (any identical pair)
+
+numbers.txt   (RBNF-like, seeded from CLDR hr)
+  %spellout-cardinal-masculine:
+    0: nula;
+    1: jedan;
+    2: dva;
+    ...
+    20: dvadeset[ >>];
+    100: sto[ >>];
+    200: << sto[ >>];      # special forms dvjesto, tristo ...
+    1000: <%spellout-cardinal-feminine< tisuć$(cardinal,one{u}few{e}other{a})$[ >>];
+  %spellout-cardinal-feminine:
+    1: jedna;
+    2: dvije;
+    ...
+
+numcontext.txt
+  ORDINAL before MONTH_GEN      -> %spellout-ordinal-masculine-genitive
+  "u" ORDINAL NOUN_LOC          -> %spellout-ordinal-masculine-locative
+  NUMBER UNIT                   -> gender of UNIT, plural by CLDR category
+
+spelling.txt
+  a а      a
+  b б      be
+  č ч      če
+  dž џ     dže
+  nj њ     enj
+  q        ku
+  w        dvostruko ve
+  @        et
+  CAPITAL_PREFIX  veliko
+
+tests.txt   (each test is also run automatically in the other script)
+  "Dana 29. 9. 2026. u 14:30"  => dana dvadeset devetog rujna dvije tisuće
+                                  dvadeset šeste u četrnaest i trideset
+  "Дана 29. 9. 2026. у 14:30"  => (identical output)
+  "predsjednik"                => p r e t s j e d n i k
+  "od kuće" / "од куће"        => o t k u tS' e
+  "ćirilica" / "ћирилица"      => tS' i r i l i ts a
+  "инјекција"                  => i n j e k ts i j a   (voice check will
+                                  flag n-j -> needs a repair rule/lexicon)
+  "1000 eura" / "1000 евра"    => tisuću eura / tisuću evra
+
+===============================================================================
+END OF ANALYSIS
+===============================================================================

@@ -27,22 +27,8 @@ endif()
 # ---------------------------------------------------------------------------
 # Portable core (no OS-specific code, no language knowledge)
 # ---------------------------------------------------------------------------
-set(MBNG_CORE_SOURCES
-  core/src/util/text.cpp
-  core/src/util/bytes.cpp
-  core/src/lang/langdata.cpp
-  core/src/lang/datfile.cpp
-  core/src/lang/rbnf.cpp
-  core/src/lang/language.cpp
-  core/src/text/canon.cpp
-  core/src/text/normalizer.cpp
-  core/src/phon/phonology.cpp
-  core/src/prosody/prosody.cpp
-  core/src/engine/pipeline.cpp
-  core/src/engine/loader.cpp
-  core/src/engine/synthproc.cpp
-  core/src/engine/capi.cpp
-)
+# source lists shared with the Android build (android/app/src/main/cpp)
+include(cmake/sources.cmake)
 add_library(mbng_core STATIC ${MBNG_CORE_SOURCES})
 target_include_directories(mbng_core PUBLIC core/include core/src)
 
@@ -68,24 +54,11 @@ endif()
 # mbrola_ng_synth: unmodified MBROLA + pipe loop. SEPARATE PROGRAM, AGPL v3
 # (ANALYSIS 4.2). Never link MBROLA code into any other target.
 # ---------------------------------------------------------------------------
-set(MBROLA_DIR external/mbrola)
-add_executable(mbrola_ng_synth synth/mbrola_ng_synth.c
-  ${MBROLA_DIR}/Database/database.c ${MBROLA_DIR}/Database/database_old.c
-  ${MBROLA_DIR}/Database/diphone_info.c ${MBROLA_DIR}/Database/hash_tab.c
-  ${MBROLA_DIR}/Database/little_big.c ${MBROLA_DIR}/Database/zstring_list.c
-  ${MBROLA_DIR}/Engine/diphone.c ${MBROLA_DIR}/Engine/mbrola.c
-  ${MBROLA_DIR}/LibOneChannel/onechannel.c
-  ${MBROLA_DIR}/Misc/audio.c ${MBROLA_DIR}/Misc/common.c ${MBROLA_DIR}/Misc/g711.c
-  ${MBROLA_DIR}/Misc/mbralloc.c ${MBROLA_DIR}/Misc/vp_error.c
-  ${MBROLA_DIR}/Parser/fifo.c ${MBROLA_DIR}/Parser/input_fifo.c ${MBROLA_DIR}/Parser/input_file.c
-  ${MBROLA_DIR}/Parser/parser_input.c ${MBROLA_DIR}/Parser/phonbuff.c ${MBROLA_DIR}/Parser/phone.c)
-target_include_directories(mbrola_ng_synth PRIVATE
-  external/mbrola/Parser external/mbrola/Misc external/mbrola/LibOneChannel
-  external/mbrola/Engine external/mbrola/Database)
+add_executable(mbrola_ng_synth ${MBNG_SYNTH_SOURCES})
+target_include_directories(mbrola_ng_synth PRIVATE ${MBNG_SYNTH_INCLUDES})
 target_compile_definitions(mbrola_ng_synth PRIVATE LIBRARY LITTLE_ENDIAN $<$<C_COMPILER_ID:MSVC>:TARGET_OS_DOS>)
-if(MSVC)
-  target_compile_options(mbrola_ng_synth PRIVATE /W0)
-else()
+target_compile_options(mbrola_ng_synth PRIVATE ${MBNG_SYNTH_OPTIONS})
+if(NOT MSVC)
   target_link_libraries(mbrola_ng_synth PRIVATE m)
 endif()
 

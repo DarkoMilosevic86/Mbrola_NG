@@ -23,7 +23,7 @@ struct NormOptions {
   bool spell = false;           // character mode (SPELL_ON)
   bool auto_spell_single = true;  // a lone character is spelled (char echo)
   bool capitals = true;         // say the capital prefix when spelling
-  bool digits = false;          // read every number digit by digit
+  int digits = 0;               // numbers: 0 as numbers, 1 digit by digit, 2 in pairs
 };
 
 enum class ItemKind : uint8_t { Word, Break, Mark, Silence, Rate, Pitch, Range, Phonemes };
@@ -77,6 +77,7 @@ class Normalizer {
   void spell_range(Ctx& c, uint32_t b, uint32_t e, bool caps_prefix) const;
 
   std::string digits_text(const u32str& digits) const;
+  std::string pairs_text(const u32str& digits) const;
   std::string number_text(int64_t v, int ruleset) const;
   void emit_word(Ctx& c, const u32str& canon, uint32_t b, uint32_t e, uint8_t flags = 0) const;
   void emit_break(Ctx& c, BreakType brk, uint32_t b, uint32_t e) const;

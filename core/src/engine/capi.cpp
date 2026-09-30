@@ -200,7 +200,7 @@ int MBNG_CALL mbng_set_param(mbng_engine* e, int param, int v) {
     case MBNG_PARAM_PUNCTUATION: n.punct_level = std::max(0, std::min(v, 3)); break;
     case MBNG_PARAM_EMOJI: n.emoji = v != 0; break;
     case MBNG_PARAM_CAPITALS: n.capitals = v != 0; break;
-    case MBNG_PARAM_DIGITS: n.digits = v != 0; break;
+    case MBNG_PARAM_DIGITS: n.digits = std::max(0, std::min(v, 2)); break;
     case MBNG_PARAM_AUTO_SPELL: n.auto_spell_single = v != 0; break;
     case MBNG_PARAM_PHONEME_EVENTS: p.phoneme_events = v != 0; break;
     default: return fail(e, MBNG_ERR_ARGUMENT, "unknown parameter");

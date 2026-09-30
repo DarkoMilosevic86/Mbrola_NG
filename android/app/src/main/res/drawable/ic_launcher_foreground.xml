@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MBROLA NG - Copyright (c) 2026 Darko Milošević
+     SPDX-License-Identifier: GPL-2.0-or-later -->
+<!-- A speech bubble with a waveform cut out of it (inside the adaptive icon's safe zone). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M37,30h34a10,10 0 0 1 10,10v20a10,10 0 0 1 -10,10h-23l-11,10v-10a10,10 0 0 1 -10,-10v-20a10,10 0 0 1 10,-10zM35.5,47.5a2.5,2.5 0 0 1 5,0v5.0a2.5,2.5 0 0 1 -5,0zM43.5,41.5a2.5,2.5 0 0 1 5,0v17.0a2.5,2.5 0 0 1 -5,0zM51.5,37.5a2.5,2.5 0 0 1 5,0v25.0a2.5,2.5 0 0 1 -5,0zM59.5,43.5a2.5,2.5 0 0 1 5,0v13.0a2.5,2.5 0 0 1 -5,0zM67.5,46.5a2.5,2.5 0 0 1 5,0v7.0a2.5,2.5 0 0 1 -5,0z" />
+</vector>

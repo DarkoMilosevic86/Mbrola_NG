@@ -85,7 +85,8 @@ enum {
   MBNG_PARAM_PUNCTUATION = 5,   /* 0 none, 1 some, 2 most, 3 all                */
   MBNG_PARAM_EMOJI = 6,         /* 0/1 read emoji                               */
   MBNG_PARAM_CAPITALS = 7,      /* 0/1 say the capital prefix when spelling     */
-  MBNG_PARAM_DIGITS = 8,        /* 0/1 read all numbers digit by digit          */
+  MBNG_PARAM_DIGITS = 8,        /* numbers: 0 as numbers, 1 digit by digit,
+                                   2 in pairs (phone numbers)                   */
   MBNG_PARAM_AUTO_SPELL = 9,    /* 0/1 spell a text that is one character       */
   MBNG_PARAM_PHONEME_EVENTS = 10 /* 0/1 produce MBNG_EVENT_PHONEME              */
 };

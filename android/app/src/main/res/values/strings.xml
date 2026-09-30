@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MBROLA NG - Copyright (c) 2026 Darko Milošević
+     SPDX-License-Identifier: GPL-2.0-or-later -->
+<resources>
+    <string name="app_name" translatable="false">MBROLA NG</string>
+
+    <!-- Voice manager -->
+    <string name="installed_voices">Installed voices</string>
+    <string name="no_voice_installed">No voice is installed yet. Choose a language below and install a voice.</string>
+    <string name="install_voices">Install voices</string>
+    <string name="choose_language_hint">Choose a language to see its voices.</string>
+    <plurals name="voice_count">
+        <item quantity="one">%d voice</item>
+        <item quantity="other">%d voices</item>
+    </plurals>
+    <string name="installed_count">%d installed</string>
+    <string name="installed">Installed</string>
+    <string name="voice_settings">Voice settings</string>
+    <string name="try_voice">Try</string>
+    <string name="stop">Stop</string>
+    <string name="remove">Remove</string>
+    <string name="install">Install</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="remove_title">Remove voice</string>
+    <string name="remove_message">Remove the voice %s from this device?</string>
+    <string name="license_title">License of the voice %s</string>
+    <string name="accept_and_install">Accept and install</string>
+    <string name="decline">Decline</string>
+    <string name="downloading">Downloading: %1$s of %2$s</string>
+    <string name="voice_installed">The voice %s is installed.</string>
+    <string name="error_download">The download failed. Check the internet connection and try again.</string>
+    <string name="error_damaged">The downloaded file is damaged. Try again.</string>
+    <string name="error_not_mbrola">The downloaded file is not an MBROLA voice.</string>
+    <string name="error_generic">The voice could not be installed: %s</string>
+    <string name="error_speak">The voice could not speak: %s</string>
+    <string name="system_engine_title">Use as the system voice</string>
+    <string name="system_engine_text">To make TalkBack and other apps speak with MBROLA NG, choose it as the preferred engine in the system\'s text-to-speech settings.</string>
+    <string name="open_tts_settings">Open text-to-speech settings</string>
+    <string name="about_text">MBROLA NG %s. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3. Each voice has its own license.</string>
+    <string name="source_code">Source code and licenses</string>
+
+    <!-- Voice settings -->
+    <string name="voice">Voice</string>
+    <string name="no_voice_for_settings">No voice is installed yet. Install a voice first.</string>
+    <string name="open_voice_manager">Open MBROLA NG</string>
+    <string name="always_use_voice">Always use this voice, for every language</string>
+    <string name="always_use_voice_hint">Turn this on if your phone is set to a language MBROLA NG does not have: TalkBack and other apps will then speak with this voice whatever language they ask for.</string>
+    <string name="use_own_rate">Use this speed instead of the system speed</string>
+    <string name="rate_from_system">The speed is set by TalkBack or by the system\'s text-to-speech settings.</string>
+    <string name="speed">Speed</string>
+    <string name="pitch">Pitch</string>
+    <string name="modulation">Modulation</string>
+    <string name="use_own_volume">Use this volume instead of the system volume</string>
+    <string name="volume_from_system">The volume is set by TalkBack or by the app that speaks.</string>
+    <string name="volume">Volume</string>
+    <string name="read_emoji">Read emoji</string>
+    <string name="numbers">How numbers are read</string>
+    <string name="numbers_whole">As whole numbers</string>
+    <string name="numbers_digits">Digit by digit</string>
+    <string name="numbers_pairs">In pairs</string>
+    <string name="reset">Reset to defaults</string>
+    <string name="percent">%d %%</string>
+</resources>

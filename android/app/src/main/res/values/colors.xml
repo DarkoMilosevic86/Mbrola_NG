@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MBROLA NG - Copyright (c) 2026 Darko Milošević
+     SPDX-License-Identifier: GPL-2.0-or-later -->
+<resources>
+    <color name="window_background">#F4FBFA</color>
+    <color name="icon_background_top">#00929A</color>
+    <color name="icon_background_bottom">#004F5C</color>
+</resources>

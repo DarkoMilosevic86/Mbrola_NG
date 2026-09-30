@@ -17,7 +17,7 @@ with the screen readers and speech systems people actually use.
 | **NVDA** (Windows) | Native NVDA synthesizer add-on with a Voice Manager | Working |
 | **Windows SAPI 5** | SAPI 5 engine for JAWS, Balabolka and all other SAPI 5 applications, with an installer (English / Croatian) that downloads the chosen voices | Working |
 | **Linux** (Orca) | Speech Dispatcher output module `sd_mbrola_ng` + terminal voice manager `mbrola-ng-voices` | Implemented, **not yet tested on Linux**. Testers welcome. |
-| **Android** | TextToSpeech engine for TalkBack and all apps | In development |
+| **Android** | TextToSpeech engine for TalkBack and all apps, with a voice manager and per-voice settings; works before the first unlock (direct boot) | Working on the emulator, **not yet tested on real devices**. Testers welcome. |
 
 The same core, language data and voices are used on every platform, so a
 sentence sounds the same everywhere.
@@ -59,6 +59,7 @@ show the license, verify the download and install it:
 
 - NVDA: *NVDA menu → Tools → MBROLA NG Voice Manager*
 - Windows: choose the voices in the installer
+- Android: choose a language on the app's home screen, then a voice
 - Linux: `mbrola-ng-voices install hr` (the distribution's `mbrola-*` voice
   packages are also used)
 
@@ -75,12 +76,13 @@ Everything is built with one command:
 | `nvda` | NVDA add-on (x64 + x86) | `dist/mbrolaNG-<version>.nvda-addon` |
 | `sapi` | SAPI 5 engine + installer | `dist/MBROLA_NG-<version>-setup.exe` |
 | `orca` | Speech Dispatcher module + `mbrola-ng-voices` | `build/linux/` |
-| `android` | Android app | in development |
+| `android` | Android app (Android SDK + NDK, JDK 17) | `dist/MBROLA_NG-<version>.apk` and `.aab` (signed), or `-debug.apk` |
 | `clean` | removes all build output | |
 
 Options: `--arch x64|x86|both` and `--debug` (Windows core); on Linux,
 `--install user` (into `~/.local`, no root needed), `--install system` (with
-sudo) and `--deb` (a `.deb` package in `dist/`).
+sudo) and `--deb` (a `.deb` package in `dist/`); for Android, `--prepare`
+(only copy the language data for Android Studio).
 
 Examples:
 
@@ -88,6 +90,7 @@ Examples:
     python build.py nvda                  # only the NVDA add-on
     python build.py core --arch both      # Windows core, x64 and x86
     python3 build.py orca --install user  # Linux: build, test, install
+    python build.py android               # Android apk (and aab when a signing key exists)
     python build.py clean
 
 Requirements:
@@ -97,10 +100,12 @@ Requirements:
   for `sapi`.
 - **Linux**: CMake 3.20+, g++ (C++17), Python 3. Speech Dispatcher 0.11 or
   newer is needed at run time. See [linux/README-linux.md](linux/README-linux.md).
+- **Android**: Android SDK with NDK 27 and JDK 17, on Windows or Linux. See
+  [android/README.md](android/README.md).
 
 The platform scripts can also be used on their own: `build.cmd` (Windows
 core), `nvda/build_addon.py`, `installer/build_installer.py` and
-`linux/build.sh`.
+`linux/build.sh`; the Android project in `android/` opens in Android Studio.
 
 ## Repository layout
 
@@ -113,6 +118,8 @@ core), `nvda/build_addon.py`, `installer/build_installer.py` and
     nvda/            NVDA add-on (driver + Voice Manager, English / Croatian)
     installer/       Windows installer (Inno Setup, English / Croatian)
     linux/           Speech Dispatcher module, mbrola-ng-voices, build.sh
+    android/         Android app: TTS engine, voice manager, store graphics
+    cmake/           source lists shared by the desktop and Android builds
     catalog/         voice catalog (download locations, checksums, voice settings)
     ANALYSIS.txt     design document: architecture, formats, decisions
 

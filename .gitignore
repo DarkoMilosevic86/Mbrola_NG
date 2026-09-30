@@ -15,7 +15,12 @@
 .cxx/
 .externalNativeBuild/
 local.properties
-/android/**/build/
+.kotlin/
+/android/build/
+/android/app/build/
+/android/generated/
+# release signing: NEVER commit the keystore or its passwords
+/android/keystore.properties
 *.apk
 *.aab
 *.keystore
@@ -38,6 +43,7 @@ CMakeUserPresets.json
 
 # Local test output
 *.wav
+!/android/app/src/main/assets/samples/*.wav
 *.pho.out
 
 # MBROLA voices are never committed: each has its own license and is

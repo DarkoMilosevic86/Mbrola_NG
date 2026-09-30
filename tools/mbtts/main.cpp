@@ -15,6 +15,7 @@
 //   -o FILE      write the output to FILE
 //   -r PERCENT   rate (100 = normal)     -p PERCENT  pitch
 //   --punct N    punctuation level 0..3  --spell     character mode
+//   --digits N   numbers: 0 as numbers, 1 digit by digit, 2 in pairs
 //   --marks      show accents/length in --phonemes output
 #include <cstdio>
 #include <cstring>
@@ -56,7 +57,7 @@ static int usage() {
 
 static int run(const std::vector<std::string>& args) {
   std::string lang_path, text, out_path, mode = "words", voice, synth, wav;
-  int rate = 100, pitch = 100, punct = 1;
+  int rate = 100, pitch = 100, punct = 1, digits = 0;
   bool spell = false, marks = false, have_text = false;
   for (size_t i = 0; i < args.size(); ++i) {
     const std::string& a = args[i];
@@ -73,6 +74,7 @@ static int run(const std::vector<std::string>& args) {
     else if (a == "-r") rate = std::atoi(next().c_str());
     else if (a == "-p") pitch = std::atoi(next().c_str());
     else if (a == "--punct") punct = std::atoi(next().c_str());
+    else if (a == "--digits") digits = std::atoi(next().c_str());
     else if (a == "--spell") spell = true;
     else if (a == "--marks") marks = true;
     else if (a == "-f") {
@@ -107,6 +109,7 @@ static int run(const std::vector<std::string>& args) {
     mbng_set_param(e, MBNG_PARAM_RATE, rate);
     mbng_set_param(e, MBNG_PARAM_PITCH, pitch);
     mbng_set_param(e, MBNG_PARAM_PUNCTUATION, punct);
+    mbng_set_param(e, MBNG_PARAM_DIGITS, digits);
     std::vector<mbng_segment> segs;
     if (spell) segs.push_back({MBNG_SEG_SPELL_ON, nullptr, nullptr, 0, 0, 0});
     segs.push_back({MBNG_SEG_TEXT, text.c_str(), nullptr, -1, 0, 0});
@@ -147,6 +150,7 @@ static int run(const std::vector<std::string>& args) {
     mbng_set_param(e, MBNG_PARAM_RATE, rate);
     mbng_set_param(e, MBNG_PARAM_PITCH, pitch);
     mbng_set_param(e, MBNG_PARAM_PUNCTUATION, punct);
+    mbng_set_param(e, MBNG_PARAM_DIGITS, digits);
     std::vector<mbng_segment> segs;
     if (spell) segs.push_back({MBNG_SEG_SPELL_ON, nullptr, nullptr, 0, 0, 0});
     segs.push_back({MBNG_SEG_TEXT, text.c_str(), nullptr, -1, 0, 0});
@@ -186,6 +190,7 @@ static int run(const std::vector<std::string>& args) {
     if (!lang) { std::fprintf(stderr, "error: %s\n", err.c_str()); return 1; }
     Pipeline p(lang);
     p.norm().punct_level = punct;
+    p.norm().digits = digits;
     p.norm().spell = spell;
     p.params().rate = rate / 100.0;
     p.begin();

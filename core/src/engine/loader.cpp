@@ -61,7 +61,7 @@ std::shared_ptr<const Language> load_language(const std::string& path, std::stri
   std::error_code ec;
   std::string key = fs::absolute(fs::u8path(path), ec).u8string();
   auto mtime = fs::last_write_time(fs::u8path(path), ec);
-  key += "|" + std::to_string(mtime.time_since_epoch().count());
+  key += "|" + std::to_string(static_cast<long long>(mtime.time_since_epoch().count()));
   {
     std::lock_guard<std::mutex> lock(mu);
     auto it = cache.find(key);

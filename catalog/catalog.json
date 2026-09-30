@@ -7,6 +7,7 @@
       "code": "hr",
       "sapi_lcid": "41A",
       "android_locale": "hrv-HRV",
+      "android_also_for": [ "srp-SRB", "bos-BIH", "cnr-MNE" ],
       "names": { "en": "Croatian", "hr": "Hrvatski" },
       "dat_version": "1.0",
       "voices": [ "cr1" ]
@@ -141,6 +142,7 @@
     {
       "id": "en1",
       "language": "en",
+      "android_locale": "eng-GBR",
       "names": { "en": "British English male (en1)", "hr": "Britanski engleski muški (en1)" },
       "gender": "male",
       "age": "adult",
