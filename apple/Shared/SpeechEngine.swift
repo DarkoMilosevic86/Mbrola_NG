@@ -77,7 +77,6 @@ final class SpeechEngine: @unchecked Sendable {
         set(MBNG_PARAM_PITCH, min(max(s.pitch, 25), 400))
         set(MBNG_PARAM_RANGE, min(max(s.modulation, 0), 300))
         set(MBNG_PARAM_VOLUME, min(max(Int(Double(s.volume) * volume + 0.5), 0), 400))
-        set(MBNG_PARAM_EMOJI, s.emoji ? 1 : 0)
         set(MBNG_PARAM_DIGITS, s.numbers.rawValue)
     }
 

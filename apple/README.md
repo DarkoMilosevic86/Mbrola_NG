@@ -12,7 +12,7 @@ newer - the first versions with the speech synthesis provider API.
   manager: installed voices, voices to install (license shown first, download
   verified by size and SHA-256), "Try" (an installed voice speaks your text,
   others play a recorded sample), per-voice settings (speed, pitch,
-  modulation, volume, read emoji, how numbers are read), remove.
+  modulation, volume, how numbers are read), remove.
   English and Croatian.
 - **The speech extension** (`MbrolaNGSpeech.appex`, an Audio Unit extension of
   type `ausp`) is what the system talks to. It offers exactly the installed

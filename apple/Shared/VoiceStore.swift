@@ -67,7 +67,6 @@ struct VoiceSettings: Codable, Equatable, Sendable {
     var pitch = 100         // percent
     var modulation = 100    // intonation range, percent (0 = monotone)
     var volume = 100        // percent
-    var emoji = true
     var numbers = NumberMode.whole
 
     static let rateRange = 50...400
@@ -86,7 +85,6 @@ struct VoiceSettings: Codable, Equatable, Sendable {
         modulation = Self.clamp(
             try c.decodeIfPresent(Int.self, forKey: .modulation) ?? d.modulation, Self.modulationRange)
         volume = Self.clamp(try c.decodeIfPresent(Int.self, forKey: .volume) ?? d.volume, Self.volumeRange)
-        emoji = try c.decodeIfPresent(Bool.self, forKey: .emoji) ?? d.emoji
         numbers = (try? c.decodeIfPresent(NumberMode.self, forKey: .numbers)) ?? d.numbers
     }
 

@@ -599,22 +599,6 @@
         }
       }
     },
-    "Read emoji": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Čitaj emojije"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Read emoji"
-          }
-        }
-      }
-    },
     "Remove Voice": {
       "localizations": {
         "hr": {

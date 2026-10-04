@@ -142,7 +142,6 @@ struct VoiceDetailView: View {
             PercentSlider(title: "Pitch", value: $settings.pitch, range: VoiceSettings.pitchRange)
             PercentSlider(title: "Modulation", value: $settings.modulation, range: VoiceSettings.modulationRange)
             PercentSlider(title: "Volume", value: $settings.volume, range: VoiceSettings.volumeRange)
-            Toggle("Read emoji", isOn: $settings.emoji)
             Picker("How numbers are read", selection: $settings.numbers) {
                 Text("As whole numbers").tag(NumberMode.whole)
                 Text("Digit by digit").tag(NumberMode.digits)

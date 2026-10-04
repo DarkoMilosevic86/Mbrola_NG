@@ -58,13 +58,12 @@ final class VoiceSettingsTests: XCTestCase {
         XCTAssertEqual(s.pitch, VoiceSettings.pitchRange.lowerBound)
         XCTAssertEqual(s.modulation, 100)
         XCTAssertEqual(s.numbers, .whole)
-        XCTAssertTrue(s.emoji)
     }
 
     func testRoundTrip() throws {
         var s = VoiceSettings()
         s.rate = 150
-        s.emoji = false
+        s.volume = 80
         s.numbers = .pairs
         XCTAssertEqual(try JSONDecoder().decode(VoiceSettings.self, from: JSONEncoder().encode(s)), s)
     }
