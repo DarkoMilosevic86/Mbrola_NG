@@ -189,6 +189,23 @@ final class SSMLTests: XCTestCase {
              .spell(true), .text("b", base: 1), .spell(false), .pitch(percent: 100)])
     }
 
+    /// What VoiceOver on the Mac sends to spell a word (VO-W twice; captured,
+    /// macOS 27): every character in a <voice> of its own with a break after
+    /// it, a capital at a higher pitch.
+    func testSystemRequestSpelledWord() {
+        func letter(_ c: String) -> String { #"<say-as interpret-as="characters">\#(c)</say-as>"# }
+        let plan = SpeechPlan(
+            #"<speak><prosody pitch="+0.0%" rate="250.0%" volume="+0.0dB"><lang xml:lang="en">"#
+            + #"<voice name=""><prosody pitch="+50.0%">\#(letter("A"))</prosody><break time="60.0ms"/></voice>"#
+            + #"<voice name="">\#(letter("b"))<break time="60.0ms"/></voice>"#
+            + #"<voice name="">\#(letter("c"))<break time="60.0ms"/></voice></lang></prosody></speak>"#)
+        XCTAssertEqual(plan.segments, [
+            .rate(percent: 250), .pitch(percent: 150), .spell(true), .text("A", base: 0), .spell(false),
+            .pitch(percent: 100), .pause(milliseconds: 1), .spell(true), .text("b", base: 1), .spell(false),
+            .pause(milliseconds: 1), .spell(true), .text("c", base: 2), .spell(false), .rate(percent: 100)])
+        XCTAssertEqual(plan.sourceStart.count, 3)
+    }
+
     func testPlainTextIsNotParsed() {
         let text = "a < b & c <speak>"
         let plan = SpeechPlan(text, ssml: false)
