@@ -49,3 +49,9 @@ CMakeUserPresets.json
 # MBROLA voices are never committed: each has its own license and is
 # downloaded by the voice managers (keep local test copies here)
 /voices/
+
+# Apple (Xcode)
+/apple/build/
+/apple/Config/Local.xcconfig
+xcuserdata/
+*.xcuserstate

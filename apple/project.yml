@@ -1,0 +1,177 @@
+# MBROLA NG - Xcode project of the Apple app (iOS, iPadOS, macOS)
+# Copyright (c) 2026 Darko Milošević and the MBROLA NG contributors
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# MbrolaNG.xcodeproj is generated from this file with XcodeGen and committed,
+# so Xcode alone is enough to build. After changing this file:
+#
+#   cd apple && xcodegen generate
+#
+name: MbrolaNG
+options:
+  deploymentTarget:
+    iOS: "16.0"
+    macOS: "13.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: false
+  useBaseInternationalization: false
+
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+
+settings:
+  base:
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+    SWIFT_VERSION: "6.0"
+    CLANG_CXX_LANGUAGE_STANDARD: c++17
+    CLANG_CXX_LIBRARY: libc++
+    GCC_C_LANGUAGE_STANDARD: gnu11
+    # the core includes its headers as "engine/pipeline.h": no header maps,
+    # only the search paths below
+    USE_HEADERMAP: NO
+    HEADER_SEARCH_PATHS:
+      - $(SRCROOT)/../core/include
+      - $(SRCROOT)/../core/src
+      - $(SRCROOT)/Shared/Native
+    SWIFT_OBJC_BRIDGING_HEADER: Shared/BridgingHeader.h
+    # the core is written for -Wall -Wextra -Wno-sign-compare (CMakeLists.txt)
+    GCC_WARN_64_TO_32_BIT_CONVERSION: NO
+    CLANG_WARN_COMMA: NO
+    CLANG_WARN_IMPLICIT_SIGN_CONVERSION: NO
+    GCC_WARN_SIGN_COMPARE: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    DEAD_CODE_STRIPPING: YES
+    ENABLE_HARDENED_RUNTIME: YES
+    TARGETED_DEVICE_FAMILY: "1,2"
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: NO
+
+# Sources of the engine that both the app ("Try") and the speech extension
+# compile: the portable core (cmake/sources.cmake, without the pipe client
+# synthproc.cpp) and MBROLA inside the process (Shared/Native).
+targetTemplates:
+  Engine:
+    sources:
+      - path: Shared
+        excludes:
+          - Native/mbrola_inproc.c
+      - path: Shared/Native/mbrola_inproc.c
+        # unmodified MBROLA: its own include folders, its warnings silenced
+        # (cmake/sources.cmake: MBNG_SYNTH_OPTIONS)
+        compilerFlags: >-
+          -w -Wno-incompatible-pointer-types -DLITTLE_ENDIAN
+          -I$(SRCROOT)/../external/mbrola/Parser
+          -I$(SRCROOT)/../external/mbrola/Misc
+          -I$(SRCROOT)/../external/mbrola/LibMultiChannel
+          -I$(SRCROOT)/../external/mbrola/Engine
+          -I$(SRCROOT)/../external/mbrola/Database
+      - path: ../core/include/mbrola_ng.h
+        group: Core
+        buildPhase: none
+      - path: ../core/src
+        name: Core
+        excludes:
+          - sapi
+          - engine/synthproc.cpp
+          - "**/*.h"
+
+targets:
+  MbrolaNG:
+    type: application
+    supportedDestinations: [iOS, macOS]
+    templates: [Engine]
+    sources:
+      - path: App
+        excludes:
+          - "*.entitlements"
+          - Info.plist
+      - path: ../android/app/src/main/assets/samples
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: MBROLA NG
+        PRODUCT_MODULE_NAME: MbrolaNG
+        PRODUCT_BUNDLE_IDENTIFIER: $(MBNG_BUNDLE_ID)
+        INFOPLIST_FILE: App/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        "CODE_SIGN_ENTITLEMENTS[sdk=iphone*]": App/MbrolaNG-iOS.entitlements
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": App/MbrolaNG-macOS.entitlements
+        ENABLE_APP_SANDBOX: NO   # the entitlements files say it (macOS)
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @executable_path/../Frameworks
+    dependencies:
+      - target: MbrolaNGSpeech
+        embed: true
+        codeSign: false
+
+  MbrolaNGSpeech:
+    type: app-extension
+    supportedDestinations: [iOS, macOS]
+    templates: [Engine]
+    sources:
+      - path: SpeechExtension
+        excludes:
+          - "*.entitlements"
+          - Info.plist
+      - path: ../catalog/catalog.json
+        group: Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: MbrolaNGSpeech
+        PRODUCT_BUNDLE_IDENTIFIER: $(MBNG_BUNDLE_ID).speech
+        INFOPLIST_FILE: SpeechExtension/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        "CODE_SIGN_ENTITLEMENTS[sdk=iphone*]": SpeechExtension/MbrolaNGSpeech-iOS.entitlements
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": SpeechExtension/MbrolaNGSpeech-macOS.entitlements
+        ENABLE_APP_SANDBOX: NO   # the entitlements files say it (macOS)
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+    postBuildScripts:
+      # languages/<code> -> Resources/languages/<code>.dat (compiled and
+      # tested by langc, which the script builds for this Mac)
+      - name: Compile languages
+        shell: /bin/sh
+        script: |
+          "$SRCROOT/Scripts/build_languages.sh" "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/languages" "$PROJECT_TEMP_DIR/langc"
+        basedOnDependencyAnalysis: false
+
+  MbrolaNGTests:
+    type: bundle.unit-test
+    supportedDestinations: [iOS, macOS]
+    sources:
+      - path: Tests
+    dependencies:
+      - target: MbrolaNG
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(MBNG_BUNDLE_ID).tests
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_OBJC_BRIDGING_HEADER: ""
+        BUNDLE_LOADER: $(TEST_HOST)
+        "TEST_HOST[sdk=macosx*]": $(BUILT_PRODUCTS_DIR)/MBROLA NG.app/Contents/MacOS/MBROLA NG
+        "TEST_HOST[sdk=iphone*]": $(BUILT_PRODUCTS_DIR)/MBROLA NG.app/MBROLA NG
+
+schemes:
+  MBROLA NG:
+    build:
+      targets:
+        MbrolaNG: all
+        MbrolaNGTests: [test]
+    test:
+      config: Debug
+      targets:
+        - MbrolaNGTests
+    run:
+      config: Debug
+    profile:
+      config: Release
+    archive:
+      config: Release

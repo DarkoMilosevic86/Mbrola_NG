@@ -1,0 +1,974 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0096E4DEDF6933266A9EA352 /* VoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59ADCE9B4716BB552CEC306 /* VoiceStore.swift */; };
+		01FFF30303D0363E664AB853 /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6006559FF0DD5221C00036E /* Catalog.swift */; };
+		038084ADA9A86963082B8720 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30E7D0400043D92D634FFCF7 /* Assets.xcassets */; };
+		10C38E16FCE89A8BB661B9CB /* loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BE84AEA10A65D8298EAD3A3 /* loader.cpp */; };
+		18989F776961A5F87A45E309 /* phonology.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 552B3DD63F7ADC6EB43C54EB /* phonology.cpp */; };
+		18A6F680BC5A92A8AA1C68EC /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622AECB74A7B7CE02D8F29CC /* text.cpp */; };
+		1EE08A0A8ED8B779313F557B /* canon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 604A1D04341A0A9671B16EFE /* canon.cpp */; };
+		2513C16678D4C44B0499F514 /* AudioUnitFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC97DD8E5B5A25E0D515766 /* AudioUnitFactory.swift */; };
+		2D524E14D6B950D3537B9FFF /* VoiceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA92C6F3A0ED4DA316A258 /* VoiceListView.swift */; };
+		2DA1BC875BC4DED10CFEA011 /* synthproc_inproc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */; };
+		2DE84E77FE1F94C00F22A03B /* samples in Resources */ = {isa = PBXBuildFile; fileRef = 32E0218BF5AC818463B59A8F /* samples */; };
+		333243B5113680242CC63CCF /* SSML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2116E149A857524DA377AF97 /* SSML.swift */; };
+		385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4E61143BC0A158656E9F1532 /* Localizable.xcstrings */; };
+		3BF88A524EB17CC5A78ED21F /* langdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */; };
+		42F16BE504DDF37F69E847A9 /* catalog.json in Resources */ = {isa = PBXBuildFile; fileRef = A98077274C6D0CE84F351BAD /* catalog.json */; };
+		44556B594AEABCC2D0D0FE5D /* EngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F615D3D106059C1883AFD9 /* EngineTests.swift */; };
+		5C03D24BB0C4ACB82D0E6A42 /* langdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */; };
+		5F3C6CA1F6AB86571C6B8D2D /* DebugSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C936E8096159DB595A0536C /* DebugSelfTest.swift */; };
+		6665B6F07C12A8C29F123C2B /* VoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59ADCE9B4716BB552CEC306 /* VoiceStore.swift */; };
+		6B9F774EB4BD7E4EE66B0002 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C051716706C2C67443F35497 /* SharedContainer.swift */; };
+		6C342C7610B88414F20A00FB /* SSMLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D233D9D4674561E0FE7679 /* SSMLTests.swift */; };
+		7528C8ACA58566EB8C970B41 /* MbrolaSpeechAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E417B54531F111E97A551823 /* MbrolaSpeechAudioUnit.swift */; };
+		799FB04915D9C233A77B3FCD /* synthproc_inproc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */; };
+		7FA33B865CAD2BED615F7F26 /* SSML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2116E149A857524DA377AF97 /* SSML.swift */; };
+		8067B816BD417782F3DDB42E /* phonology.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 552B3DD63F7ADC6EB43C54EB /* phonology.cpp */; };
+		81B88A52BAA3C917D93A6B2A /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6006559FF0DD5221C00036E /* Catalog.swift */; };
+		8873D89CBB2D8C1AD8A59226 /* Resampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402BFDE25360859796F5B044 /* Resampler.swift */; };
+		8A4F825B56A97157F9D5076B /* VoiceLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E587FEDC3F4D51A9950D4F8C /* VoiceLibrary.swift */; };
+		8CE284C27CBFE73EB7518E37 /* language.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1FCB121B00CB977DB60CF28 /* language.cpp */; };
+		90329CDF5503868232BE716A /* language.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1FCB121B00CB977DB60CF28 /* language.cpp */; };
+		9234710BFBFA4CBE9DA3148C /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C051716706C2C67443F35497 /* SharedContainer.swift */; };
+		9742C903317052FC920F880E /* canon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 604A1D04341A0A9671B16EFE /* canon.cpp */; };
+		A06DBAE6D83A5FA2B742B63E /* pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED5D2D7208BCFAFEFD95E682 /* pipeline.cpp */; };
+		A153937F634DA3BDD8874AEE /* datfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85A53669C87DF0272F18DD8 /* datfile.cpp */; };
+		A55824CF5E4BA7B42EB85D17 /* Resampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 402BFDE25360859796F5B044 /* Resampler.swift */; };
+		ABAB74CE5DCCBC67A2822865 /* capi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E19528A64477DDF10D1C4B70 /* capi.cpp */; };
+		B027424B042FCADEE0296E55 /* normalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 482471B9021C1C7433763675 /* normalizer.cpp */; };
+		B35F12A8C08AD99F4D49339B /* VoiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */; };
+		B5BB512722CEBEDCEF920269 /* bytes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4B71C9B6B7E848CDC3FE93F /* bytes.cpp */; };
+		BE2397335B458E7788EBE937 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622AECB74A7B7CE02D8F29CC /* text.cpp */; };
+		BE53837048DBAD69C52E4408 /* SpeechEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */; };
+		C561A6A0242F07486E08E84D /* prosody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89B1DBCCED45060902A35B64 /* prosody.cpp */; };
+		C8D3CDC0FA00F2E6540F55F8 /* rbnf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */; };
+		CAA645254ADE545C1EA1F125 /* pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED5D2D7208BCFAFEFD95E682 /* pipeline.cpp */; };
+		D6A6F57D6117806F0D289AFD /* loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BE84AEA10A65D8298EAD3A3 /* loader.cpp */; };
+		D9BA7B3DAF62C1A25C60D52C /* MbrolaNGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B470A3DE09834C8FE0CD80 /* MbrolaNGApp.swift */; };
+		DA7E498D0A1726A3D262D6BE /* MbrolaNGSpeech.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4E2F0FADCD3A6BBA527CF7EC /* MbrolaNGSpeech.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DC997F1911F447BF493E5C39 /* capi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E19528A64477DDF10D1C4B70 /* capi.cpp */; };
+		DEC00F24B5C7A7849B1790B8 /* normalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 482471B9021C1C7433763675 /* normalizer.cpp */; };
+		E0015592BDE6C960DB36FA55 /* mbrola_inproc.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E5C856F9D95E84905E31866 /* mbrola_inproc.c */; settings = {COMPILER_FLAGS = "-w -Wno-incompatible-pointer-types -DLITTLE_ENDIAN -I$(SRCROOT)/../external/mbrola/Parser -I$(SRCROOT)/../external/mbrola/Misc -I$(SRCROOT)/../external/mbrola/LibMultiChannel -I$(SRCROOT)/../external/mbrola/Engine -I$(SRCROOT)/../external/mbrola/Database"; }; };
+		E0024411050CD42887A56E48 /* bytes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4B71C9B6B7E848CDC3FE93F /* bytes.cpp */; };
+		E13E54A184D8BC670F5D8C24 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4707675DB7AFB17C6F56952 /* AboutView.swift */; };
+		E275796BFD0CD686F40AFCD7 /* SpeechEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */; };
+		E6EE488B60CA475DE441582C /* PreviewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B330B3E786C3963D4D7CBD /* PreviewPlayer.swift */; };
+		E6F31BC364ED6088C90C9E29 /* mbrola_inproc.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E5C856F9D95E84905E31866 /* mbrola_inproc.c */; settings = {COMPILER_FLAGS = "-w -Wno-incompatible-pointer-types -DLITTLE_ENDIAN -I$(SRCROOT)/../external/mbrola/Parser -I$(SRCROOT)/../external/mbrola/Misc -I$(SRCROOT)/../external/mbrola/LibMultiChannel -I$(SRCROOT)/../external/mbrola/Engine -I$(SRCROOT)/../external/mbrola/Database"; }; };
+		E788BE793A6307B0D7725D4E /* datfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85A53669C87DF0272F18DD8 /* datfile.cpp */; };
+		F225BD34F023D5854B051630 /* prosody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89B1DBCCED45060902A35B64 /* prosody.cpp */; };
+		F8E148872741366008EFBF4B /* rbnf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */; };
+		FF3B592C0820DEE48BAA709C /* VoiceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE02CA5F0E17B5E099605C /* VoiceInstaller.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9B7194100D90B8F9A0D69CF3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9061C8D4F60AAE11BE6BD7AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E948B5117CDCDAF6641A970E;
+			remoteInfo = MbrolaNG;
+		};
+		A6EB1F3337E0860A8D8F96E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9061C8D4F60AAE11BE6BD7AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8ECAD554363D8CC63BE33264;
+			remoteInfo = MbrolaNGSpeech;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE6682FE5965C7183D218DDB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DA7E498D0A1726A3D262D6BE /* MbrolaNGSpeech.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08CB8A2E44404F9668E40208 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		0BE84AEA10A65D8298EAD3A3 /* loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = loader.cpp; sourceTree = "<group>"; };
+		0C936E8096159DB595A0536C /* DebugSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSelfTest.swift; sourceTree = "<group>"; };
+		1EAA92C6F3A0ED4DA316A258 /* VoiceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceListView.swift; sourceTree = "<group>"; };
+		2116E149A857524DA377AF97 /* SSML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSML.swift; sourceTree = "<group>"; };
+		2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceDetailView.swift; sourceTree = "<group>"; };
+		30E7D0400043D92D634FFCF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		32E0218BF5AC818463B59A8F /* samples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = samples; path = ../android/app/src/main/assets/samples; sourceTree = SOURCE_ROOT; };
+		38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+		402BFDE25360859796F5B044 /* Resampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resampler.swift; sourceTree = "<group>"; };
+		482471B9021C1C7433763675 /* normalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = normalizer.cpp; sourceTree = "<group>"; };
+		4E2F0FADCD3A6BBA527CF7EC /* MbrolaNGSpeech.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MbrolaNGSpeech.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E61143BC0A158656E9F1532 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		552B3DD63F7ADC6EB43C54EB /* phonology.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = phonology.cpp; sourceTree = "<group>"; };
+		604A1D04341A0A9671B16EFE /* canon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = canon.cpp; sourceTree = "<group>"; };
+		622AECB74A7B7CE02D8F29CC /* text.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = text.cpp; sourceTree = "<group>"; };
+		66F615D3D106059C1883AFD9 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
+		6E5C856F9D95E84905E31866 /* mbrola_inproc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbrola_inproc.c; sourceTree = "<group>"; };
+		73D233D9D4674561E0FE7679 /* SSMLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSMLTests.swift; sourceTree = "<group>"; };
+		89B1DBCCED45060902A35B64 /* prosody.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = prosody.cpp; sourceTree = "<group>"; };
+		9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = langdata.cpp; sourceTree = "<group>"; };
+		A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = synthproc_inproc.cpp; sourceTree = "<group>"; };
+		A4707675DB7AFB17C6F56952 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		A6B470A3DE09834C8FE0CD80 /* MbrolaNGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MbrolaNGApp.swift; sourceTree = "<group>"; };
+		A818AE50EB75ADC388CEDFEC /* MbrolaNG.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MbrolaNG.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A98077274C6D0CE84F351BAD /* catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = catalog.json; path = ../catalog/catalog.json; sourceTree = "<group>"; };
+		ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rbnf.cpp; sourceTree = "<group>"; };
+		ADDE02CA5F0E17B5E099605C /* VoiceInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInstaller.swift; sourceTree = "<group>"; };
+		B1FCB121B00CB977DB60CF28 /* language.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = language.cpp; sourceTree = "<group>"; };
+		B4B71C9B6B7E848CDC3FE93F /* bytes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bytes.cpp; sourceTree = "<group>"; };
+		B59ADCE9B4716BB552CEC306 /* VoiceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceStore.swift; sourceTree = "<group>"; };
+		C051716706C2C67443F35497 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
+		C0FD01E92B9096C188B0DB34 /* mbrola_ng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mbrola_ng.h; path = ../core/include/mbrola_ng.h; sourceTree = "<group>"; };
+		C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechEngine.swift; sourceTree = "<group>"; };
+		E0B330B3E786C3963D4D7CBD /* PreviewPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPlayer.swift; sourceTree = "<group>"; };
+		E19528A64477DDF10D1C4B70 /* capi.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = capi.cpp; sourceTree = "<group>"; };
+		E417B54531F111E97A551823 /* MbrolaSpeechAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MbrolaSpeechAudioUnit.swift; sourceTree = "<group>"; };
+		E587FEDC3F4D51A9950D4F8C /* VoiceLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLibrary.swift; sourceTree = "<group>"; };
+		E6006559FF0DD5221C00036E /* Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Catalog.swift; sourceTree = "<group>"; };
+		E71EAC13F4C1A7EA0DF4C8E4 /* mbrola_inproc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mbrola_inproc.h; sourceTree = "<group>"; };
+		E85A53669C87DF0272F18DD8 /* datfile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = datfile.cpp; sourceTree = "<group>"; };
+		ECC97DD8E5B5A25E0D515766 /* AudioUnitFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUnitFactory.swift; sourceTree = "<group>"; };
+		ED5D2D7208BCFAFEFD95E682 /* pipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pipeline.cpp; sourceTree = "<group>"; };
+		F9C9CE4BCD0350F330090871 /* MbrolaNGTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MbrolaNGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0966E97F1A1DD8629CF7074D /* lang */ = {
+			isa = PBXGroup;
+			children = (
+				E85A53669C87DF0272F18DD8 /* datfile.cpp */,
+				9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */,
+				B1FCB121B00CB977DB60CF28 /* language.cpp */,
+				ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */,
+			);
+			path = lang;
+			sourceTree = "<group>";
+		};
+		099F63A91F9CCBBD655EC60B /* phon */ = {
+			isa = PBXGroup;
+			children = (
+				552B3DD63F7ADC6EB43C54EB /* phonology.cpp */,
+			);
+			path = phon;
+			sourceTree = "<group>";
+		};
+		150A6D5D76326DF05863CA67 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				32E0218BF5AC818463B59A8F /* samples */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
+		1AD211FBA59BDAC4B9541971 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				150A6D5D76326DF05863CA67 /* assets */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		1BD59FEBDD25D95BE9F67003 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A98077274C6D0CE84F351BAD /* catalog.json */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		27874917A9A16E39354DC99E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7535F4424FF070A240EFAC70 /* Native */,
+				08CB8A2E44404F9668E40208 /* BridgingHeader.h */,
+				E6006559FF0DD5221C00036E /* Catalog.swift */,
+				402BFDE25360859796F5B044 /* Resampler.swift */,
+				C051716706C2C67443F35497 /* SharedContainer.swift */,
+				C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */,
+				2116E149A857524DA377AF97 /* SSML.swift */,
+				B59ADCE9B4716BB552CEC306 /* VoiceStore.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		300B98D54C5CA895006B0EF2 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9B97DC578BEF9F462694C617 /* engine */,
+				0966E97F1A1DD8629CF7074D /* lang */,
+				099F63A91F9CCBBD655EC60B /* phon */,
+				A65B782B77292F5BF74C7B62 /* prosody */,
+				4F034C386EC942AB95C90EED /* text */,
+				C51DA1D1E237B9FB732526C8 /* util */,
+			);
+			name = Core;
+			path = src;
+			sourceTree = "<group>";
+		};
+		32DF9E731A56765A0998EF42 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				1AD211FBA59BDAC4B9541971 /* main */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		344ED2594BFAE88480759586 /* mbrola_ng */ = {
+			isa = PBXGroup;
+			children = (
+				5A74609F3AF4C9757E842378 /* android */,
+				784CE9D6E38AB350F3F6EDFA /* core */,
+			);
+			name = mbrola_ng;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		48A1C8A3753BF9852ACD253C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A818AE50EB75ADC388CEDFEC /* MbrolaNG.app */,
+				4E2F0FADCD3A6BBA527CF7EC /* MbrolaNGSpeech.appex */,
+				F9C9CE4BCD0350F330090871 /* MbrolaNGTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4F034C386EC942AB95C90EED /* text */ = {
+			isa = PBXGroup;
+			children = (
+				604A1D04341A0A9671B16EFE /* canon.cpp */,
+				482471B9021C1C7433763675 /* normalizer.cpp */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
+		5A74609F3AF4C9757E842378 /* android */ = {
+			isa = PBXGroup;
+			children = (
+				A7257A3636D498F718C24DE6 /* app */,
+			);
+			path = android;
+			sourceTree = "<group>";
+		};
+		6D4E9D981249F7FD637592FC /* SpeechExtension */ = {
+			isa = PBXGroup;
+			children = (
+				ECC97DD8E5B5A25E0D515766 /* AudioUnitFactory.swift */,
+				E417B54531F111E97A551823 /* MbrolaSpeechAudioUnit.swift */,
+			);
+			path = SpeechExtension;
+			sourceTree = "<group>";
+		};
+		7535F4424FF070A240EFAC70 /* Native */ = {
+			isa = PBXGroup;
+			children = (
+				6E5C856F9D95E84905E31866 /* mbrola_inproc.c */,
+				E71EAC13F4C1A7EA0DF4C8E4 /* mbrola_inproc.h */,
+				A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */,
+			);
+			path = Native;
+			sourceTree = "<group>";
+		};
+		784CE9D6E38AB350F3F6EDFA /* core */ = {
+			isa = PBXGroup;
+			children = (
+				300B98D54C5CA895006B0EF2 /* Core */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		87BF128242FAC02416BAB536 = {
+			isa = PBXGroup;
+			children = (
+				E9FABE57318990BB0A8D2D75 /* App */,
+				EADC22BCAB664E1AB3A09901 /* Config */,
+				8AA3B7CDEA67156BCB0EB860 /* Core */,
+				344ED2594BFAE88480759586 /* mbrola_ng */,
+				1BD59FEBDD25D95BE9F67003 /* Resources */,
+				27874917A9A16E39354DC99E /* Shared */,
+				6D4E9D981249F7FD637592FC /* SpeechExtension */,
+				AFE6DC8E1BFAABFD013ABBFB /* Tests */,
+				48A1C8A3753BF9852ACD253C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8AA3B7CDEA67156BCB0EB860 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C0FD01E92B9096C188B0DB34 /* mbrola_ng.h */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		9B97DC578BEF9F462694C617 /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				E19528A64477DDF10D1C4B70 /* capi.cpp */,
+				0BE84AEA10A65D8298EAD3A3 /* loader.cpp */,
+				ED5D2D7208BCFAFEFD95E682 /* pipeline.cpp */,
+			);
+			path = engine;
+			sourceTree = "<group>";
+		};
+		A65B782B77292F5BF74C7B62 /* prosody */ = {
+			isa = PBXGroup;
+			children = (
+				89B1DBCCED45060902A35B64 /* prosody.cpp */,
+			);
+			path = prosody;
+			sourceTree = "<group>";
+		};
+		A7257A3636D498F718C24DE6 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				32DF9E731A56765A0998EF42 /* src */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		AFE6DC8E1BFAABFD013ABBFB /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				66F615D3D106059C1883AFD9 /* EngineTests.swift */,
+				73D233D9D4674561E0FE7679 /* SSMLTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		C51DA1D1E237B9FB732526C8 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				B4B71C9B6B7E848CDC3FE93F /* bytes.cpp */,
+				622AECB74A7B7CE02D8F29CC /* text.cpp */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		E9FABE57318990BB0A8D2D75 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A4707675DB7AFB17C6F56952 /* AboutView.swift */,
+				30E7D0400043D92D634FFCF7 /* Assets.xcassets */,
+				0C936E8096159DB595A0536C /* DebugSelfTest.swift */,
+				4E61143BC0A158656E9F1532 /* Localizable.xcstrings */,
+				A6B470A3DE09834C8FE0CD80 /* MbrolaNGApp.swift */,
+				E0B330B3E786C3963D4D7CBD /* PreviewPlayer.swift */,
+				2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */,
+				ADDE02CA5F0E17B5E099605C /* VoiceInstaller.swift */,
+				E587FEDC3F4D51A9950D4F8C /* VoiceLibrary.swift */,
+				1EAA92C6F3A0ED4DA316A258 /* VoiceListView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		EADC22BCAB664E1AB3A09901 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		265282DD079EDDB788576D15 /* MbrolaNGTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 25BBE361CF403F24C1FE440B /* Build configuration list for PBXNativeTarget "MbrolaNGTests" */;
+			buildPhases = (
+				DE7EA57315B42C6449DF984C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5C0E8C101242D5D8420FCCBD /* PBXTargetDependency */,
+			);
+			name = MbrolaNGTests;
+			packageProductDependencies = (
+			);
+			productName = MbrolaNGTests;
+			productReference = F9C9CE4BCD0350F330090871 /* MbrolaNGTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8ECAD554363D8CC63BE33264 /* MbrolaNGSpeech */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41975D8E9136B8703973C577 /* Build configuration list for PBXNativeTarget "MbrolaNGSpeech" */;
+			buildPhases = (
+				F6F702D61CABB0671E967C5C /* Sources */,
+				0D5D35C7CBB42B731D3A4A2D /* Resources */,
+				B4E51543771C8AD073FBD9C6 /* Compile languages */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MbrolaNGSpeech;
+			packageProductDependencies = (
+			);
+			productName = MbrolaNGSpeech;
+			productReference = 4E2F0FADCD3A6BBA527CF7EC /* MbrolaNGSpeech.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		E948B5117CDCDAF6641A970E /* MbrolaNG */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0CCE63FE65544621F258934E /* Build configuration list for PBXNativeTarget "MbrolaNG" */;
+			buildPhases = (
+				82B826306DCA6888142F51EF /* Sources */,
+				0BA796EABCDE63AA2C5F2D35 /* Resources */,
+				CE6682FE5965C7183D218DDB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AE1CA0278CC90B54B9379BA2 /* PBXTargetDependency */,
+			);
+			name = MbrolaNG;
+			packageProductDependencies = (
+			);
+			productName = MbrolaNG;
+			productReference = A818AE50EB75ADC388CEDFEC /* MbrolaNG.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9061C8D4F60AAE11BE6BD7AF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					265282DD079EDDB788576D15 = {
+						DevelopmentTeam = 3GAM6Z3A2W;
+						ProvisioningStyle = Automatic;
+					};
+					8ECAD554363D8CC63BE33264 = {
+						DevelopmentTeam = 3GAM6Z3A2W;
+						ProvisioningStyle = Automatic;
+					};
+					E948B5117CDCDAF6641A970E = {
+						DevelopmentTeam = 3GAM6Z3A2W;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 50AAFF647785152C837404A4 /* Build configuration list for PBXProject "MbrolaNG" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				hr,
+			);
+			mainGroup = 87BF128242FAC02416BAB536;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 48A1C8A3753BF9852ACD253C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E948B5117CDCDAF6641A970E /* MbrolaNG */,
+				8ECAD554363D8CC63BE33264 /* MbrolaNGSpeech */,
+				265282DD079EDDB788576D15 /* MbrolaNGTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0BA796EABCDE63AA2C5F2D35 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				038084ADA9A86963082B8720 /* Assets.xcassets in Resources */,
+				385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */,
+				2DE84E77FE1F94C00F22A03B /* samples in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D5D35C7CBB42B731D3A4A2D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42F16BE504DDF37F69E847A9 /* catalog.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B4E51543771C8AD073FBD9C6 /* Compile languages */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Compile languages";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/Scripts/build_languages.sh\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/languages\" \"$PROJECT_TEMP_DIR/langc\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		82B826306DCA6888142F51EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E13E54A184D8BC670F5D8C24 /* AboutView.swift in Sources */,
+				01FFF30303D0363E664AB853 /* Catalog.swift in Sources */,
+				5F3C6CA1F6AB86571C6B8D2D /* DebugSelfTest.swift in Sources */,
+				D9BA7B3DAF62C1A25C60D52C /* MbrolaNGApp.swift in Sources */,
+				E6EE488B60CA475DE441582C /* PreviewPlayer.swift in Sources */,
+				8873D89CBB2D8C1AD8A59226 /* Resampler.swift in Sources */,
+				7FA33B865CAD2BED615F7F26 /* SSML.swift in Sources */,
+				6B9F774EB4BD7E4EE66B0002 /* SharedContainer.swift in Sources */,
+				E275796BFD0CD686F40AFCD7 /* SpeechEngine.swift in Sources */,
+				B35F12A8C08AD99F4D49339B /* VoiceDetailView.swift in Sources */,
+				FF3B592C0820DEE48BAA709C /* VoiceInstaller.swift in Sources */,
+				8A4F825B56A97157F9D5076B /* VoiceLibrary.swift in Sources */,
+				2D524E14D6B950D3537B9FFF /* VoiceListView.swift in Sources */,
+				6665B6F07C12A8C29F123C2B /* VoiceStore.swift in Sources */,
+				B5BB512722CEBEDCEF920269 /* bytes.cpp in Sources */,
+				9742C903317052FC920F880E /* canon.cpp in Sources */,
+				ABAB74CE5DCCBC67A2822865 /* capi.cpp in Sources */,
+				E788BE793A6307B0D7725D4E /* datfile.cpp in Sources */,
+				3BF88A524EB17CC5A78ED21F /* langdata.cpp in Sources */,
+				90329CDF5503868232BE716A /* language.cpp in Sources */,
+				D6A6F57D6117806F0D289AFD /* loader.cpp in Sources */,
+				E0015592BDE6C960DB36FA55 /* mbrola_inproc.c in Sources */,
+				DEC00F24B5C7A7849B1790B8 /* normalizer.cpp in Sources */,
+				18989F776961A5F87A45E309 /* phonology.cpp in Sources */,
+				CAA645254ADE545C1EA1F125 /* pipeline.cpp in Sources */,
+				C561A6A0242F07486E08E84D /* prosody.cpp in Sources */,
+				C8D3CDC0FA00F2E6540F55F8 /* rbnf.cpp in Sources */,
+				2DA1BC875BC4DED10CFEA011 /* synthproc_inproc.cpp in Sources */,
+				BE2397335B458E7788EBE937 /* text.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE7EA57315B42C6449DF984C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44556B594AEABCC2D0D0FE5D /* EngineTests.swift in Sources */,
+				6C342C7610B88414F20A00FB /* SSMLTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6F702D61CABB0671E967C5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2513C16678D4C44B0499F514 /* AudioUnitFactory.swift in Sources */,
+				81B88A52BAA3C917D93A6B2A /* Catalog.swift in Sources */,
+				7528C8ACA58566EB8C970B41 /* MbrolaSpeechAudioUnit.swift in Sources */,
+				A55824CF5E4BA7B42EB85D17 /* Resampler.swift in Sources */,
+				333243B5113680242CC63CCF /* SSML.swift in Sources */,
+				9234710BFBFA4CBE9DA3148C /* SharedContainer.swift in Sources */,
+				BE53837048DBAD69C52E4408 /* SpeechEngine.swift in Sources */,
+				0096E4DEDF6933266A9EA352 /* VoiceStore.swift in Sources */,
+				E0024411050CD42887A56E48 /* bytes.cpp in Sources */,
+				1EE08A0A8ED8B779313F557B /* canon.cpp in Sources */,
+				DC997F1911F447BF493E5C39 /* capi.cpp in Sources */,
+				A153937F634DA3BDD8874AEE /* datfile.cpp in Sources */,
+				5C03D24BB0C4ACB82D0E6A42 /* langdata.cpp in Sources */,
+				8CE284C27CBFE73EB7518E37 /* language.cpp in Sources */,
+				10C38E16FCE89A8BB661B9CB /* loader.cpp in Sources */,
+				E6F31BC364ED6088C90C9E29 /* mbrola_inproc.c in Sources */,
+				B027424B042FCADEE0296E55 /* normalizer.cpp in Sources */,
+				8067B816BD417782F3DDB42E /* phonology.cpp in Sources */,
+				A06DBAE6D83A5FA2B742B63E /* pipeline.cpp in Sources */,
+				F225BD34F023D5854B051630 /* prosody.cpp in Sources */,
+				F8E148872741366008EFBF4B /* rbnf.cpp in Sources */,
+				799FB04915D9C233A77B3FCD /* synthproc_inproc.cpp in Sources */,
+				18A6F680BC5A92A8AA1C68EC /* text.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5C0E8C101242D5D8420FCCBD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E948B5117CDCDAF6641A970E /* MbrolaNG */;
+			targetProxy = 9B7194100D90B8F9A0D69CF3 /* PBXContainerItemProxy */;
+		};
+		AE1CA0278CC90B54B9379BA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8ECAD554363D8CC63BE33264 /* MbrolaNGSpeech */;
+			targetProxy = A6EB1F3337E0860A8D8F96E9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		056BF544383C4A3E4F8678D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../core/include",
+					"$(SRCROOT)/../core/src",
+					"$(SRCROOT)/Shared/Native",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Shared/BridgingHeader.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		23C51A06897A6C63A9EF8997 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "App/MbrolaNG-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "App/MbrolaNG-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID)";
+				PRODUCT_MODULE_NAME = MbrolaNG;
+				PRODUCT_NAME = "MBROLA NG";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		38DD0CF8071AFA3F4A1010B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = NO;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../core/include",
+					"$(SRCROOT)/../core/src",
+					"$(SRCROOT)/Shared/Native",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Shared/BridgingHeader.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		4CB45948297D31A588C87142 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "SpeechExtension/MbrolaNGSpeech-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "SpeechExtension/MbrolaNGSpeech-macOS.entitlements";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SpeechExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID).speech";
+				PRODUCT_NAME = MbrolaNGSpeech;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7FE43B4854548F0EBBE72B49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "App/MbrolaNG-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "App/MbrolaNG-macOS.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID)";
+				PRODUCT_MODULE_NAME = MbrolaNG;
+				PRODUCT_NAME = "MBROLA NG";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B505A4600586CF35BFBF1581 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID).tests";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MbrolaNG.app/MbrolaNG";
+				"TEST_HOST[sdk=iphone*]" = "$(BUILT_PRODUCTS_DIR)/MBROLA NG.app/MBROLA NG";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/MBROLA NG.app/Contents/MacOS/MBROLA NG";
+			};
+			name = Release;
+		};
+		EF8EC260622EFD47BFF93FD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphone*]" = "SpeechExtension/MbrolaNGSpeech-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "SpeechExtension/MbrolaNGSpeech-macOS.entitlements";
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SpeechExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID).speech";
+				PRODUCT_NAME = MbrolaNGSpeech;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FED9307E28A173DBBBCC51F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MBNG_BUNDLE_ID).tests";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MbrolaNG.app/MbrolaNG";
+				"TEST_HOST[sdk=iphone*]" = "$(BUILT_PRODUCTS_DIR)/MBROLA NG.app/MBROLA NG";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/MBROLA NG.app/Contents/MacOS/MBROLA NG";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0CCE63FE65544621F258934E /* Build configuration list for PBXNativeTarget "MbrolaNG" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FE43B4854548F0EBBE72B49 /* Debug */,
+				23C51A06897A6C63A9EF8997 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		25BBE361CF403F24C1FE440B /* Build configuration list for PBXNativeTarget "MbrolaNGTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FED9307E28A173DBBBCC51F5 /* Debug */,
+				B505A4600586CF35BFBF1581 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41975D8E9136B8703973C577 /* Build configuration list for PBXNativeTarget "MbrolaNGSpeech" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CB45948297D31A588C87142 /* Debug */,
+				EF8EC260622EFD47BFF93FD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		50AAFF647785152C837404A4 /* Build configuration list for PBXProject "MbrolaNG" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38DD0CF8071AFA3F4A1010B1 /* Debug */,
+				056BF544383C4A3E4F8678D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9061C8D4F60AAE11BE6BD7AF /* Project object */;
+}

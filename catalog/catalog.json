@@ -8,6 +8,8 @@
       "sapi_lcid": "41A",
       "android_locale": "hrv-HRV",
       "android_also_for": [ "srp-SRB", "bos-BIH", "cnr-MNE" ],
+      "apple_locale": "hr-HR",
+      "apple_also_for": [ "sr-RS", "bs-BA", "sr-ME" ],
       "names": { "en": "Croatian", "hr": "Hrvatski" },
       "dat_version": "1.0",
       "voices": [ "cr1" ]
@@ -16,6 +18,7 @@
       "code": "en",
       "sapi_lcid": "409",
       "android_locale": "eng-USA",
+      "apple_locale": "en-US",
       "names": { "en": "English", "hr": "Engleski" },
       "dat_version": "1.0",
       "voices": [ "us1", "us2", "us3", "en1" ]
@@ -143,6 +146,7 @@
       "id": "en1",
       "language": "en",
       "android_locale": "eng-GBR",
+      "apple_locale": "en-GB",
       "names": { "en": "British English male (en1)", "hr": "Britanski engleski muški (en1)" },
       "gender": "male",
       "age": "adult",

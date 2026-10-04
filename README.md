@@ -18,6 +18,7 @@ with the screen readers and speech systems people actually use.
 | **Windows SAPI 5** | SAPI 5 engine for JAWS, Balabolka and all other SAPI 5 applications, with an installer (English / Croatian) that downloads the chosen voices | Working |
 | **Linux** (Orca) | Speech Dispatcher output module `sd_mbrola_ng` + terminal voice manager `mbrola-ng-voices` | Implemented, **not yet tested on Linux**. Testers welcome. |
 | **Android** | TextToSpeech engine for TalkBack and all apps, with a voice manager and per-voice settings; works before the first unlock (direct boot) | Working on the emulator, **not yet tested on real devices**. Testers welcome. |
+| **iOS, iPadOS, macOS** | System voice for VoiceOver, Spoken Content and all apps (speech synthesis provider extension), with a voice manager and per-voice settings; iOS 16 / macOS 13 or newer | Working on macOS 27 and on an iPhone 17 through the system speech API; **not yet tested by ear with VoiceOver or on older system versions**. Testers welcome. |
 
 The same core, language data and voices are used on every platform, so a
 sentence sounds the same everywhere.
@@ -60,6 +61,7 @@ show the license, verify the download and install it:
 - NVDA: *NVDA menu → Tools → MBROLA NG Voice Manager*
 - Windows: choose the voices in the installer
 - Android: choose a language on the app's home screen, then a voice
+- iOS, iPadOS, macOS: choose a voice on the app's main screen
 - Linux: `mbrola-ng-voices install hr` (the distribution's `mbrola-*` voice
   packages are also used)
 
@@ -103,6 +105,9 @@ Requirements:
 - **Android**: Android SDK with NDK 27 and JDK 17, on Windows or Linux. See
   [android/README.md](android/README.md).
 
+- **iOS, iPadOS, macOS**: Xcode 16 or newer; open `apple/MbrolaNG.xcodeproj`
+  and run (not part of `build.py`). See [apple/README.md](apple/README.md).
+
 The platform scripts can also be used on their own: `build.cmd` (Windows
 core), `nvda/build_addon.py`, `installer/build_installer.py` and
 `linux/build.sh`; the Android project in `android/` opens in Android Studio.
@@ -119,6 +124,7 @@ core), `nvda/build_addon.py`, `installer/build_installer.py` and
     installer/       Windows installer (Inno Setup, English / Croatian)
     linux/           Speech Dispatcher module, mbrola-ng-voices, build.sh
     android/         Android app: TTS engine, voice manager, store graphics
+    apple/           iOS, iPadOS and macOS app: speech synthesis extension, voice manager
     cmake/           source lists shared by the desktop and Android builds
     catalog/         voice catalog (download locations, checksums, voice settings)
     ANALYSIS.txt     design document: architecture, formats, decisions

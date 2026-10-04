@@ -1,0 +1,17 @@
+// MBROLA NG - signing of the Apple app
+// Copyright (c) 2026 Darko Milošević and the MBROLA NG contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+// The app, its speech extension and the App Group they share are all named
+// after MBNG_BUNDLE_ID. To build with another Apple developer account, change
+// DEVELOPMENT_TEAM (and, if the identifier is taken on that account,
+// MBNG_BUNDLE_ID - then also SharedContainer.bundleIdentifier in
+// Shared/SharedContainer.swift) or put the two lines into Config/Local.xcconfig,
+// which git ignores.
+
+DEVELOPMENT_TEAM = 3GAM6Z3A2W
+MBNG_BUNDLE_ID = io.github.darkomilosevic86.mbrolang
+
+CODE_SIGN_STYLE = Automatic
+
+#include? "Local.xcconfig"
