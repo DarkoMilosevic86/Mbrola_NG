@@ -58,7 +58,8 @@ final class PreviewPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
             let result = await Task.detached(priority: .userInitiated) { () -> Result<Data, Error> in
                 Result {
                     let engine = try SpeechEngine(voice: voice)
-                    let samples = try engine.synthesize(SpeechPlan(text, ssml: false), settings: settings)
+                    let samples = engine.shortenPauses(
+                        try engine.synthesize(SpeechPlan(text, ssml: false), settings: settings))
                     return wavFile(samples, sampleRate: engine.sampleRate)
                 }
             }.value

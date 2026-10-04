@@ -153,8 +153,98 @@ final class SpeechEngine: @unchecked Sendable {
     }
 }
 
+/// Shortens the pauses in the audio of the core. On Apple's systems a voice
+/// is heard next to the system's own, which pause far more briefly, above
+/// all between the parts of what VoiceOver says about an element. The core
+/// has no parameter for its pauses (they are part of the language data and
+/// the same on every platform), so the silence is taken out of what it
+/// delivers: a short pause (a comma, between VoiceOver's parts) is halved,
+/// of what a pause is longer than `knee` four fifths stay (the end of a
+/// sentence remains one). Silence is held back until the sound after it
+/// arrives, which also lets the caller decide how much of it is left at the
+/// end of an utterance.
+struct PauseShortener<Sample: SignedNumeric & Comparable> {
+    /// Below this a sample is silence (MBROLA's pauses are digital silence).
+    let level: Sample
+    /// Shorter stretches (the closure of a "p" or "t") are left alone.
+    let shortest: Int
+    /// What is left of a pause at least, so that phrases never run together.
+    let least: Int
+    /// Up to here a pause is halved.
+    let knee: Int
+
+    private var withheld = 0    // silent samples read and not yet passed on
+    private var position = 0    // samples read
+    private var removed = 0
+    private var cuts: [(position: Int, removed: Int)] = []
+
+    init(level: Sample, sampleRate: Int) {
+        self.level = level
+        shortest = sampleRate * 30 / 1000
+        least = sampleRate * 25 / 1000
+        knee = sampleRate * 200 / 1000
+    }
+
+    // (not abs(): the lowest value of an integer sample has none)
+    private func isSilent(_ x: Sample) -> Bool { x < level && x > -level }
+
+    private func kept(_ silence: Int) -> Int {
+        if silence < shortest { return silence }
+        if silence <= knee { return max(least, silence / 2) }
+        return knee / 2 + (silence - knee) * 4 / 5
+    }
+
+    private mutating func release(into out: inout [Sample], at input: Int, limit: Int? = nil) {
+        if withheld == 0 { return }
+        let pass = min(kept(withheld), limit ?? Int.max)
+        out.append(contentsOf: repeatElement(0, count: pass))
+        if pass != withheld {
+            removed += withheld - pass
+            cuts.append((input, removed))
+        }
+        withheld = 0
+    }
+
+    mutating func process(_ input: UnsafeBufferPointer<Sample>, into out: inout [Sample]) {
+        var i = 0
+        let n = input.count
+        while i < n {
+            var j = i
+            if isSilent(input[i]) {
+                while j < n && isSilent(input[j]) { j += 1 }
+                withheld += j - i
+            } else {
+                release(into: &out, at: position + i)
+                while j < n && !isSilent(input[j]) { j += 1 }
+                out.append(contentsOf: UnsafeBufferPointer(rebasing: input[i..<j]))
+            }
+            i = j
+        }
+        position += n
+    }
+
+    /// The end of the utterance: the silence still held back, at most `tail` samples of it.
+    mutating func finish(tail: Int? = nil, into out: inout [Sample]) {
+        release(into: &out, at: position, limit: tail)
+    }
+
+    /// Where a position in the audio that was read (an event) is in the audio passed on.
+    func outputPosition(_ input: Int) -> Int {
+        max(input - (cuts.last { $0.position <= input }?.removed ?? 0), 0)
+    }
+}
+
 /// The whole utterance at once (the app's "Try"; tests).
 extension SpeechEngine {
+    /// The pauses as the system hears them from the extension (the app's "Try").
+    func shortenPauses(_ all: [Int16]) -> [Int16] {
+        var shortener = PauseShortener<Int16>(level: 4, sampleRate: sampleRate)
+        var samples: [Int16] = []
+        all.withUnsafeBufferPointer { shortener.process($0, into: &samples) }
+        shortener.finish(into: &samples)
+        return samples
+    }
+
     func synthesize(_ plan: SpeechPlan, settings: VoiceSettings) throws -> [Int16] {
         apply(settings, volume: plan.volume)
         guard begin(plan.segments) else { throw SpeechEngineError(message: lastError) }

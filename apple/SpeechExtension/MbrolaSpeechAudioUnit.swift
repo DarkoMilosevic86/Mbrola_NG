@@ -14,9 +14,15 @@ import os
 ///
 /// A speech synthesizer unit is rendered offline (the system pulls as fast as
 /// the unit delivers and plays the result itself), so the render block may
-/// synthesize: it pulls from the core exactly the samples it was asked for.
-/// The first sound is there after well under a millisecond and nothing is
-/// synthesized that a cancelled utterance would throw away.
+/// synthesize: it pulls from the core about the samples it was asked for.
+/// The first sound is there after well under a millisecond and next to nothing
+/// is synthesized that a cancelled utterance would throw away.
+///
+/// The system plays one request after the other (VoiceOver: the name of an
+/// element, then "Heading"), so whatever silence a request ends with is heard
+/// as a pause before the next one. The last block therefore carries only the
+/// frames that were produced, and the pause the core puts after a sentence is
+/// cut down to `Synthesis.tailFrames` at the end of a request.
 public final class MbrolaSpeechAudioUnit: AVSpeechSynthesisProviderAudioUnit, @unchecked Sendable {
     /// Sample rate of the output bus = the rate of every voice in the
     /// catalog. A voice with another rate is resampled (Synthesis).
@@ -88,13 +94,15 @@ public final class MbrolaSpeechAudioUnit: AVSpeechSynthesisProviderAudioUnit, @u
             let buffers = UnsafeMutableAudioBufferListPointer(outputData)
             guard let first = buffers.first else { return kAudioUnitErr_InvalidParameter }
             let frames = Int(frameCount)
-            let (target, finished, markers, request) = synthesis.render(frames: frames, into: first.mData)
+            let (target, produced, finished, markers, request) = synthesis.render(frames: frames, into: first.mData)
             guard let target else { return kAudioUnitErr_TooManyFramesToProcess }
             for i in 0..<buffers.count {
                 // the host normally supplies the buffer; without one, ours is handed out
                 if buffers[i].mData == nil { buffers[i].mData = UnsafeMutableRawPointer(target) }
                 else if i > 0 { memcpy(buffers[i].mData, target, frames * MemoryLayout<Float32>.size) }
-                buffers[i].mDataByteSize = UInt32(frames * MemoryLayout<Float32>.size)
+                // the last block is as long as the speech in it: the rest of
+                // it would be played as silence before the next utterance
+                buffers[i].mDataByteSize = UInt32(produced * MemoryLayout<Float32>.size)
             }
             if !markers.isEmpty, let request, let deliver = self?.speechSynthesisOutputMetadataBlock {
                 deliver(markers, request)
@@ -123,16 +131,29 @@ private final class Synthesis: @unchecked Sendable {
         let plan: SpeechPlan
         var resampler: Resampler?
         var lastRange = NSRange(location: NSNotFound, length: 0)
+        // Silence is held back until sound follows it, so that pauses can be
+        // shortened and the one at the very end cut:
+        var shortener: PauseShortener<Float32>
+        var ready: [Float32] = []   // audio waiting to be handed out
+        var ended = false           // the engine has delivered everything
     }
     private var current: Utterance?
 
+    /// Silence left at the end of a request: enough to keep requests that
+    /// follow each other at once (reading on) apart, too short to be a pause.
+    static let tailFrames = MbrolaSpeechAudioUnit.outputSampleRate * 50 / 1000
+    /// MBROLA's pauses are digital silence; anything below 4 steps of 16 bit counts.
+    static let silenceLevel = Float32(4.0 / 32768.0)
+
     private var pcm = UnsafeMutableBufferPointer<Int16>.allocate(capacity: 4096)
     private var floats = UnsafeMutableBufferPointer<Float32>.allocate(capacity: 4096)
+    private var staging = UnsafeMutableBufferPointer<Float32>.allocate(capacity: 4096)
     private var events: [SpeechEvent] = []
 
     deinit {
         pcm.deallocate()
         floats.deallocate()
+        staging.deallocate()
     }
 
     func prepare(maximumFrames: Int) {
@@ -146,8 +167,10 @@ private final class Synthesis: @unchecked Sendable {
         if frames <= pcm.count { return }
         pcm.deallocate()
         floats.deallocate()
+        staging.deallocate()
         pcm = .allocate(capacity: frames)
         floats = .allocate(capacity: frames)
+        staging = .allocate(capacity: frames)
     }
 
     /// Call with the lock held.
@@ -174,21 +197,57 @@ private final class Synthesis: @unchecked Sendable {
             #if DEBUG
             log.debug("request \(request.ssmlRepresentation, privacy: .public)")
             #endif
-            engine.apply(VoiceSettings.load(id), volume: plan.volume)
-            guard engine.begin(plan.segments) else {
+            var segments = plan.segments
+            let rate = Self.overallRate(&segments)
+            engine.apply(VoiceSettings.load(id), rate: rate, volume: plan.volume)
+            guard engine.begin(segments) else {
                 log.error("begin failed: \(engine.lastError, privacy: .public)")
                 return
             }
             current = Utterance(
                 engine: engine, request: request, plan: plan,
                 resampler: engine.sampleRate == MbrolaSpeechAudioUnit.outputSampleRate
-                    ? nil : Resampler(from: engine.sampleRate, to: MbrolaSpeechAudioUnit.outputSampleRate))
+                    ? nil : Resampler(from: engine.sampleRate, to: MbrolaSpeechAudioUnit.outputSampleRate),
+                shortener: PauseShortener(
+                    level: Self.silenceLevel, sampleRate: MbrolaSpeechAudioUnit.outputSampleRate))
         } catch {
             // the voice was removed, or its file is damaged: this utterance is
             // silent and ends at once; the engine is tried again next time
             engines[id] = nil
             log.error("voice \(id, privacy: .public): \(error.localizedDescription, privacy: .public)")
         }
+    }
+
+    /// The system gives its speed as one <prosody rate> around the whole
+    /// request. As a rate inside the utterance it would only make the words
+    /// faster: the core's pauses follow the speed of the voice. So that the
+    /// pauses get shorter with VoiceOver's speed too, such a rate is taken
+    /// out of the segments and returned (1 = none) to become the voice's speed.
+    /// The breaks of the request (VoiceOver on the Mac: 250 ms between an
+    /// application, its window and what is in it) follow that speed as well,
+    /// as they do with the system's voices; the core takes them literally.
+    static func overallRate(_ segments: inout [SpeechSegment]) -> Double {
+        var rates: [Int] = []
+        var spoken: [Int] = []
+        for (i, segment) in segments.enumerated() {
+            switch segment {
+            case .rate: rates.append(i)
+            case .text, .pause: spoken.append(i)
+            default: break
+            }
+        }
+        guard rates.count == 2, case .rate(let percent) = segments[rates[0]],
+              segments[rates[1]] == .rate(percent: 100),
+              let first = spoken.first, let last = spoken.last, rates[0] < first, rates[1] > last
+        else { return 1 }
+        segments.remove(at: rates[1])
+        segments.remove(at: rates[0])
+        let rate = Double(max(percent, 1)) / 100
+        segments = segments.map { segment in
+            guard case .pause(let ms) = segment else { return segment }
+            return .pause(milliseconds: max(Int(Double(ms) / rate + 0.5), 1))
+        }
+        return rate
     }
 
     func cancel() {
@@ -202,48 +261,76 @@ private final class Synthesis: @unchecked Sendable {
         current = nil
     }
 
-    /// Renders `frames` frames into `destination` (or into an own buffer when
-    /// the host gave none). Returns the buffer written to (nil: too many
-    /// frames), whether the utterance ended inside this block, and the
-    /// markers of the words that start in it.
+    /// Renders up to `frames` frames into `destination` (or into an own buffer
+    /// when the host gave none). Returns the buffer written to (nil: too many
+    /// frames), the frames of audio in it (fewer than `frames` only in the
+    /// last block; the rest is zero), whether the utterance ended inside this
+    /// block, and the markers of the words that were synthesized for it.
     func render(frames: Int, into destination: UnsafeMutableRawPointer?)
-        -> (UnsafeMutablePointer<Float32>?, Bool, [AVSpeechSynthesisMarker], AVSpeechSynthesisProviderRequest?)
+        -> (UnsafeMutablePointer<Float32>?, Int, Bool, [AVSpeechSynthesisMarker], AVSpeechSynthesisProviderRequest?)
     {
         lock.lock()
         defer { lock.unlock() }
         reserve(frames)
         guard let out = destination?.assumingMemoryBound(to: Float32.self) ?? floats.baseAddress,
-              let samples = pcm.baseAddress
-        else { return (nil, true, [], nil) }
+              let samples = pcm.baseAddress, let block = staging.baseAddress
+        else { return (nil, 0, true, [], nil) }
 
         guard var utterance = current else {
-            // nothing to say (no request, cancelled, voice missing): silence, done
+            // nothing to say (no request, cancelled, voice missing): no audio, done
             out.update(repeating: 0, count: frames)
-            return (out, true, [], nil)
+            return (out, 0, true, [], nil)
         }
+        current = nil  // ours until it is put back below: its buffers are changed in place, not copied
 
         events.removeAll(keepingCapacity: true)
-        var produced: Int
-        if utterance.resampler != nil {
-            let engine = utterance.engine
-            produced = utterance.resampler!.render(out, frames: frames) { buffer, count, events in
-                engine.read(buffer, count: count, events: &events)
-            } events: { self.events.append(contentsOf: $0) }
-        } else {
-            produced = utterance.engine.read(samples, count: frames, events: &events)
-            if produced > 0 {
-                // 16-bit integer -> float in -1 ... 1
-                var scale = Float32(1.0 / 32768.0)
-                vDSP_vflt16(samples, 1, out, 1, vDSP_Length(produced))
-                vDSP_vsmul(out, 1, &scale, out, 1, vDSP_Length(produced))
+        var mapped = 0  // events whose position already is one in the shortened audio
+        while utterance.ready.count < frames && !utterance.ended {
+            var got: Int
+            let eventsBefore = events.count
+            if utterance.resampler != nil {
+                let engine = utterance.engine
+                got = utterance.resampler!.render(block, frames: frames) { buffer, count, events in
+                    engine.read(buffer, count: count, events: &events)
+                } events: { self.events.append(contentsOf: $0) }
+            } else {
+                got = utterance.engine.read(samples, count: frames, events: &events)
+                if got > 0 {
+                    // 16-bit integer -> float in -1 ... 1
+                    var scale = Float32(1.0 / 32768.0)
+                    vDSP_vflt16(samples, 1, block, 1, vDSP_Length(got))
+                    vDSP_vsmul(block, 1, &scale, block, 1, vDSP_Length(got))
+                }
             }
+            if got < 0 {
+                log.error("synthesis failed: \(utterance.engine.lastError, privacy: .public)")
+                got = 0
+            }
+            // a short block that brought events may only mean that more events are waiting
+            if got < frames && (utterance.resampler != nil || events.count == eventsBefore) {
+                utterance.ended = true
+            }
+
+            // silence at the end of what was read waits for the sound after it
+            // (through a copy: two parts of `utterance` cannot be changed in one call)
+            var shortener = utterance.shortener
+            shortener.process(UnsafeBufferPointer(start: block, count: got), into: &utterance.ready)
+            // the pause after the last sentence: only a short tail of it
+            if utterance.ended { shortener.finish(tail: Self.tailFrames, into: &utterance.ready) }
+            utterance.shortener = shortener
+            for k in mapped..<events.count {
+                let position = utterance.shortener.outputPosition(events[k].sample)
+                events[k].sample = position
+            }
+            mapped = events.count
         }
-        if produced < 0 {
-            log.error("synthesis failed: \(utterance.engine.lastError, privacy: .public)")
-            produced = 0
+        let produced = min(frames, utterance.ready.count)
+        if produced > 0 {
+            utterance.ready.withUnsafeBufferPointer { out.update(from: $0.baseAddress!, count: produced) }
+            utterance.ready.removeFirst(produced)
         }
-        let finished = produced < frames
-        if finished { (out + produced).update(repeating: 0, count: frames - produced) }
+        let finished = utterance.ended && utterance.ready.isEmpty
+        if produced < frames { (out + produced).update(repeating: 0, count: frames - produced) }
 
         // word positions for the host (highlighting, "speak range" callbacks)
         var markers: [AVSpeechSynthesisMarker] = []
@@ -269,6 +356,6 @@ private final class Synthesis: @unchecked Sendable {
         }
         let request = utterance.request
         current = finished ? nil : utterance
-        return (out, finished, markers, request)
+        return (out, produced, finished, markers, request)
     }
 }

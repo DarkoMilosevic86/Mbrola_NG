@@ -89,10 +89,27 @@ the Croatian data reads Cyrillic too).
   block pulls from the core exactly the frames the system asks for. The first
   audio of an utterance is there in about a millisecond; synthesis runs
   several thousand times faster than real time.
+- **Pauses**: VoiceOver sends what it says about an element as sentences in
+  one request (`<s>Settings</s><s>Heading</s>`). `Shared/SSML.swift` joins
+  them with the pause of a comma, as the system's voices do, instead of the
+  paragraph break a new line would be to the core. A line break inside the
+  text (the lines of a label) is likewise the pause of a comma, an empty
+  line that of a full stop. VoiceOver on the Mac separates the parts with
+  `<break time="60ms"/>` and `250ms` instead: a break shorter than 100 ms is
+  that comma and nothing more, a longer one follows the speed of the request.
+  Next to the system's voices the core's pauses are still long, and it has
+  no parameter for them, so `PauseShortener` (`Shared/SpeechEngine.swift`)
+  takes silence out of the audio: a pause of up to 200 ms is halved, of what
+  is beyond that four fifths stay; the word positions move accordingly. Silence at the end of a
+  request is heard before the next one, so the extension gives the last
+  block the length of the audio in it instead of padding it with silence,
+  and shortens the core's pause after the last sentence (450 ms after a full
+  stop) to 50 ms.
 - **What the system sends** (observed, covered by `Tests/SSMLTests.swift`):
   speed as `<prosody rate="160%">` (12.5 % ... 400 %), pitch as a relative
   `pitch="+30%"`, volume as `volume="-6.02dB"` or `silent`. They are applied
-  on top of the voice's own settings.
+  on top of the voice's own settings. A speed around the whole request
+  becomes the speed of the voice, so that the pauses follow it as well.
 - **Word positions** are reported back to the system (highlighting in Speak
   Screen, `willSpeakRangeOfSpeechString` in apps).
 - Output is 16 kHz mono float, the rate of every voice in the catalog; a

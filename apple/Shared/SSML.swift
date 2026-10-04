@@ -19,7 +19,9 @@ enum SpeechSegment: Equatable, Sendable {
 /// volume VoiceOver or the app asked for. This is the same small, forgiving
 /// parser as the Speech Dispatcher module's (linux/speechd/ssml.cpp): speak,
 /// prosody, break, mark, say-as, sub and p/s are understood, every other tag
-/// is dropped and its content spoken. In addition it remembers where each
+/// is dropped and its content spoken. Unlike there, <s> does not start a
+/// paragraph: a sentence that brings no punctuation is followed by the pause
+/// of a comma (see `case "s"`). In addition it remembers where each
 /// character of the spoken text stands in the SSML, because the system wants
 /// the word positions it highlights expressed in the SSML string.
 struct SpeechPlan: Equatable, Sendable {
@@ -77,6 +79,8 @@ private struct Parser {
     private var spell = 0   // nesting depth of say-as characters
     private var skip = 0    // nesting depth of ignored content (<sub> body, <desc>)
     private var volumeSeen = false
+    private var softLines = false   // SSML: see softenLineBreaks()
+    private var sawText = false     // the request has text of its own (not only separators put here)
 
     init(_ units: [UInt16]) { s = units }
 
@@ -96,6 +100,74 @@ private struct Parser {
         for u in String(Character(valid)).utf16 { put(u, from: start, to: end) }
     }
 
+    /// A line break inside the text of a request is not the end of a sentence
+    /// or of a paragraph, as it is to the core: VoiceOver reads the lines of a
+    /// label ("Heineken\nSponsored, Public\n...") like the parts of a list.
+    /// One line break becomes the pause of a comma (nothing, when the line
+    /// ends with punctuation of its own), an empty line the pause of a full
+    /// stop. The paragraph separator the parser itself puts for <p> stays.
+    private mutating func softenLineBreaks() {
+        func isLineBreak(_ u: UInt16) -> Bool { u == 0x0A || u == 0x0D || u == 0x85 || u == 0x2028 }
+        guard pending.contains(where: isLineBreak) else { return }
+        var text: [UInt16] = []
+        var starts: [Int32] = []
+        var ends: [Int32] = []
+        var i = 0
+        while i < pending.count {
+            var j = i
+            var lines = 0
+            while j < pending.count, isSpace(pending[j]) || isLineBreak(pending[j]) {
+                if isLineBreak(pending[j]), !(pending[j] == 0x0A && j > i && pending[j - 1] == 0x0D) { lines += 1 }
+                j += 1
+            }
+            if lines == 0 {
+                j = max(j, i + 1)
+                text.append(contentsOf: pending[i..<j])
+                starts.append(contentsOf: pendingStart[i..<j])
+                ends.append(contentsOf: pendingEnd[i..<j])
+            } else {
+                let punctuated = text.last.map { Array(".,;:!?\u{2026}".utf16).contains($0) } ?? false
+                let separator = lines > 1 ? "\n" : punctuated ? " " : ", "
+                for u in separator.utf16 {
+                    text.append(u)
+                    starts.append(pendingStart[i])
+                    ends.append(pendingEnd[j - 1])
+                }
+            }
+            i = j
+        }
+        pending = text
+        pendingStart = starts
+        pendingEnd = ends
+    }
+
+    /// A comma or space at the very end would only make the last phrase sound
+    /// unfinished (the separators put between lines and sentences).
+    /// Text that is spelled, or that is nothing but commas, is said as it is.
+    private mutating func trimEnd() {
+        let untrimmed = plan
+        defer {
+            let spoken = plan.segments.contains { if case .text = $0 { return true } else { return false } }
+            if !spoken && sawText { plan = untrimmed }
+        }
+        while let k = plan.segments.lastIndex(where: { if case .text = $0 { return true } else { return false } }),
+              case .text(let text, let base) = plan.segments[k] {
+            var spelled = false
+            for segment in plan.segments[..<k] { if case .spell(let on) = segment { spelled = on } }
+            if spelled { return }
+            var units = Array(text.utf16)
+            while let last = units.last, isSpace(last) || last == 0x2C { units.removeLast() }
+            let removed = text.utf16.count - units.count
+            plan.sourceStart.removeLast(removed)
+            plan.sourceEnd.removeLast(removed)
+            if !units.isEmpty {
+                plan.segments[k] = .text(String(decoding: units, as: UTF16.self), base: base)
+                return
+            }
+            plan.segments.remove(at: k)  // nothing but separators: look at the text before
+        }
+    }
+
     private mutating func flush() {
         defer {
             pending.removeAll(keepingCapacity: true)
@@ -103,6 +175,7 @@ private struct Parser {
             pendingEnd.removeAll(keepingCapacity: true)
         }
         if pending.isEmpty || skip > 0 { return }
+        if softLines && spell == 0 { softenLineBreaks() }
         let text = String(decoding: pending, as: UTF16.self)
         if case .text(let previous, let base)? = plan.segments.last {
             plan.segments[plan.segments.count - 1] = .text(previous + text, base: base)
@@ -269,6 +342,13 @@ private struct Parser {
         return Int(min(ms, 60000) + 0.5)
     }
 
+    /// VoiceOver on the Mac puts <break time="60ms"/> between the parts of
+    /// what it says ("Photos", "widget"). A break ends the phrase before it,
+    /// which the core follows with the pause of a comma by itself - longer
+    /// than such a break. Below this length (ms) a break therefore is that
+    /// comma and nothing more; a longer one is silence in addition to it.
+    static let phraseBreak = 100
+
     private static func breakStrength(_ v: String?) -> Int {
         switch v?.lowercased() {
         case "none": return 0
@@ -338,11 +418,14 @@ private struct Parser {
     }
 
     mutating func parse() {
+        softLines = true
+        defer { trimEnd() }
         var i = 0
         let n = s.count
         while i < n {
             let c = s[i]
             if c == 0x26 {  // &
+                sawText = true
                 if let (scalar, next) = entity(at: i) {
                     put(scalar: scalar, from: i, to: next)
                     i = next
@@ -353,6 +436,7 @@ private struct Parser {
                 continue
             }
             if c != 0x3C {  // <
+                if !isSpace(c) { sawText = true }
                 put(c, from: i, to: i + 1)
                 i += 1
                 continue
@@ -364,6 +448,7 @@ private struct Parser {
             }
             if matches("<![CDATA[", at: i) {
                 let end = find("]]>", from: i + 9) ?? n
+                sawText = true
                 for k in (i + 9)..<max(end, i + 9) where k < n { put(s[k], from: k, to: k + 1) }
                 i = min(end + 3, n)
                 continue
@@ -403,7 +488,7 @@ private struct Parser {
                         plan.segments.append(.pitch(percent: Int(pitch * 100 + 0.5)))
                     }
                     if f.name == "p" || f.name == "s" {
-                        put("\n", from: tagStart, to: i)
+                        put(f.name == "p" ? "\u{2029}" : " ", from: tagStart, to: i)
                         flush()
                     }
                 }
@@ -421,7 +506,12 @@ private struct Parser {
                 if skip == 0 {
                     let ms = Parser.milliseconds(t.attributes["time"])
                         ?? Parser.breakStrength(t.attributes["strength"])
-                    if ms > 0 { plan.segments.append(.pause(milliseconds: ms)) }
+                    if ms >= Parser.phraseBreak {
+                        plan.segments.append(.pause(milliseconds: ms))
+                    } else if ms > 0 {
+                        put(", ", from: tagStart, to: i)
+                        flush()
+                    }
                 }
             default:
                 if t.empty { break }  // <audio/> and the like: nothing to say
@@ -460,9 +550,19 @@ private struct Parser {
                 case "desc":
                     f.skip = true
                     skip += 1
-                case "p", "s":
-                    put("\n", from: tagStart, to: i)
+                case "p":
+                    put("\u{2029}", from: tagStart, to: i)
                     flush()
+                case "s":
+                    // VoiceOver sends the parts of what it says about an
+                    // element as sentences (<s>Settings</s><s>Heading</s>)
+                    // and the system's voices read them like "Settings,
+                    // Heading". A line break would be a paragraph to the
+                    // core: its longest pause, between every two parts.
+                    if !plan.sourceStart.isEmpty {
+                        put(", ", from: tagStart, to: i)
+                        flush()
+                    }
                 default:
                     break
                 }

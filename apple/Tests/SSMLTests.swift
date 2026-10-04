@@ -117,7 +117,48 @@ final class SSMLTests: XCTestCase {
     func testParagraphsAndIgnoredMarkup() {
         let plan = SpeechPlan(
             "<?xml version=\"1.0\"?><!-- c --><speak xmlns=\"http://www.w3.org/2001/10/synthesis\"><p>One</p><s>Two</s><desc>no</desc><voice name=\"x\"><emphasis>Three</emphasis></voice><![CDATA[a < b]]><audio src=\"x\"/></speak>")
-        XCTAssertEqual(plan.segments, [.text("\nOne\n\nTwo\nThreea < b", base: 0)])
+        XCTAssertEqual(plan.segments, [.text("\u{2029}One\u{2029}, Two Threea < b", base: 0)])
+    }
+
+    /// What VoiceOver says about an element: its name, then what it is.
+    func testSystemRequestSentences() {
+        let plan = SpeechPlan(
+            #"<speak><prosody rate="160.00002%"><s><lang xml:lang="hr-HR">MBROLA NG</lang></s><s><lang xml:lang="hr-HR">Naslov</lang></s></prosody></speak>"#)
+        XCTAssertEqual(plan.segments, [.rate(percent: 160), .text("MBROLA NG , Naslov", base: 0), .rate(percent: 100)])
+    }
+
+    /// What VoiceOver on the Mac says when a window comes to the front.
+    func testSystemRequestShortBreaks() {
+        let plan = SpeechPlan(
+            #"<speak><prosody pitch="+0.0%" rate="250.0%" volume="+0.0dB"><lang xml:lang="hr"><voice name="">Terminal</voice><voice name=""><break time="250.0ms"/></voice><voice name=""><break time="60.0ms"/>mbrola</voice><voice name=""><break time="60.0ms"/>window</voice><voice name=""><say-as interpret-as="characters">a</say-as><break time="60.0ms"/></voice></lang></prosody></speak>"#)
+        XCTAssertEqual(plan.segments, [
+            .rate(percent: 250), .text("Terminal", base: 0), .pause(milliseconds: 250),
+            .text(", mbrola, window", base: 8), .spell(true), .text("a", base: 24), .spell(false),
+            .rate(percent: 100)])
+        XCTAssertEqual(plan.sourceStart.count, 25)
+    }
+
+    /// The lines of a label are read like the parts of a list.
+    func testLineBreaksInText() {
+        let ssml = "<speak><s>Heineken  \nSponzorirano, Javno\nHeineken 0.0.\r\nDodatne\n\nSa zvukom\n</s></speak>"
+        let plan = SpeechPlan(ssml)
+        XCTAssertEqual(plan.segments, [.text("Heineken, Sponzorirano, Javno, Heineken 0.0. Dodatne\nSa zvukom", base: 0)])
+        XCTAssertEqual(plan.sourceStart.count, plan.sourceEnd.count)
+        XCTAssertEqual(source(plan, ssml, offset: 10, length: 12), "Sponzorirano")
+        XCTAssertEqual(SpeechPlan("a\nb", ssml: false).segments, [.text("a\nb", base: 0)])
+    }
+
+    /// Separators are only taken away where they are not what is to be said.
+    func testCommasThatAreSpoken() {
+        XCTAssertEqual(SpeechPlan("<speak>,</speak>").segments, [.text(",", base: 0)])
+        XCTAssertEqual(
+            SpeechPlan(#"<speak><say-as interpret-as="characters">,</say-as></speak>"#).segments,
+            [.spell(true), .text(",", base: 0), .spell(false)])
+        XCTAssertEqual(
+            SpeechPlan("<speak><say-as interpret-as=\"characters\">\n</say-as></speak>").segments,
+            [.spell(true), .text("\n", base: 0), .spell(false)])
+        XCTAssertEqual(SpeechPlan(#"<speak><break time="60ms"/></speak>"#).segments, [])
+        XCTAssertEqual(SpeechPlan("<speak>a,<break time=\"60ms\"/></speak>").segments, [.text("a", base: 0)])
     }
 
     func testPlainTextIsNotParsed() {

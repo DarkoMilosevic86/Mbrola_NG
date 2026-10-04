@@ -71,6 +71,43 @@ final class VoiceSettingsTests: XCTestCase {
 }
 
 final class AudioTests: XCTestCase {
+    func testPauseShortener() {
+        // 16 kHz: 20 ms sound, 100 ms pause, sound, 20 ms closure, sound, 200 ms at the end
+        let input = [Int16](repeating: 100, count: 320) + [Int16](repeating: 0, count: 1600)
+            + [Int16](repeating: -100, count: 320) + [Int16](repeating: 1, count: 320)
+            + [Int16](repeating: 100, count: 320) + [Int16](repeating: 0, count: 3200)
+        func run(tail: Int?, block: Int) -> ([Int16], PauseShortener<Int16>) {
+            var shortener = PauseShortener<Int16>(level: 4, sampleRate: 16000)
+            var out: [Int16] = []
+            input.withUnsafeBufferPointer { all in
+                for start in stride(from: 0, to: all.count, by: block) {
+                    shortener.process(
+                        UnsafeBufferPointer(rebasing: all[start..<min(start + block, all.count)]), into: &out)
+                }
+            }
+            shortener.finish(tail: tail, into: &out)
+            return (out, shortener)
+        }
+        // 100 ms -> 50 ms, the closure stays, 200 ms -> 100 ms (or the tail asked for)
+        XCTAssertEqual(run(tail: nil, block: 4096).0.count, 320 + 800 + 320 + 320 + 320 + 1600)
+        for block in [4096, 512, 7] {
+            let (out, shortener) = run(tail: 480, block: block)
+            XCTAssertEqual(out.count, 320 + 800 + 320 + 320 + 320 + 480, "block \(block)")
+            XCTAssertEqual(out[320 + 800], -100)
+            XCTAssertEqual(shortener.outputPosition(100), 100)
+            XCTAssertEqual(shortener.outputPosition(1920), 1120)
+        }
+        // longer than the knee: 600 ms -> 100 + 400 * 4 / 5
+        var long = PauseShortener<Int16>(level: 4, sampleRate: 1000)
+        var out: [Int16] = []
+        ([9] + [Int16](repeating: 0, count: 600) + [9]).withUnsafeBufferPointer { long.process($0, into: &out) }
+        XCTAssertEqual(out.count, 2 + 420)
+        // the lowest sample value is sound, not a crash
+        out = []
+        [Int16.min, 0, Int16.max].withUnsafeBufferPointer { long.process($0, into: &out) }
+        XCTAssertEqual(out.suffix(3), [Int16.min, 0, Int16.max])
+    }
+
     func testWavFile() {
         let wav = wavFile([0, 1, -1, 32767], sampleRate: 16000)
         XCTAssertEqual(wav.count, 44 + 8)
