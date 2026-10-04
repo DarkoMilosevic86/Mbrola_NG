@@ -43,6 +43,29 @@ The project file is generated from `project.yml` with
 [XcodeGen](https://github.com/yonaskolb/XcodeGen) and committed. After
 changing `project.yml` or adding files: `cd apple && xcodegen generate`.
 
+## Packaging for distribution
+
+**macOS**: one script builds the Release configuration from scratch for Apple
+silicon and Intel, checks the result (speech extension, catalog, languages,
+both architectures, signature, App Group) and packs the app:
+
+    apple/Scripts/package_macos.sh
+
+It writes `dist/MBROLA_NG-<version>-macos.zip`, which holds `MBROLA NG.app`:
+unpack it and move the app to Applications.
+
+- With a **Developer ID Application** certificate of the team in the keychain
+  the app is signed with it. `--notarize <keychain profile>` then also sends
+  it to Apple's notary service and staples the ticket, so that it opens on
+  every Mac without a warning. The profile is made once with
+  `xcrun notarytool store-credentials <profile> --apple-id <id> --team-id <team>`.
+- Without that certificate the build is signed for development. It runs on
+  the Mac that built it; on another Mac Gatekeeper refuses it until the user
+  allows it in System Settings › Privacy & Security (Open Anyway).
+
+**iOS / iPadOS**: in Xcode, Product › Archive with the destination
+*Any iOS Device*, then distribute the archive from the Organizer.
+
 ## Using the voices
 
 1. Start the app and install a voice.
