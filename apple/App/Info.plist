@@ -27,7 +27,7 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2026 Darko Milošević. GNU GPL v2 or later.</string>
+	<string>MBROLA NG © 2026 Darko Milošević and the MBROLA NG contributors. MBROLA synthesizer © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab). GNU AGPL v3.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchScreen</key>

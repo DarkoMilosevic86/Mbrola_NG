@@ -206,10 +206,8 @@ struct PercentSlider: View {
             Slider(
                 value: Binding(get: { Double(value) }, set: { value = Int($0.rounded()) }),
                 in: Double(range.lowerBound)...Double(range.upperBound), step: 5
-            ) {
-                Text(title)
-            }
-            .labelsHidden()
+            )
+            // No label view here: VoiceOver would read it and the accessibility label, "Pitch, Pitch".
             .accessibilityLabel(Text(title))
             .accessibilityValue(Text(Double(value) / 100, format: .percent))
         }

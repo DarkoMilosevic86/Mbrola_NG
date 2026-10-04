@@ -98,9 +98,14 @@ struct VoiceListView: View {
 enum SystemHelp {
     static var text: LocalizedStringKey {
         #if os(macOS)
-        "Installed voices are offered by macOS like its own. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Spoken Content › System voice › Manage Voices. A newly installed voice can take up to a minute to appear."
+        "Installed voices appear in macOS alongside its built-in voices. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Read & Speak (Spoken Content on older systems) › System voice. A newly installed voice can take up to a minute to appear."
         #else
-        "Installed voices are offered by the system like its own. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear."
+        if #available(iOS 26, *) {
+            "Installed voices appear in the system alongside its built-in voices. For VoiceOver, add the voice in Settings › Accessibility › VoiceOver › Speech › Add Rotor Voice. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Read & Speak › Speak Screen or Speak Selection. A newly installed voice can take up to a minute to appear."
+        } else {
+            // iOS 16 to 18: Read & Speak is still called Spoken Content
+            "Installed voices appear in the system alongside its built-in voices. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For reading the screen and selected text aloud, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear."
+        }
         #endif
     }
 }

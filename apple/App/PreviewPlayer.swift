@@ -9,7 +9,7 @@ import SwiftUI
 enum SampleTexts {
     static func installedAndWorking(_ language: String) -> String {
         switch language {
-        case "hr": return "Ukoliko čujete ovu poruku, ovaj glas je instaliran i radi."
+        case "hr": return "Ako čujete ovu poruku, ovaj glas je instaliran i radi."
         default: return "If you can hear this message, this voice is installed and working."
         }
     }

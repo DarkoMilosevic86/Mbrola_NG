@@ -54,13 +54,80 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kao cijeli broj"
+            "value": "Kao cijele brojeve"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "As whole numbers"
+          }
+        }
+      }
+    },
+    "Authors and licenses": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autori i licence"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authors and licenses"
+          }
+        }
+      }
+    },
+    "Authors: Thierry Dutoit and Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgium. GNU Affero General Public License, version 3 or later.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autori: Thierry Dutoit i Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgija. GNU Affero General Public License, verzija 3 ili novija."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authors: Thierry Dutoit and Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgium. GNU Affero General Public License, version 3 or later."
+          }
+        }
+      }
+    },
+    "Because the MBROLA synthesizer is built into this app, the app as a whole is distributed under the GNU Affero General Public License, version 3. It comes with no warranty. You may redistribute it under the terms of that license.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Budući da je sintetizator MBROLA ugrađen u ovu aplikaciju, aplikacija se kao cjelina distribuira pod licencom GNU Affero General Public License, verzija 3. Dolazi bez ikakvog jamstva. Smijete je dalje distribuirati pod uvjetima te licence."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Because the MBROLA synthesizer is built into this app, the app as a whole is distributed under the GNU Affero General Public License, version 3. It comes with no warranty. You may redistribute it under the terms of that license."
+          }
+        }
+      }
+    },
+    "CMU Pronouncing Dictionary": {
+      "shouldTranslate": false
+    },
+    "CMU Pronouncing Dictionary License": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenca rječnika CMU Pronouncing Dictionary"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CMU Pronouncing Dictionary License"
           }
         }
       }
@@ -129,6 +196,70 @@
         }
       }
     },
+    "Emoji names. Copyright © Unicode, Inc. Unicode License v3.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nazivi emojija. Copyright © Unicode, Inc. Unicode License v3."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emoji names. Copyright © Unicode, Inc. Unicode License v3."
+          }
+        }
+      }
+    },
+    "English pronunciations. Copyright © 1993–2015 Carnegie Mellon University. BSD-style license.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izgovor engleskih riječi. Copyright © 1993–2015 Carnegie Mellon University. Licenca tipa BSD."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "English pronunciations. Copyright © 1993–2015 Carnegie Mellon University. BSD-style license."
+          }
+        }
+      }
+    },
+    "GNU Affero General Public License, version 3": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU Affero General Public License, verzija 3"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU Affero General Public License, version 3"
+          }
+        }
+      }
+    },
+    "GNU General Public License, version 2": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU General Public License, verzija 2"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU General Public License, version 2"
+          }
+        }
+      }
+    },
     "How numbers are read": {
       "localizations": {
         "hr": {
@@ -193,34 +324,50 @@
         }
       }
     },
-    "Installed voices are offered by macOS like its own. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Spoken Content › System voice › Manage Voices. A newly installed voice can take up to a minute to appear.": {
+    "Installed voices appear in macOS alongside its built-in voices. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Read & Speak (Spoken Content on older systems) › System voice. A newly installed voice can take up to a minute to appear.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Instalirane glasove macOS nudi kao i svoje. Za VoiceOver odaberite glas u VoiceOver uslužnom programu › Govor. Za čitanje teksta naglas odaberite ga u Postavkama sustava › Pristupačnost › Izgovoreni sadržaj › Glas sustava › Upravljaj glasovima. Može proći do minute dok se novoinstalirani glas ne pojavi."
+            "value": "Instalirani glasovi pojavljuju se u sustavu macOS uz njegove ugrađene glasove. Za VoiceOver odaberite glas u uslužnom programu VoiceOver › Govor. Za čitanje teksta naglas odaberite ga u Postavkama sustava › Pristupačnost › Čitanje i govorenje (na starijim sustavima: Pročitani sadržaj) › Glas sustava. Može proći do jedne minute prije nego što se novoinstalirani glas pojavi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Installed voices are offered by macOS like its own. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Spoken Content › System voice › Manage Voices. A newly installed voice can take up to a minute to appear."
+            "value": "Installed voices appear in macOS alongside its built-in voices. For VoiceOver, choose the voice in VoiceOver Utility › Speech. For reading text aloud, choose it in System Settings › Accessibility › Read & Speak (Spoken Content on older systems) › System voice. A newly installed voice can take up to a minute to appear."
           }
         }
       }
     },
-    "Installed voices are offered by the system like its own. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear.": {
+    "Installed voices appear in the system alongside its built-in voices. For VoiceOver, add the voice in Settings › Accessibility › VoiceOver › Speech › Add Rotor Voice. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Read & Speak › Speak Screen or Speak Selection. A newly installed voice can take up to a minute to appear.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Instalirane glasove sustav nudi kao i svoje. Za VoiceOver odaberite glas u Postavkama › Pristupačnost › VoiceOver › Govor. Za Izgovor zaslona i Izgovor odabira odaberite ga u Postavkama › Pristupačnost › Izgovoreni sadržaj › Glasovi. Može proći do minute dok se novoinstalirani glas ne pojavi."
+            "value": "Instalirani glasovi pojavljuju se u sustavu uz njegove ugrađene glasove. Za VoiceOver dodajte glas u Postavkama › Pristupačnost › VoiceOver › Čitanje › Dodaj glas rotora. Za značajke Pročitaj zaslon i Pročitaj odabir odaberite ga u Postavkama › Pristupačnost › Čitanje i govorenje › Pročitaj zaslon ili Pročitaj odabir. Može proći do jedne minute prije nego što se novoinstalirani glas pojavi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Installed voices are offered by the system like its own. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear."
+            "value": "Installed voices appear in the system alongside its built-in voices. For VoiceOver, add the voice in Settings › Accessibility › VoiceOver › Speech › Add Rotor Voice. For Speak Screen and Speak Selection, choose it in Settings › Accessibility › Read & Speak › Speak Screen or Speak Selection. A newly installed voice can take up to a minute to appear."
+          }
+        }
+      }
+    },
+    "Installed voices appear in the system alongside its built-in voices. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For reading the screen and selected text aloud, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instalirani glasovi pojavljuju se u sustavu uz njegove ugrađene glasove. Za VoiceOver odaberite glas u Postavkama › Pristupačnost › VoiceOver › Čitanje. Za čitanje zaslona i odabranog teksta naglas odaberite ga u Postavkama › Pristupačnost › Izgovarani sadržaj › Glasovi. Može proći do jedne minute prije nego što se novoinstalirani glas pojavi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installed voices appear in the system alongside its built-in voices. For VoiceOver, choose the voice in Settings › Accessibility › VoiceOver › Speech. For reading the screen and selected text aloud, choose it in Settings › Accessibility › Spoken Content › Voices. A newly installed voice can take up to a minute to appear."
           }
         }
       }
@@ -273,21 +420,85 @@
         }
       }
     },
-    "MBROLA NG": {
-      "shouldTranslate": false
-    },
-    "MBROLA NG is text-to-speech built on the MBROLA diphone synthesizer, by Darko Milošević. It is free software under the GNU General Public License, version 2 or later. The MBROLA synthesizer, which is part of this app, is under the GNU Affero General Public License, version 3. Each voice has its own license.": {
+    "Licenses": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG je sinteza govora izgrađena na difonskom sintetizatoru MBROLA, autora Darka Miloševića. Slobodan je softver pod Općom javnom licencom GNU, verzija 2 ili novija. Sintetizator MBROLA, koji je dio ove aplikacije, pod licencom je GNU Affero General Public License, verzija 3. Svaki glas ima svoju licencu."
+            "value": "Licence"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG is text-to-speech built on the MBROLA diphone synthesizer, by Darko Milošević. It is free software under the GNU General Public License, version 2 or later. The MBROLA synthesizer, which is part of this app, is under the GNU Affero General Public License, version 3. Each voice has its own license."
+            "value": "Licenses"
+          }
+        }
+      }
+    },
+    "MBROLA NG": {
+      "shouldTranslate": false
+    },
+    "MBROLA NG for iOS, iPadOS and macOS": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA NG za iOS, iPadOS i macOS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA NG for iOS, iPadOS and macOS"
+          }
+        }
+      }
+    },
+    "MBROLA NG is free text-to-speech software built on the MBROLA speech synthesizer. It consists of parts by different authors, listed below. The authors of MBROLA NG are not the authors or owners of MBROLA and are not affiliated with them.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA NG je slobodan softver za sintezu govora izgrađen na sintetizatoru govora MBROLA. Sastoji se od dijelova različitih autora, koji su navedeni u nastavku. Autori softvera MBROLA NG nisu autori ni vlasnici sintetizatora MBROLA i nisu povezani s njima."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA NG is free text-to-speech software built on the MBROLA speech synthesizer. It consists of parts by different authors, listed below. The authors of MBROLA NG are not the authors or owners of MBROLA and are not affiliated with them."
+          }
+        }
+      }
+    },
+    "MBROLA Source Code": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izvorni kod sintetizatora MBROLA"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA Source Code"
+          }
+        }
+      }
+    },
+    "MBROLA speech synthesizer": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sintetizator govora MBROLA"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MBROLA speech synthesizer"
           }
         }
       }
@@ -313,7 +524,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Još nije instaliran nijedan glas. Odaberite glas ispod i instalirajte ga."
+            "value": "Još nije instaliran nijedan glas. Odaberite glas u nastavku i instalirajte ga."
           }
         },
         "en": {
@@ -361,7 +572,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reproduciraj primjer"
+            "value": "Reproduciraj uzorak"
           }
         },
         "en": {
@@ -393,7 +604,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Čitaj emoji"
+            "value": "Čitaj emojije"
           }
         },
         "en": {
@@ -441,7 +652,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vrati zadano"
+            "value": "Vrati zadane postavke"
           }
         },
         "en": {
@@ -532,6 +743,22 @@
         }
       }
     },
+    "Text processing, languages and the versions for NVDA, Windows, Linux and Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, version 2 or later.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrada teksta, jezici i verzije za NVDA, Windows, Linux i Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, verzija 2 ili novija."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text processing, languages and the versions for NVDA, Windows, Linux and Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, version 2 or later."
+          }
+        }
+      }
+    },
     "Text to speak": {
       "localizations": {
         "hr": {
@@ -548,18 +775,18 @@
         }
       }
     },
-    "The app collects no data. It uses the internet only to download the voices you install. The English pronunciations come from the CMU Pronouncing Dictionary, the emoji names from Unicode CLDR.": {
+    "The app collects no data. It uses the internet only to download the voices you install.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aplikacija ne prikuplja nikakve podatke. Internet koristi samo za preuzimanje glasova koje instalirate. Engleski izgovori potječu iz rječnika CMU Pronouncing Dictionary, a nazivi emojija iz Unicode CLDR-a."
+            "value": "Aplikacija ne prikuplja nikakve podatke. Internet koristi samo za preuzimanje glasova koje instalirate."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The app collects no data. It uses the internet only to download the voices you install. The English pronunciations come from the CMU Pronouncing Dictionary, the emoji names from Unicode CLDR."
+            "value": "The app collects no data. It uses the internet only to download the voices you install."
           }
         }
       }
@@ -601,13 +828,29 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preuzeta datoteka nije MBROLA glas."
+            "value": "Preuzeta datoteka nije glas za MBROLA."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The downloaded file is not an MBROLA voice."
+          }
+        }
+      }
+    },
+    "The license of each voice is on the voice's page.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenca svakog glasa nalazi se na stranici tog glasa."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The license of each voice is on the voice's page."
           }
         }
       }
@@ -633,7 +876,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Glas ne može govoriti: %@"
+            "value": "Glas nije mogao govoriti: %@"
           }
         },
         "en": {
@@ -660,18 +903,50 @@
         }
       }
     },
+    "The voices are not part of MBROLA NG or of the MBROLA synthesizer. Each voice belongs to those who created it and has its own license, which is shown before you download the voice and on the voice's page.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glasovi nisu dio softvera MBROLA NG ni sintetizatora MBROLA. Svaki glas pripada onima koji su ga izradili i ima svoju licencu, koja se prikazuje prije preuzimanja glasa i na stranici glasa."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The voices are not part of MBROLA NG or of the MBROLA synthesizer. Each voice belongs to those who created it and has its own license, which is shown before you download the voice and on the voice's page."
+          }
+        }
+      }
+    },
     "These settings apply wherever the voice speaks. The speed, pitch and volume chosen in VoiceOver or in an app are applied on top of them.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ove postavke vrijede gdje god glas govori. Brzina, visina i jačina odabrane u VoiceOveru ili u aplikaciji primjenjuju se povrh njih."
+            "value": "Ove postavke vrijede gdje god glas govori. Brzina, visina i glasnoća odabrane u VoiceOveru ili u aplikaciji primjenjuju se povrh njih."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "These settings apply wherever the voice speaks. The speed, pitch and volume chosen in VoiceOver or in an app are applied on top of them."
+          }
+        }
+      }
+    },
+    "This app and its speech extension: Hrvoje Katić. GNU General Public License, version 2 or later.": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ova aplikacija i njezino proširenje za govor: Hrvoje Katić. GNU General Public License, verzija 2 ili novija."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This app and its speech extension: Hrvoje Katić. GNU General Public License, version 2 or later."
           }
         }
       }
@@ -692,12 +967,18 @@
         }
       }
     },
+    "Unicode CLDR": {
+      "shouldTranslate": false
+    },
+    "Unicode License v3": {
+      "shouldTranslate": false
+    },
     "Using the voices": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Korištenje glasova"
+            "value": "Uporaba glasova"
           }
         },
         "en": {
@@ -740,6 +1021,22 @@
         }
       }
     },
+    "Voices": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glasovi"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voices"
+          }
+        }
+      }
+    },
     "Voices cannot be stored: the app is not signed with its App Group.": {
       "localizations": {
         "hr": {
@@ -777,7 +1074,7 @@
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Jačina"
+            "value": "Glasnoća"
           }
         },
         "en": {
