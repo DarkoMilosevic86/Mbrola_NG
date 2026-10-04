@@ -18,6 +18,7 @@ struct MbrolaNGApp: App {
                 #endif
         }
         #if os(macOS)
+        .defaultSize(width: 540, height: 680)
         .commands {
             CommandGroup(replacing: .newItem) {}  // one window is all there is
         }

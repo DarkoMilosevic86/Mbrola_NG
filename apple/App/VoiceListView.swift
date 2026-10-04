@@ -21,7 +21,7 @@ struct VoiceListView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List {
+            Form {
                 if !library.storageAvailable {
                     Section {
                         Label(
@@ -67,6 +67,7 @@ struct VoiceListView: View {
                     }
                 }
             }
+            .formStyle(.grouped)  // on the Mac, the look of the other screens
             .navigationTitle("MBROLA NG")
             .navigationDestination(for: Route.self) { route in
                 switch route {

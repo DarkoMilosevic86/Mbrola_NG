@@ -29,6 +29,9 @@ struct VoiceDetailView: View {
             if installed {
                 Section {
                     Button("Remove Voice", role: .destructive) { confirmRemove = true }
+                        #if os(macOS)
+                        .foregroundStyle(.red)  // a Mac form does not color the role
+                        #endif
                 }
             }
         }
@@ -113,6 +116,12 @@ struct VoiceDetailView: View {
         Section("Try the voice") {
             TextField("Text to speak", text: $text, axis: .vertical)
                 .lineLimit(1...5)
+                #if os(macOS)
+                // a Mac form would put the title to the left and the text
+                // to the right; the section header says what it is
+                .labelsHidden()
+                .multilineTextAlignment(.leading)
+                #endif
             Button {
                 if isPlaying {
                     player.stop()
