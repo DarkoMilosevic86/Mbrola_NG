@@ -128,6 +128,11 @@ the Croatian data reads Cyrillic too).
   block the length of the audio in it instead of padding it with silence,
   and shortens the core's pause after the last sentence (450 ms after a full
   stop) to 50 ms.
+- **Spelling**: such a comma is only ever text next to other text. Between
+  spelled characters (`<say-as interpret-as="characters">`, VoiceOver's
+  typing echo and spelling) it becomes a 1 ms break, which the core follows
+  with the same pause; alone in a text segment the core would spell it
+  ("a comma b comma"), as it spells every text that is one character.
 - **What the system sends** (observed, covered by `Tests/SSMLTests.swift`):
   speed as `<prosody rate="160%">` (12.5 % ... 400 %), pitch as a relative
   `pitch="+30%"`, volume as `volume="-6.02dB"` or `silent`. They are applied

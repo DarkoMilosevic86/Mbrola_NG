@@ -161,6 +161,34 @@ final class SSMLTests: XCTestCase {
         XCTAssertEqual(SpeechPlan("<speak>a,<break time=\"60ms\"/></speak>").segments, [.text("a", base: 0)])
     }
 
+    /// VoiceOver spelling a word, and the echo of a typed key: the pauses the
+    /// parser puts between the parts are never text of their own, which the
+    /// core would spell ("a comma b comma").
+    func testSeparatorsAreNotSpelled() {
+        let a = #"<say-as interpret-as="characters">a</say-as>"#, b = #"<say-as interpret-as="characters">b</say-as>"#
+        let spelled: [SpeechSegment] = [
+            .spell(true), .text("a", base: 0), .spell(false), .pause(milliseconds: 1),
+            .spell(true), .text("b", base: 1), .spell(false)]
+        for between in [#"<break time="60ms"/>"#, "\n", #"<break time="60ms"/> "#, "</s><s>"] {
+            let plan = SpeechPlan("<speak><s>\(a)\(between)\(b)<break time=\"60ms\"/></s></speak>")
+            XCTAssertEqual(plan.segments, spelled, between)
+            XCTAssertEqual(plan.sourceStart.count, 2, between)
+        }
+        // inside spelled text the characters are apart already
+        XCTAssertEqual(
+            SpeechPlan(#"<speak><say-as interpret-as="characters">a<break time="60ms"/>b<s>c</s><break time="60ms"/></say-as></speak>"#).segments,
+            [.spell(true), .text("abc", base: 0), .spell(false)])
+        // a separator still is a comma next to text, before or after it
+        XCTAssertEqual(
+            SpeechPlan("<speak>\(a)<break time=\"60ms\"/>word<break time=\"60ms\"/>\(b)</speak>").segments,
+            [.spell(true), .text("a", base: 0), .spell(false), .text(", word, ", base: 1),
+             .spell(true), .text("b", base: 9), .spell(false)])
+        XCTAssertEqual(
+            SpeechPlan("<speak>\(a)<break time=\"60ms\"/><prosody pitch=\"+50%\">\(b)</prosody></speak>").segments,
+            [.spell(true), .text("a", base: 0), .spell(false), .pause(milliseconds: 1), .pitch(percent: 150),
+             .spell(true), .text("b", base: 1), .spell(false), .pitch(percent: 100)])
+    }
+
     func testPlainTextIsNotParsed() {
         let text = "a < b & c <speak>"
         let plan = SpeechPlan(text, ssml: false)

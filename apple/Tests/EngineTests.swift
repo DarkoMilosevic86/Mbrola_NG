@@ -221,6 +221,23 @@ final class EngineTests: XCTestCase {
         XCTAssertEqual(try engine.synthesize(plan, settings: VoiceSettings()).count, normal.count, accuracy: 400)
     }
 
+    /// Spelled characters with VoiceOver's breaks between them: the break is
+    /// a pause, not the word "comma".
+    func testSpelledCharactersWithBreaks() throws {
+        let (engine, _) = try engine("cr1")
+        func spell(_ text: String) -> String { #"<say-as interpret-as="characters">\#(text)</say-as>"# }
+        func length(_ ssml: String) throws -> Int {
+            try engine.synthesize(SpeechPlan("<speak>\(ssml)</speak>"), settings: VoiceSettings()).count
+        }
+        let pause = #"<break time="60ms"/>"#
+        let apart = try length(spell("a") + pause + spell("b") + pause)
+        let together = try length(spell("ab"))
+        let withComma = try length(spell("a,b"))
+        XCTAssertGreaterThan(apart, together)
+        XCTAssertLessThan(apart, together + 16000 * 300 / 1000)  // the pause of a comma at most
+        XCTAssertLessThan(apart, withComma)
+    }
+
     func testEmptyAndOddUtterances() throws {
         let (engine, _) = try engine("us1")
         for text in ["", " ", "\n\n", "...", "😀", "a", String(repeating: "word ", count: 2000)] {

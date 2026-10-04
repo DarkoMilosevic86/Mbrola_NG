@@ -82,6 +82,15 @@ private struct Parser {
     private var softLines = false   // SSML: see softenLineBreaks()
     private var sawText = false     // the request has text of its own (not only separators put here)
 
+    /// A separator that had no text before it to follow: see flush().
+    private struct Held {
+        var text: [UInt16]
+        var start: [Int32]
+        var end: [Int32]
+        var at: Int             // plan.segments.count when it was put
+    }
+    private var held: Held?
+
     init(_ units: [UInt16]) { s = units }
 
     // ------------------------------------------------------------ output
@@ -107,7 +116,6 @@ private struct Parser {
     /// ends with punctuation of its own), an empty line the pause of a full
     /// stop. The paragraph separator the parser itself puts for <p> stays.
     private mutating func softenLineBreaks() {
-        func isLineBreak(_ u: UInt16) -> Bool { u == 0x0A || u == 0x0D || u == 0x85 || u == 0x2028 }
         guard pending.contains(where: isLineBreak) else { return }
         var text: [UInt16] = []
         var starts: [Int32] = []
@@ -168,14 +176,61 @@ private struct Parser {
         }
     }
 
-    private mutating func flush() {
+    /// `separator`: the pending text is a pause the parser put itself (", "
+    /// between sentences, lines and short breaks), not text of the request.
+    ///
+    /// Such a comma must never be heard. The core spells a text that is one
+    /// character (the echo of a typed key), and every text segment is a text
+    /// of its own to it: ", " alone between two spelled characters
+    /// (<say-as>a</say-as><break/><say-as>b</say-as>, VoiceOver on iOS
+    /// spelling) was read as "a comma b comma", and so was a comma put
+    /// inside <say-as>. A separator is
+    /// therefore only text next to other text: it follows the text before it
+    /// or waits for the text after it. Where there is neither (spelled
+    /// characters, a change of speed or pitch on both sides) it becomes a
+    /// break, which the core follows with the pause of a comma; inside
+    /// spelled text, where the characters are said one by one anyway, and
+    /// at the end of the request it is nothing.
+    private mutating func flush(separator: Bool = false) {
         defer {
             pending.removeAll(keepingCapacity: true)
             pendingStart.removeAll(keepingCapacity: true)
             pendingEnd.removeAll(keepingCapacity: true)
         }
         if pending.isEmpty || skip > 0 { return }
-        if softLines && spell == 0 { softenLineBreaks() }
+        var separator = separator
+        let blank = !pending.contains { !isSpace($0) && !isLineBreak($0) }
+        if softLines && spell == 0 {
+            softenLineBreaks()
+            if blank && pending.contains(0x2C) { separator = true }  // a line break between two tags
+        }
+        var hasTextBefore = false  // (spaces alone are not text to follow)
+        if case .text(let previous)? = plan.segments.last { hasTextBefore = previous.0.utf16.contains { !isSpace($0) } }
+        if separator || (blank && spell == 0 && held?.at == plan.segments.count) {
+            if separator && spell > 0 { return }
+            if held != nil {
+                // more separators, or spaces after one, wait with it
+                held!.text += pending
+                held!.start += pendingStart
+                held!.end += pendingEnd
+                return
+            }
+            if !hasTextBefore {
+                held = Held(text: pending, start: pendingStart, end: pendingEnd, at: plan.segments.count)
+                return
+            }
+        } else if let h = held {
+            if !blank {
+                held = nil
+                if spell == 0 && h.at == plan.segments.count {
+                    pending = h.text + pending
+                    pendingStart = h.start + pendingStart
+                    pendingEnd = h.end + pendingEnd
+                } else {
+                    plan.segments.insert(.pause(milliseconds: Parser.separatorPause), at: h.at)
+                }
+            }
+        }
         let text = String(decoding: pending, as: UTF16.self)
         if case .text(let previous, let base)? = plan.segments.last {
             plan.segments[plan.segments.count - 1] = .text(previous + text, base: base)
@@ -188,6 +243,7 @@ private struct Parser {
 
     // ------------------------------------------------------------- input
     private func isSpace(_ u: UInt16) -> Bool { u == 0x20 || u == 0x09 || u == 0x0A || u == 0x0D }
+    private func isLineBreak(_ u: UInt16) -> Bool { u == 0x0A || u == 0x0D || u == 0x85 || u == 0x2028 }
     private func isAlpha(_ u: UInt16) -> Bool { (u >= 0x41 && u <= 0x5A) || (u >= 0x61 && u <= 0x7A) }
 
     private func matches(_ literal: String, at i: Int) -> Bool {
@@ -349,6 +405,10 @@ private struct Parser {
     /// comma and nothing more; a longer one is silence in addition to it.
     static let phraseBreak = 100
 
+    /// The break (ms) a separator becomes where it cannot be a comma in text
+    /// (see flush()): it only has to end the phrase.
+    static let separatorPause = 1
+
     private static func breakStrength(_ v: String?) -> Int {
         switch v?.lowercased() {
         case "none": return 0
@@ -489,7 +549,7 @@ private struct Parser {
                     }
                     if f.name == "p" || f.name == "s" {
                         put(f.name == "p" ? "\u{2029}" : " ", from: tagStart, to: i)
-                        flush()
+                        flush(separator: f.name == "s")
                     }
                 }
                 continue
@@ -510,7 +570,7 @@ private struct Parser {
                         plan.segments.append(.pause(milliseconds: ms))
                     } else if ms > 0 {
                         put(", ", from: tagStart, to: i)
-                        flush()
+                        flush(separator: true)
                     }
                 }
             default:
@@ -561,7 +621,7 @@ private struct Parser {
                     // core: its longest pause, between every two parts.
                     if !plan.sourceStart.isEmpty {
                         put(", ", from: tagStart, to: i)
-                        flush()
+                        flush(separator: true)
                     }
                 default:
                     break
