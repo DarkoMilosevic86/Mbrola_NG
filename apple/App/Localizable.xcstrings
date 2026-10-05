@@ -65,73 +65,6 @@
         }
       }
     },
-    "Authors and licenses": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Autori i licence"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Authors and licenses"
-          }
-        }
-      }
-    },
-    "Authors: Thierry Dutoit and Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgium. GNU Affero General Public License, version 3 or later.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Autori: Thierry Dutoit i Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgija. GNU Affero General Public License, verzija 3 ili novija."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Authors: Thierry Dutoit and Vincent Pagel. Copyright © 1995–2018 Faculté Polytechnique de Mons (TCTS Lab), Belgium. GNU Affero General Public License, version 3 or later."
-          }
-        }
-      }
-    },
-    "Because the MBROLA synthesizer is built into this app, the app as a whole is distributed under the GNU Affero General Public License, version 3. It comes with no warranty. You may redistribute it under the terms of that license.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Budući da je sintetizator MBROLA ugrađen u ovu aplikaciju, aplikacija se kao cjelina distribuira pod licencom GNU Affero General Public License, verzija 3. Dolazi bez ikakvog jamstva. Smijete je dalje distribuirati pod uvjetima te licence."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Because the MBROLA synthesizer is built into this app, the app as a whole is distributed under the GNU Affero General Public License, version 3. It comes with no warranty. You may redistribute it under the terms of that license."
-          }
-        }
-      }
-    },
-    "CMU Pronouncing Dictionary": {
-      "shouldTranslate": false
-    },
-    "CMU Pronouncing Dictionary License": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Licenca rječnika CMU Pronouncing Dictionary"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "CMU Pronouncing Dictionary License"
-          }
-        }
-      }
-    },
     "Cancel": {
       "localizations": {
         "hr": {
@@ -192,70 +125,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Downloading: %@ of %@"
-          }
-        }
-      }
-    },
-    "Emoji names. Copyright © Unicode, Inc. Unicode License v3.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nazivi emojija. Copyright © Unicode, Inc. Unicode License v3."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emoji names. Copyright © Unicode, Inc. Unicode License v3."
-          }
-        }
-      }
-    },
-    "English pronunciations. Copyright © 1993–2015 Carnegie Mellon University. BSD-style license.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Izgovor engleskih riječi. Copyright © 1993–2015 Carnegie Mellon University. Licenca tipa BSD."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "English pronunciations. Copyright © 1993–2015 Carnegie Mellon University. BSD-style license."
-          }
-        }
-      }
-    },
-    "GNU Affero General Public License, version 3": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GNU Affero General Public License, verzija 3"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GNU Affero General Public License, version 3"
-          }
-        }
-      }
-    },
-    "GNU General Public License, version 2": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GNU General Public License, verzija 2"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GNU General Public License, version 2"
           }
         }
       }
@@ -420,85 +289,21 @@
         }
       }
     },
-    "Licenses": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Licence"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Licenses"
-          }
-        }
-      }
-    },
     "MBROLA NG": {
       "shouldTranslate": false
     },
-    "MBROLA NG for iOS, iPadOS and macOS": {
+    "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3. Each voice has its own license.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG za iOS, iPadOS i macOS"
+            "value": "MBROLA NG %@. Slobodan softver pod licencom GNU GPL, verzija 2 ili novija. Sintetizator MBROLA je pod licencom GNU AGPL v3. Svaki glas ima svoju licencu."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG for iOS, iPadOS and macOS"
-          }
-        }
-      }
-    },
-    "MBROLA NG is free text-to-speech software built on the MBROLA speech synthesizer. It consists of parts by different authors, listed below. The authors of MBROLA NG are not the authors or owners of MBROLA and are not affiliated with them.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MBROLA NG je slobodan softver za sintezu govora izgrađen na sintetizatoru govora MBROLA. Sastoji se od dijelova različitih autora, koji su navedeni u nastavku. Autori softvera MBROLA NG nisu autori ni vlasnici sintetizatora MBROLA i nisu povezani s njima."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MBROLA NG is free text-to-speech software built on the MBROLA speech synthesizer. It consists of parts by different authors, listed below. The authors of MBROLA NG are not the authors or owners of MBROLA and are not affiliated with them."
-          }
-        }
-      }
-    },
-    "MBROLA Source Code": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Izvorni kod sintetizatora MBROLA"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MBROLA Source Code"
-          }
-        }
-      }
-    },
-    "MBROLA speech synthesizer": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sintetizator govora MBROLA"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MBROLA speech synthesizer"
+            "value": "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3. Each voice has its own license."
           }
         }
       }
@@ -583,22 +388,6 @@
         }
       }
     },
-    "Privacy Policy": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pravila privatnosti"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacy Policy"
-          }
-        }
-      }
-    },
     "Remove Voice": {
       "localizations": {
         "hr": {
@@ -663,7 +452,7 @@
         }
       }
     },
-    "Source Code and Licenses": {
+    "Source code and licenses": {
       "localizations": {
         "hr": {
           "stringUnit": {
@@ -674,7 +463,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Source Code and Licenses"
+            "value": "Source code and licenses"
           }
         }
       }
@@ -727,22 +516,6 @@
         }
       }
     },
-    "Text processing, languages and the versions for NVDA, Windows, Linux and Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, version 2 or later.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obrada teksta, jezici i verzije za NVDA, Windows, Linux i Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, verzija 2 ili novija."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text processing, languages and the versions for NVDA, Windows, Linux and Android: Darko Milošević. Copyright © 2026 Darko Milošević. GNU General Public License, version 2 or later."
-          }
-        }
-      }
-    },
     "Text to speak": {
       "localizations": {
         "hr": {
@@ -755,22 +528,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text to speak"
-          }
-        }
-      }
-    },
-    "The app collects no data. It uses the internet only to download the voices you install.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aplikacija ne prikuplja nikakve podatke. Internet koristi samo za preuzimanje glasova koje instalirate."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The app collects no data. It uses the internet only to download the voices you install."
           }
         }
       }
@@ -823,22 +580,6 @@
         }
       }
     },
-    "The license of each voice is on the voice's page.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Licenca svakog glasa nalazi se na stranici tog glasa."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The license of each voice is on the voice's page."
-          }
-        }
-      }
-    },
     "The voice %@ is installed.": {
       "localizations": {
         "hr": {
@@ -887,22 +628,6 @@
         }
       }
     },
-    "The voices are not part of MBROLA NG or of the MBROLA synthesizer. Each voice belongs to those who created it and has its own license, which is shown before you download the voice and on the voice's page.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glasovi nisu dio softvera MBROLA NG ni sintetizatora MBROLA. Svaki glas pripada onima koji su ga izradili i ima svoju licencu, koja se prikazuje prije preuzimanja glasa i na stranici glasa."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The voices are not part of MBROLA NG or of the MBROLA synthesizer. Each voice belongs to those who created it and has its own license, which is shown before you download the voice and on the voice's page."
-          }
-        }
-      }
-    },
     "These settings apply wherever the voice speaks. The speed, pitch and volume chosen in VoiceOver or in an app are applied on top of them.": {
       "localizations": {
         "hr": {
@@ -915,22 +640,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "These settings apply wherever the voice speaks. The speed, pitch and volume chosen in VoiceOver or in an app are applied on top of them."
-          }
-        }
-      }
-    },
-    "This app and its speech extension: Hrvoje Katić. GNU General Public License, version 2 or later.": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ova aplikacija i njezino proširenje za govor: Hrvoje Katić. GNU General Public License, verzija 2 ili novija."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This app and its speech extension: Hrvoje Katić. GNU General Public License, version 2 or later."
           }
         }
       }
@@ -950,12 +659,6 @@
           }
         }
       }
-    },
-    "Unicode CLDR": {
-      "shouldTranslate": false
-    },
-    "Unicode License v3": {
-      "shouldTranslate": false
     },
     "Using the voices": {
       "localizations": {
@@ -1001,22 +704,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voice settings"
-          }
-        }
-      }
-    },
-    "Voices": {
-      "localizations": {
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glasovi"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voices"
           }
         }
       }
