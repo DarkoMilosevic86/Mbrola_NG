@@ -205,7 +205,7 @@ private struct Parser {
             if blank && pending.contains(0x2C) { separator = true }  // a line break between two tags
         }
         var hasTextBefore = false  // (spaces alone are not text to follow)
-        if case .text(let previous)? = plan.segments.last { hasTextBefore = previous.0.utf16.contains { !isSpace($0) } }
+        if case .text(let previous, _)? = plan.segments.last { hasTextBefore = previous.utf16.contains { !isSpace($0) } }
         if separator || (blank && spell == 0 && held?.at == plan.segments.count) {
             if separator && spell > 0 { return }
             if held != nil {

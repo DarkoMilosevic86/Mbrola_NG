@@ -292,18 +292,18 @@
     "MBROLA NG": {
       "shouldTranslate": false
     },
-    "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3. Each voice has its own license.": {
+    "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3 and is part of this app, which is therefore distributed under the GNU AGPL v3. Each voice has its own license.": {
       "localizations": {
         "hr": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG %@. Slobodan softver pod licencom GNU GPL, verzija 2 ili novija. Sintetizator MBROLA je pod licencom GNU AGPL v3. Svaki glas ima svoju licencu."
+            "value": "MBROLA NG %@. Slobodan softver pod licencom GNU GPL, verzija 2 ili novija. Sintetizator MBROLA je pod licencom GNU AGPL v3 i dio je ove aplikacije, koja se stoga distribuira pod licencom GNU AGPL v3. Svaki glas ima svoju licencu."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3. Each voice has its own license."
+            "value": "MBROLA NG %@. Free software under the GNU GPL, version 2 or later. The MBROLA synthesizer is under the GNU AGPL v3 and is part of this app, which is therefore distributed under the GNU AGPL v3. Each voice has its own license."
           }
         }
       }

@@ -3,11 +3,11 @@
 <!-- Copyright (c) 2026 Darko Milošević
      SPDX-License-Identifier: GPL-2.0-or-later -->
 
-*Last updated: 2 October 2026* · [Hrvatski ispod](#pravila-privatnosti--mbrola-ng)
+*Last updated: 5 October 2026* · [Hrvatski ispod](#pravila-privatnosti--mbrola-ng)
 
 MBROLA NG is free, open-source text-to-speech software by Darko Milošević,
-available for Android, NVDA, Windows (SAPI 5) and Linux. This policy covers
-all of them.
+available for Android, iOS, iPadOS, macOS, NVDA, Windows (SAPI 5) and Linux.
+This policy covers all of them.
 
 ## Summary
 
@@ -16,8 +16,8 @@ It has no user accounts, no advertising, no analytics and no tracking.
 
 ## What the app does on your device
 
-- **Text you have read aloud** (by TalkBack, a screen reader or any other
-  app) is converted to speech entirely on your device. It is never sent
+- **Text you have read aloud** (by TalkBack, VoiceOver, a screen reader or any
+  other app) is converted to speech entirely on your device. It is never sent
   anywhere and never saved.
 - **Your settings** (speed, pitch, volume and the other voice settings) and
   the **voices you install** are stored only on your device. They are
@@ -63,11 +63,11 @@ MBROLA NG project.
 
 # Pravila privatnosti – MBROLA NG
 
-*Posljednja izmjena: 2. listopada 2026.*
+*Posljednja izmjena: 5. listopada 2026.*
 
 MBROLA NG je besplatan sintetizator govora otvorenog koda autora Darka
-Miloševića, za Android, NVDA, Windows (SAPI 5) i Linux. Ova pravila vrijede
-za sve te verzije.
+Miloševića, za Android, iOS, iPadOS, macOS, NVDA, Windows (SAPI 5) i Linux.
+Ova pravila vrijede za sve te verzije.
 
 ## Ukratko
 
@@ -76,8 +76,8 @@ osobne podatke.** Nema korisničkih računa, oglasa, analitike ni praćenja.
 
 ## Što aplikacija radi na vašem uređaju
 
-- **Tekst koji se čita naglas** (TalkBack, čitač ekrana ili bilo koja druga
-  aplikacija) pretvara se u govor isključivo na vašem uređaju. Nikamo se ne
+- **Tekst koji se čita naglas** (TalkBack, VoiceOver, čitač ekrana ili bilo koja
+  druga aplikacija) pretvara se u govor isključivo na vašem uređaju. Nikamo se ne
   šalje i nigdje se ne sprema.
 - **Vaše postavke** (brzina, visina, jačina i ostale postavke glasa) i
   **instalirani glasovi** spremaju se samo na vašem uređaju. Brišu se kad

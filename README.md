@@ -18,7 +18,7 @@ with the screen readers and speech systems people actually use.
 | **Windows SAPI 5** | SAPI 5 engine for JAWS, Balabolka and all other SAPI 5 applications, with an installer (English / Croatian) that downloads the chosen voices | Working |
 | **Linux** (Orca) | Speech Dispatcher output module `sd_mbrola_ng` + terminal voice manager `mbrola-ng-voices` | Implemented, **not yet tested on Linux**. Testers welcome. |
 | **Android** | TextToSpeech engine for TalkBack and all apps, with a voice manager and per-voice settings; works before the first unlock (direct boot) | Working on the emulator, **not yet tested on real devices**. Testers welcome. |
-| **iOS, iPadOS, macOS** | System voice for VoiceOver, Spoken Content and all apps (speech synthesis provider extension), with a voice manager and per-voice settings; iOS 16 / macOS 13 or newer | Working on macOS 27 and on an iPhone 17 through the system speech API; **not yet tested by ear with VoiceOver or on older system versions**. Testers welcome. |
+| **iOS, iPadOS, macOS** | System voice for VoiceOver, Spoken Content and all apps (speech synthesis provider extension), with a voice manager and per-voice settings; iOS 16 / macOS 13 or newer | Working with VoiceOver on macOS 27 and on an iPhone 17 (iOS 27); **not yet tested on older system versions**. Testers welcome. |
 
 The same core, language data and voices are used on every platform, so a
 sentence sounds the same everywhere.

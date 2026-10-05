@@ -26,7 +26,6 @@
 		5C03D24BB0C4ACB82D0E6A42 /* langdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */; };
 		5F3C6CA1F6AB86571C6B8D2D /* DebugSelfTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C936E8096159DB595A0536C /* DebugSelfTest.swift */; };
 		6665B6F07C12A8C29F123C2B /* VoiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59ADCE9B4716BB552CEC306 /* VoiceStore.swift */; };
-		6731211CCBCE547097ECC7C4 /* GPL-2.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = 087A36B5745A6BE00CA192E4 /* GPL-2.0.txt */; };
 		6B9F774EB4BD7E4EE66B0002 /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C051716706C2C67443F35497 /* SharedContainer.swift */; };
 		6C342C7610B88414F20A00FB /* SSMLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D233D9D4674561E0FE7679 /* SSMLTests.swift */; };
 		7528C8ACA58566EB8C970B41 /* MbrolaSpeechAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E417B54531F111E97A551823 /* MbrolaSpeechAudioUnit.swift */; };
@@ -47,12 +46,9 @@
 		B027424B042FCADEE0296E55 /* normalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 482471B9021C1C7433763675 /* normalizer.cpp */; };
 		B35F12A8C08AD99F4D49339B /* VoiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */; };
 		B5BB512722CEBEDCEF920269 /* bytes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4B71C9B6B7E848CDC3FE93F /* bytes.cpp */; };
-		B696AB07C81EC43659FC8EBB /* AGPL-3.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = 75D132915DF4177959AD43A2 /* AGPL-3.0.txt */; };
-		B816B330180B4BB6943D4148 /* CMUdict.txt in Resources */ = {isa = PBXBuildFile; fileRef = 68021D7BFD16EA64298025F5 /* CMUdict.txt */; };
 		BE2397335B458E7788EBE937 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622AECB74A7B7CE02D8F29CC /* text.cpp */; };
 		BE53837048DBAD69C52E4408 /* SpeechEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */; };
 		C561A6A0242F07486E08E84D /* prosody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89B1DBCCED45060902A35B64 /* prosody.cpp */; };
-		C7742BD1A1506F38799EB7EB /* Unicode-3.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = 45DC53575DC1F474939FB6E4 /* Unicode-3.0.txt */; };
 		C8D3CDC0FA00F2E6540F55F8 /* rbnf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */; };
 		CAA645254ADE545C1EA1F125 /* pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED5D2D7208BCFAFEFD95E682 /* pipeline.cpp */; };
 		D6A6F57D6117806F0D289AFD /* loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BE84AEA10A65D8298EAD3A3 /* loader.cpp */; };
@@ -104,7 +100,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		087A36B5745A6BE00CA192E4 /* GPL-2.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "GPL-2.0.txt"; sourceTree = "<group>"; };
 		08CB8A2E44404F9668E40208 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		0BE84AEA10A65D8298EAD3A3 /* loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = loader.cpp; sourceTree = "<group>"; };
 		0C936E8096159DB595A0536C /* DebugSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSelfTest.swift; sourceTree = "<group>"; };
@@ -115,7 +110,6 @@
 		32E0218BF5AC818463B59A8F /* samples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = samples; path = ../android/app/src/main/assets/samples; sourceTree = SOURCE_ROOT; };
 		38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		402BFDE25360859796F5B044 /* Resampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resampler.swift; sourceTree = "<group>"; };
-		45DC53575DC1F474939FB6E4 /* Unicode-3.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Unicode-3.0.txt"; sourceTree = "<group>"; };
 		482471B9021C1C7433763675 /* normalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = normalizer.cpp; sourceTree = "<group>"; };
 		4E2F0FADCD3A6BBA527CF7EC /* MbrolaNGSpeech.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MbrolaNGSpeech.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E61143BC0A158656E9F1532 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -123,10 +117,8 @@
 		604A1D04341A0A9671B16EFE /* canon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = canon.cpp; sourceTree = "<group>"; };
 		622AECB74A7B7CE02D8F29CC /* text.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = text.cpp; sourceTree = "<group>"; };
 		66F615D3D106059C1883AFD9 /* EngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineTests.swift; sourceTree = "<group>"; };
-		68021D7BFD16EA64298025F5 /* CMUdict.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMUdict.txt; sourceTree = "<group>"; };
 		6E5C856F9D95E84905E31866 /* mbrola_inproc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mbrola_inproc.c; sourceTree = "<group>"; };
 		73D233D9D4674561E0FE7679 /* SSMLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSMLTests.swift; sourceTree = "<group>"; };
-		75D132915DF4177959AD43A2 /* AGPL-3.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "AGPL-3.0.txt"; sourceTree = "<group>"; };
 		89B1DBCCED45060902A35B64 /* prosody.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = prosody.cpp; sourceTree = "<group>"; };
 		9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = langdata.cpp; sourceTree = "<group>"; };
 		A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = synthproc_inproc.cpp; sourceTree = "<group>"; };
@@ -322,17 +314,6 @@
 			name = Core;
 			sourceTree = "<group>";
 		};
-		94F408873A3AAFC17635B5F4 /* Licenses */ = {
-			isa = PBXGroup;
-			children = (
-				75D132915DF4177959AD43A2 /* AGPL-3.0.txt */,
-				68021D7BFD16EA64298025F5 /* CMUdict.txt */,
-				087A36B5745A6BE00CA192E4 /* GPL-2.0.txt */,
-				45DC53575DC1F474939FB6E4 /* Unicode-3.0.txt */,
-			);
-			path = Licenses;
-			sourceTree = "<group>";
-		};
 		9B97DC578BEF9F462694C617 /* engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,7 +361,6 @@
 		E9FABE57318990BB0A8D2D75 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				94F408873A3AAFC17635B5F4 /* Licenses */,
 				A4707675DB7AFB17C6F56952 /* AboutView.swift */,
 				30E7D0400043D92D634FFCF7 /* Assets.xcassets */,
 				0C936E8096159DB595A0536C /* DebugSelfTest.swift */,
@@ -512,12 +492,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B696AB07C81EC43659FC8EBB /* AGPL-3.0.txt in Resources */,
 				038084ADA9A86963082B8720 /* Assets.xcassets in Resources */,
-				B816B330180B4BB6943D4148 /* CMUdict.txt in Resources */,
-				6731211CCBCE547097ECC7C4 /* GPL-2.0.txt in Resources */,
 				385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */,
-				C7742BD1A1506F38799EB7EB /* Unicode-3.0.txt in Resources */,
 				2DE84E77FE1F94C00F22A03B /* samples in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

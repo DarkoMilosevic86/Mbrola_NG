@@ -194,6 +194,12 @@ REVISION HISTORY
                   the engine setting "Always use this voice, for every
                   language" (EngineSettings.forcedVoice): every language is
                   reported available and spoken with that voice.
+  r18 2026-10-05  APPLE (iOS, iPadOS, macOS) implemented in apple/ by Hrvoje
+                  Katić: speech synthesis provider extension + SwiftUI voice
+                  manager. MBROLA is linked into the extension there (no
+                  child process on iOS), so those binaries are AGPL v3 as a
+                  whole. Catalog keys "apple_locale", "apple_also_for".
+                  Described in Appendix C; sections 1-19 are unchanged.
 
 CONTENTS
   1.  Goal, scope and fixed decisions
@@ -217,6 +223,7 @@ CONTENTS
  19.  Decisions already made / open questions
  Appendix A. Full cr1 diphone inventory facts
  Appendix B. Example snippets of proposed source-file syntax
+ Appendix C. Host 5: Apple (iOS, iPadOS, macOS)
 
 
 ===============================================================================
@@ -2184,6 +2191,65 @@ tests.txt   (each test is also run automatically in the other script)
   "инјекција"                  => i n j e k ts i j a   (voice check will
                                   flag n-j -> needs a repair rule/lexicon)
   "1000 eura" / "1000 евра"    => tisuću eura / tisuću evra
+
+===============================================================================
+APPENDIX C. HOST 5: APPLE (iOS, iPadOS, macOS)
+===============================================================================
+(Added in r18 by Hrvoje Katić. An appendix so that the section numbers the
+source code refers to stay as they are. Details: apple/README.md.)
+
+C.1 Structure
+     One Xcode project (apple/, generated from project.yml with XcodeGen),
+     iOS / iPadOS 16 and macOS 13 or newer - the first versions with the
+     speech synthesis provider API:
+       - the speech extension MbrolaNGSpeech.appex: an Audio Unit extension
+         of type "ausp" (AVSpeechSynthesisProviderAudioUnit). The system
+         asks it for the voices (= the installed ones), hands it every
+         request as SSML and pulls the audio. VoiceOver, Spoken Content,
+         "say" and AVSpeechSynthesizer all speak through it;
+       - the app (SwiftUI, one target for iPhone, iPad and Mac) = voice
+         manager as in 14.4: install (license first, verification 10.7),
+         try, per-voice settings, remove. English and Croatian;
+       - resources of the extension: all language .dat files (compiled and
+         tested by langc during the build) and catalog.json. NO voices in
+         the app (downloaded, 10.4).
+     The app and the extension are two processes; they meet in the App
+     Group container: voices/<id>/<id> (10.9) and voice-settings.json.
+
+C.2 MBROLA inside the process (differs from 4.6 / 5.9)
+     iOS does not let an app start another program, so mbrola_ng_synth
+     cannot exist there. apple/Shared/Native/synthproc_inproc.cpp implements
+     the core's SynthProcess class on MBROLA's multi-channel library
+     (LibMultiChannel/lib2.c, MBROLA unmodified) and is compiled in place of
+     core/src/engine/synthproc.cpp; the core itself is unchanged. The
+     extension is a process of its own, so a damaged voice still cannot take
+     the screen reader down.
+     LICENSE CONSEQUENCE: MBROLA (AGPL v3) is linked into the Apple app and
+     extension, so these binaries are distributed under the AGPL v3 as a
+     whole (the GPL-2.0-or-later parts allow that). The separation of
+     section 4 does not hold on this platform. GPL / AGPL software also
+     does not fit the App Store's standard terms; distribution is undecided.
+
+C.3 Behaviour
+     - Voices: catalog "apple_locale" (BCP 47: hr-HR, en-US, en-GB) and
+       "apple_also_for" (sr-RS, bs-BA, sr-ME for the hr voices, as r17).
+     - Request: SSML -> segments (apple/Shared/SSML.swift, the parser of the
+       Speech Dispatcher module plus the source positions the system wants
+       for word highlighting). Speed, pitch and volume of the request are
+       applied on top of the voice's own settings.
+     - Audio: 16 kHz mono float, rendered offline (the system pulls as fast
+       as the unit delivers), mbng_read per render call; mbng_cancel on
+       cancelSpeechRequest.
+     - Pauses: next to the system's voices the core's pauses are long, above
+       all between the parts of what VoiceOver says about an element. The
+       core has no parameter for them, so the Apple layer shortens them:
+       sentence boundaries and breaks under 100 ms of a request are the
+       pause of a comma, and silence is taken out of the audio
+       (PauseShortener). The audio therefore is NOT sample-identical to the
+       other hosts. A pause parameter in the core would replace this.
+     - Voices and settings are stored without file protection and excluded
+       from backups: VoiceOver speaks before the first unlock.
+
 
 ===============================================================================
 END OF ANALYSIS
