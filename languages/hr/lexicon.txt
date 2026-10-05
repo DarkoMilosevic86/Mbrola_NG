@@ -30,7 +30,7 @@ facebook       f e j s b u k
 google         g u g l
 youtube        j u t j u b
 iphone         a j f o n
-windows        v i n d o u s
+windows        v i n d o u z
 email          i m e j l
 wifi           v a j f a j
 online         o n l a j n
@@ -39,3 +39,25 @@ hardware       x a r d v e r
 jazz           dZ e s
 show           S o u
 weekend        v i k e n d
+viber        v a j b e r
+messenger        m e s i n dZ e r
+jaws        dZ o z
+nvda        e n v e d e a
+remote        r i m o u t
+messages        m e s i dZ i z
+whatsapp        v a ts a p
+talkback        t o k b e k
+tts        t i t i e s
+braille        b r e j l
+sullivan        s a l i v e n
+microsoft        m a j k r o s o f t
+apple        e p l
+twitter        t v i t e r
+synthesizer        s i n t i s a j z e r
+synthesize        s i n t i s a j z
+phone        f o u n
+language        l e n g v i dZ
+voice        v o j s
+languages        l e n g v i dZ i z
+voices        v o j s i z
+speech        s p i tS
