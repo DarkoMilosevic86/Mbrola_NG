@@ -48,7 +48,8 @@
 					<key>type</key>
 					<string>ausp</string>
 					<key>version</key>
-					<integer>67072</integer>
+					<!-- 0.1.0 as 0x00MMmmpp (MARKETING_VERSION in project.yml) -->
+					<integer>256</integer>
 				</dict>
 			</array>
 		</dict>

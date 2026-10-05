@@ -36,8 +36,9 @@ sentence sounds the same everywhere.
 - **Emoji** are read by their Unicode CLDR names, in Croatian and in English.
 - **Screen reader behaviour**: fast, immediate stop; index marks for
   say-all; character and spelling mode; rate, pitch, inflection and volume.
-- **Robust**: MBROLA runs as a separate small process. A damaged voice file
-  can never crash the screen reader.
+- **Robust**: MBROLA runs as a separate small process (on Apple platforms
+  inside the speech extension, which is a process of its own). A damaged
+  voice file can never crash the screen reader.
 - **Open language format**: a language is a folder of commented text files
   (`languages/hr`, `languages/en`). They cover phonemes, grapheme-to-phoneme
   rules, lexicon, number grammar, dates, symbols, emoji, prosody and built-in

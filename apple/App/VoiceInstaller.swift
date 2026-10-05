@@ -26,11 +26,12 @@ enum VoiceInstallError: LocalizedError {
 }
 
 enum VoiceInstaller {
+    private static let receiver = ChunkReceiver()
     private static let session: URLSession = {
         let c = URLSessionConfiguration.ephemeral  // no cookies, no cache: nothing is kept
         c.timeoutIntervalForRequest = 30
         c.requestCachePolicy = .reloadIgnoringLocalCacheData
-        return URLSession(configuration: c)
+        return URLSession(configuration: c, delegate: receiver, delegateQueue: nil)
     }()
 
     /// A folder for one installation attempt, next to the installed voices
@@ -59,32 +60,18 @@ enum VoiceInstaller {
         for url in file.urls {
             do {
                 try Task.checkCancellation()
-                let (bytes, response) = try await session.bytes(from: url)
-                guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-                    throw VoiceInstallError.download("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
-                }
                 FileManager.default.createFile(atPath: destination.path, contents: nil)
                 let handle = try FileHandle(forWritingTo: destination)
                 defer { try? handle.close() }
                 var hash = SHA256()
                 var size: Int64 = 0
-                var buffer = Data()
-                buffer.reserveCapacity(1 << 16)
-                func flush() throws {
-                    try handle.write(contentsOf: buffer)
-                    hash.update(data: buffer)
-                    size += Int64(buffer.count)
-                    buffer.removeAll(keepingCapacity: true)
+                for try await chunk in receiver.chunks(of: url, in: session) {
+                    try handle.write(contentsOf: chunk)
+                    hash.update(data: chunk)
+                    size += Int64(chunk.count)
+                    onProgress(size)
                 }
-                for try await byte in bytes {
-                    buffer.append(byte)
-                    if buffer.count >= 1 << 16 {
-                        try flush()
-                        onProgress(size)
-                    }
-                }
-                try flush()
-                onProgress(size)
+                try Task.checkCancellation()  // a cancelled task ends the stream without an error
                 if file.size > 0 && size != file.size { throw VoiceInstallError.damaged(file.name) }
                 let digest = hash.finalize().map { String(format: "%02x", $0) }.joined()
                 if file.sha256.count == 64 && digest != file.sha256.lowercased() {
@@ -172,5 +159,51 @@ enum VoiceInstaller {
 
     static func discard(_ directory: URL) {
         try? FileManager.default.removeItem(at: directory)
+    }
+}
+
+/// Hands out a download in the blocks the network delivers them in (the
+/// session's delegate). Any answer but 200 ends the stream with an error.
+private final class ChunkReceiver: NSObject, URLSessionDataDelegate, @unchecked Sendable {
+    private typealias Continuation = AsyncThrowingStream<Data, Error>.Continuation
+    private let lock = NSLock()
+    private var continuations: [Int: Continuation] = [:]
+
+    func chunks(of url: URL, in session: URLSession) -> AsyncThrowingStream<Data, Error> {
+        let task = session.dataTask(with: url)
+        return AsyncThrowingStream { continuation in
+            lock.lock()
+            continuations[task.taskIdentifier] = continuation
+            lock.unlock()
+            continuation.onTermination = { _ in task.cancel() }  // no one reads on (nothing, if it is complete)
+            task.resume()
+        }
+    }
+
+    private func continuation(of task: URLSessionTask, remove: Bool = false) -> Continuation? {
+        lock.lock()
+        defer { lock.unlock() }
+        return remove ? continuations.removeValue(forKey: task.taskIdentifier) : continuations[task.taskIdentifier]
+    }
+
+    func urlSession(
+        _ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+        completionHandler: @escaping @Sendable (URLSession.ResponseDisposition) -> Void
+    ) {
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            continuation(of: dataTask, remove: true)?.finish(
+                throwing: VoiceInstallError.download("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)"))
+            completionHandler(.cancel)
+            return
+        }
+        completionHandler(.allow)
+    }
+
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        continuation(of: dataTask)?.yield(data)
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        continuation(of: task, remove: true)?.finish(throwing: error)
     }
 }

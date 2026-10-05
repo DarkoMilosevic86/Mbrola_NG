@@ -63,7 +63,9 @@
 		E6EE488B60CA475DE441582C /* PreviewPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B330B3E786C3963D4D7CBD /* PreviewPlayer.swift */; };
 		E6F31BC364ED6088C90C9E29 /* mbrola_inproc.c in Sources */ = {isa = PBXBuildFile; fileRef = 6E5C856F9D95E84905E31866 /* mbrola_inproc.c */; settings = {COMPILER_FLAGS = "-w -Wno-incompatible-pointer-types -DLITTLE_ENDIAN -I$(SRCROOT)/../external/mbrola/Parser -I$(SRCROOT)/../external/mbrola/Misc -I$(SRCROOT)/../external/mbrola/LibMultiChannel -I$(SRCROOT)/../external/mbrola/Engine -I$(SRCROOT)/../external/mbrola/Database"; }; };
 		E788BE793A6307B0D7725D4E /* datfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85A53669C87DF0272F18DD8 /* datfile.cpp */; };
+		EC2FAF8794C5F64DE1317484 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 26E7386B4B261089901B8E2D /* PrivacyInfo.xcprivacy */; };
 		F225BD34F023D5854B051630 /* prosody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89B1DBCCED45060902A35B64 /* prosody.cpp */; };
+		F7F9F8D932508D3ADB777BA1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 26E7386B4B261089901B8E2D /* PrivacyInfo.xcprivacy */; };
 		F8E148872741366008EFBF4B /* rbnf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */; };
 		FF3B592C0820DEE48BAA709C /* VoiceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDE02CA5F0E17B5E099605C /* VoiceInstaller.swift */; };
 /* End PBXBuildFile section */
@@ -105,6 +107,7 @@
 		0C936E8096159DB595A0536C /* DebugSelfTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSelfTest.swift; sourceTree = "<group>"; };
 		1EAA92C6F3A0ED4DA316A258 /* VoiceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceListView.swift; sourceTree = "<group>"; };
 		2116E149A857524DA377AF97 /* SSML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSML.swift; sourceTree = "<group>"; };
+		26E7386B4B261089901B8E2D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceDetailView.swift; sourceTree = "<group>"; };
 		30E7D0400043D92D634FFCF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32E0218BF5AC818463B59A8F /* samples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = samples; path = ../android/app/src/main/assets/samples; sourceTree = SOURCE_ROOT; };
@@ -196,6 +199,7 @@
 				7535F4424FF070A240EFAC70 /* Native */,
 				08CB8A2E44404F9668E40208 /* BridgingHeader.h */,
 				E6006559FF0DD5221C00036E /* Catalog.swift */,
+				26E7386B4B261089901B8E2D /* PrivacyInfo.xcprivacy */,
 				402BFDE25360859796F5B044 /* Resampler.swift */,
 				C051716706C2C67443F35497 /* SharedContainer.swift */,
 				C5B917B30FDCCE9AD0E8B360 /* SpeechEngine.swift */,
@@ -494,6 +498,7 @@
 			files = (
 				038084ADA9A86963082B8720 /* Assets.xcassets in Resources */,
 				385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */,
+				F7F9F8D932508D3ADB777BA1 /* PrivacyInfo.xcprivacy in Resources */,
 				2DE84E77FE1F94C00F22A03B /* samples in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +507,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC2FAF8794C5F64DE1317484 /* PrivacyInfo.xcprivacy in Resources */,
 				42F16BE504DDF37F69E847A9 /* catalog.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
