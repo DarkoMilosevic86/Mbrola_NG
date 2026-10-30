@@ -49,6 +49,14 @@ else()
   # function to a long-returning pointer (an error in GCC 14 / Clang 16);
   # the value is only tested for zero, so it is harmless.
   set(MBNG_SYNTH_OPTIONS -w -Wno-incompatible-pointer-types)
+  if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    # glibc 2.41 declares swab() in <unistd.h> for _XOPEN_SOURCE only (older
+    # versions also did it for _DEFAULT_SOURCE); without it the call in
+    # Database/little_big.c is an implicit declaration, an error in GCC 14.
+    # _DEFAULT_SOURCE stays on as well: asking for _XOPEN_SOURCE alone would
+    # switch it off and hide the other extensions MBROLA uses.
+    list(APPEND MBNG_SYNTH_OPTIONS -D_XOPEN_SOURCE=700 -D_DEFAULT_SOURCE)
+  endif()
 endif()
 set(MBNG_SYNTH_INCLUDES
   ${MBROLA_DIR}/Parser ${MBROLA_DIR}/Misc ${MBROLA_DIR}/LibOneChannel

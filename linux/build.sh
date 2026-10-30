@@ -72,7 +72,7 @@ case "$MODE" in
     echo "Removed. Voices in ~/.local/share/mbrola-ng/voices are kept."
     ;;
   *)
-    sed -n '4,17p' "$0"
+    sed -n '6,17p' "$0"
     exit 2
     ;;
 esac
