@@ -29,6 +29,12 @@ or newer (Debian 13, Ubuntu 24.04 / 26.04, current Fedora and Arch).
 where Speech Dispatcher finds it by itself. `mbrola-ng-voices` goes to
 `~/.local/bin`.
 
+    linux/build.sh --uninstall-user      # removes the --user installation
+    linux/build.sh --uninstall-system    # removes it for all users (sudo)
+
+Both keep the downloaded voices (`mbrola-ng-voices remove <voice>` deletes
+those). A `--deb` installation is removed with `sudo apt remove mbrola-ng`.
+
 ## Voices
 
 Voices are not part of the package (each has its own license). Install them

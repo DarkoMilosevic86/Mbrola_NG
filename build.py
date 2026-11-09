@@ -22,6 +22,8 @@
 #   --debug               debug build of core
 #   --install user|system Linux: install for this user (~/.local, no root)
 #                         or for all users (sudo)
+#   --uninstall user|system  Linux: remove that installation again and stop
+#                         (downloaded voices are kept)
 #   --deb                 Linux: also make a .deb package (-> dist/)
 #   --prepare             android: only put the language data, catalog into
 #                         android/generated (then build in Android Studio)
@@ -242,12 +244,20 @@ def main():
 	ap.add_argument("--arch", choices=("x64", "x86", "both"), default="x64")
 	ap.add_argument("--debug", action="store_true")
 	ap.add_argument("--install", choices=("user", "system"))
+	ap.add_argument("--uninstall", choices=("user", "system"))
 	ap.add_argument("--deb", action="store_true")
 	ap.add_argument("--prepare", action="store_true")
 	a = ap.parse_args()
 	for t in a.targets:
 		if t not in TARGETS:
 			ap.error("unknown target %r (choose from %s)" % (t, ", ".join(TARGETS)))
+
+	if a.uninstall:
+		if a.install:
+			ap.error("--install and --uninstall are mutually exclusive")
+		need(LINUX, "--uninstall", "Linux")
+		run(["sh", os.path.join(ROOT, "linux", "build.sh"), "--uninstall-" + a.uninstall])
+		return 0
 
 	targets = list(a.targets)
 	if "clean" in targets:

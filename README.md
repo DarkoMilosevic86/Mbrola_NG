@@ -106,6 +106,7 @@ Examples:
     python build.py nvda                  # only the NVDA add-on
     python build.py core --arch both      # Windows core, x64 and x86
     python3 build.py orca --install user  # Linux: build, test, install
+    python3 build.py --uninstall user     # Linux: remove that installation
     python build.py android               # Android apk (and aab when a signing key exists)
     python build.py clean
 

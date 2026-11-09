@@ -11,6 +11,8 @@
 #                             /usr/local + the system module folder + /etc
 #   linux/build.sh --deb      .deb package (prefix /usr) in build/linux-deb
 #   linux/build.sh --uninstall-user   removes the --user installation
+#   linux/build.sh --uninstall-system removes the --system installation
+#                             (asks for sudo; downloaded voices are kept)
 #
 # Needs: cmake (3.20+), g++ (C++17), make or ninja, python3; for --system and
 # --deb also pkg-config and the speech-dispatcher development files help to
@@ -71,8 +73,39 @@ case "$MODE" in
           "$HOME/.local/share/mbrola-ng/voices.d" 2>/dev/null || true
     echo "Removed. Voices in ~/.local/share/mbrola-ng/voices are kept."
     ;;
+  --uninstall-system)
+    M="$ROOT/build/linux-system/install_manifest.txt"
+    if [ -f "$M" ]; then
+      sudo xargs -d '\n' rm -f < "$M"
+    else
+      # No build folder any more: remove what the install rules of
+      # CMakeLists.txt put under the /usr/local prefix.
+      echo "no $M, removing the /usr/local paths of a --system installation"
+      sudo rm -f /usr/local/bin/mbrola-ng-voices \
+                 /usr/local/libexec/mbrola-ng/mbrola_ng_synth \
+                 /usr/local/share/mbrola-ng/catalog.json \
+                 /etc/speech-dispatcher/modules/mbrola_ng.conf
+      sudo rm -rf /usr/local/share/mbrola-ng/languages \
+                  /usr/local/share/mbrola-ng/voices.d \
+                  /usr/local/share/doc/MBROLA_NG
+      # the module folder differs between distributions (CMakeLists.txt)
+      for D in "/usr/lib/$(uname -m)-linux-gnu/speech-dispatcher-modules" \
+               /usr/libexec/speech-dispatcher-modules \
+               /usr/lib/speech-dispatcher-modules \
+               /usr/lib64/speech-dispatcher-modules \
+               /usr/local/lib/speech-dispatcher-modules; do
+        if [ -f "$D/sd_mbrola_ng" ]; then sudo rm -f "$D/sd_mbrola_ng"; fi
+      done
+    fi
+    # only the folders the installation made, and only while they are empty
+    sudo rmdir /usr/local/libexec/mbrola-ng /usr/local/share/mbrola-ng/languages \
+               /usr/local/share/mbrola-ng/voices.d /usr/local/share/doc/MBROLA_NG \
+               /usr/local/share/mbrola-ng /usr/local/libexec 2>/dev/null || true
+    echo "Removed. Voices in /usr/local/share/mbrola-ng/voices are kept."
+    echo "  killall speech-dispatcher          (it starts again by itself)"
+    ;;
   *)
-    sed -n '6,17p' "$0"
+    sed -n '6,19p' "$0"
     exit 2
     ;;
 esac
