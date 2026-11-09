@@ -17,7 +17,7 @@
 ; - silent: /VOICES=cr1,es1  or  /LANGS=hr,es  (default voice of each language)
 
 #ifndef AppVersion
-  #define AppVersion "0.1.0"
+  #define AppVersion "0.2.0"
 #endif
 #ifndef Stage
   #define Stage "build\stage"
