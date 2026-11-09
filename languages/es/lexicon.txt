@@ -1,0 +1,54 @@
+# =============================================================================
+# MBROLA NG - Español (es) - lexicon.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Exceptions: the few words that the rules of g2p.txt get wrong - the names
+# in which x is read as jota, and loan words.
+#
+# FORMAT:  word  phonemes...
+#   Phoneme marks:  a:  long vowel     a\  falling accent    a/  rising accent
+#   Words entered without a mark get their stress from accents.txt.
+# =============================================================================
+
+# --- x is read as jota in these names
+méxico        m e\ x i k o
+mexicano       m e x i k a n o
+mexicana       m e x i k a n a
+mexicanos      m e x i k a n o s
+mexicanas      m e x i k a n a s
+oaxaca         o a x a k a
+texas          t e x a s
+xavier         x a b j e r
+
+# --- loan words (common in everyday text)
+email          i m e\ j l
+emails         i m e\ j l s
+google         g u\ g e l
+facebook       f e\ j s b u k
+youtube        jj u\ t u b
+whatsapp       g w a s a\ p
+iphone         a\ j f o n
+windows        w i\ n d o s
+software       s o\ f t w e r
+hardware       x a\ r d w e r
+bluetooth      b l u t u\ T
+show           tS o\ w
+byte           b a j t
+bytes          b a j t s
+kilobyte       k i l o b a j t
+kilobytes      k i l o b a j t s
+megabyte       m e g a b a j t
+megabytes      m e g a b a j t s
+gigabyte       x i g a b a j t
+gigabytes      x i g a b a j t s
+terabyte       t e r a b a j t
+terabytes      t e r a b a j t s
+jazz           jj a\ s
+jeans          jj i\ n s
+spray          e s p r e\ j
+pizza          p i\ T a
+whisky         w i\ s k i
+sexy           s e\ k s i
+rugby          rr u\ g b i
+hobby          x o\ b i

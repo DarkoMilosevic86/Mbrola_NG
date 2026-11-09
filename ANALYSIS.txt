@@ -1,8 +1,8 @@
 ===============================================================================
  MBROLA NG
  Multi-platform text-to-speech built on the MBROLA diphone synthesizer
- Croatian first, more languages later
- Analysis and design document - revision 16
+ Croatian first, then English and Spanish
+ Analysis and design document - revision 19
  Author: Darko Milošević
  Copyright (c) 2026 Darko Milošević
  SPDX-License-Identifier: GPL-2.0-or-later
@@ -200,6 +200,35 @@ REVISION HISTORY
                   child process on iOS), so those binaries are AGPL v3 as a
                   whole. Catalog keys "apple_locale", "apple_also_for".
                   Described in Appendix C; sections 1-19 are unchanged.
+  r19 2026-11-09  SPANISH added (extends D6/r11: we now ship hr + en + es).
+                  languages/es: the Castilian SAMPA symbols of the es1 voice
+                  plus five allophones that es1 does not distinguish (B D G
+                  for b d g between vowels, s2 and T2 for the syllable-final
+                  s and c/z); G2P rules cover the whole language, so
+                  lexicon.txt holds only names with x = jota and loan words.
+                  The same data serves Spain and Latin America: the Latin
+                  American voices map T to s (seseo) and L to their palatal
+                  sound (yeísmo). Voices in catalog.json: es1, es2 (22 kHz),
+                  es3 (female), es4, mx1, mx2 (Mexican), vz1 (Venezuelan) -
+                  every voice symbol and sample rate was read out of the
+                  binary databases, and every voice was checked against the
+                  real phoneme stream of a Spanish corpus (missing diphones:
+                  es1 0, es2 0, mx1 0, mx2 0, es4 1, es3 4, vz1 8).
+                  TWO ADDITIONS TO THE LANGUAGE FORMAT (.dat 1.1, minor
+                  version: old engines ignore them, see 9.3):
+                    - g2p.txt rules may carry the accent and length marks of
+                      lexicon.txt ("a" with a trailing backslash): the
+                      written accent of Spanish becomes the word stress, and
+                      an accent that the transcription has already placed is
+                      never overruled by accents.txt;
+                    - accents.txt "@ending LETTERS... SYLLABLE type": the
+                      last letter of the word chooses the stressed syllable
+                      (Spanish: a word ending in a consonant other than n or
+                      s is stressed on its last syllable, every other word
+                      on its second to last). No word list is needed.
+                  tests.txt also accepts "// phonemes with accent marks //",
+                  so a language can test its stress rules. Described in
+                  Appendix D; sections 1-19 are otherwise unchanged.
 
 CONTENTS
   1.  Goal, scope and fixed decisions
@@ -224,6 +253,7 @@ CONTENTS
  Appendix A. Full cr1 diphone inventory facts
  Appendix B. Example snippets of proposed source-file syntax
  Appendix C. Host 5: Apple (iOS, iPadOS, macOS)
+ Appendix D. Spanish language data (languages/es)
 
 
 ===============================================================================
@@ -1188,12 +1218,16 @@ non-programmer.
                       upper/lower pairs, homoglyph table, NFC tables.
     g2p.txt           Grapheme -> phoneme rewrite rules (ordered), for the
                       letters that need context (Latin digraphs, foreign
-                      letters); plain 1:1 letters come from scripts.txt.
+                      letters); plain 1:1 letters come from scripts.txt. A
+                      rule may mark its phonemes with the accent and length
+                      marks of lexicon.txt (the written accent of Spanish).
     postlex.txt       Phrase-level phoneme rules (assimilation,
                       degemination, hiatus) (ordered).
     syllables.txt     Syllabification (incl. syllabic r).
     lexicon.txt       Exceptions: word -> phonemes (+ accent), any script.
-    accents.txt       Accent lexicon + default accent rule.
+    accents.txt       Accent lexicon + default accent rule + the
+                      "@ending" rules that let the last letter of a word
+                      choose the stressed syllable (Spanish, Appendix D).
     clitics.txt       Proclitics and enclitics.
     numbers.txt       RBNF number grammar (cardinal, ordinal, genders, cases,
                       digit-by-digit, roman).
@@ -1281,6 +1315,12 @@ Voice-specific settings (base pitch, database path) are NOT here (section 10).
        'SYLL','LEXI','ACCN','CLIT','NUMB','NCTX','DATE','UNIT','ABBR',
        'SYMB','EMOJ','SPEL','ACRO','PROS','UNIC','META','STRS'), offset,
        size, CRC32 }.
+     Format versions:
+       1.0  the sections above.
+       1.1  ACCN also holds the "@ending" rules and G2PR the accent/length
+            marks of the produced phonemes, both appended at the end of
+            their section: an engine that reads 1.0 stops before them and
+            keeps working (it then places the accent by @default alone).
      Rules:
        - Unknown sections ignored (newer compilers may add optional data).
        - The core refuses a higher MAJOR version with a clear error; minor
@@ -2254,3 +2294,78 @@ C.3 Behaviour
 ===============================================================================
 END OF ANALYSIS
 ===============================================================================
+
+===============================================================================
+APPENDIX D. SPANISH LANGUAGE DATA (languages/es)
+===============================================================================
+
+D.1 Why Spanish fits the existing mechanisms
+     Spanish spelling is almost phonemic: the rules of g2p.txt produce the
+     pronunciation of practically every word, so lexicon.txt only holds the
+     names in which x is a jota (Mexico, Oaxaca, Texas) and loan words
+     (email, software, whisky ...). What Spanish needed and the format did
+     not have was the STRESS, which is predictable but not positional:
+       - a word with a written accent is stressed on that vowel;
+       - a word ending in a consonant other than n or s on the last;
+       - every other word on the second to last.
+     The first rule is now data (a g2p.txt rule marks the accented vowel),
+     the second and third are the "@ending" rules of accents.txt. Both
+     additions are language-independent and are described in r19 and in 9.3.
+
+D.2 Phoneme inventory (32 symbols, phonemes.txt)
+     The 26 Castilian symbols of the es1 database, read out of the binary
+     (a complete 26 x 26 diphone matrix), plus the palatal semivowel j,
+     which es1 did not record and which its map sends to the vowel i:
+       a e i o u   j w   p b t d k g   tS   f T s x jj   m n J   l L r rr   _
+     plus five allophones that Spanish has and es1 does not distinguish:
+       B D G   the approximants of b d g ("abogado" = a B o G a D o)
+       s2 T2   the syllable-final s and c/z ("es", "feliz")
+     postlex.txt produces them, and a voice without a separate sound for
+     them maps them back (es1: "B=b D=d G=g s2=s T2=T"). This is the same
+     mechanism as the aspirated p_h t_h k_h of English (r11).
+     The semivowels j and w are CONSONANTS here, so that the syllable count
+     the stress rules use is right: "agua" = a G w a (2 syllables, stress on
+     the first a), "aire" = a j r e (2), "familia" = f a m i l j a (3).
+
+D.3 Rules (g2p.txt, postlex.txt)
+     - c/z -> T, j/g(e,i) -> x, ll -> L, ñ -> J, ch -> tS, qu/gu -> k/g,
+       gü  -> g w, h silent, v -> b, y -> jj / j / i, x -> k s or s,
+       r -> rr at the start of a word and after n, l, s.
+     - i and u become j and w next to another vowel; after i/u they stay
+       vowels ("ruido" = rr w i D o), and an accented i/u is always a vowel
+       ("dia", "pais").
+     - The accented letters are canonical letters of their own (scripts.txt)
+       and g2p.txt reads them as the plain vowel plus the stress mark.
+     - postlex.txt: n -> m before p/b and n -> J before tS/L/jj (also across
+       word boundaries), the approximants of D.2, s/T -> s2/T2 at the end of
+       a syllable or word, and the usual merging of identical neighbours.
+
+D.4 Numbers, dates, units (numbers.txt, dates.txt, numcontext.txt, units.txt)
+     Three number forms are needed and all three are in numbers.txt:
+     "uno" (standalone), "un"/"veintiun" (before a masculine noun: units.txt
+     uses it, so "1 euro" is "un euro" and "21 EUR" is "veintiun euros") and
+     the feminine "una"/"doscientas". Ordinals have masculine and feminine
+     forms and the short "primer"/"tercer" of "1.er". Dates are read with
+     cardinals ("29 de septiembre de dos mil veintiseis"); "3/4" is a
+     fraction, so a date without a year is only recognised for days 13-31.
+     Times use the feminine hour ("una hora"). The ordinal indicators of
+     "1.o" and "2.a" are letters of their own, which keeps the abbreviation
+     "no" (numero) apart from the word "no".
+
+D.5 The seven voices and their phoneme maps (catalog/catalog.json)
+     Spain:          es1 (male, 16 kHz, full matrix - the default voice)
+                     es2 (male, 22 kHz; T is only an alias of s there, so
+                          the map sends T to s)
+                     es3 (female; its database uses another alphabet:
+                          z = T, j = x, H = tS, N = J, Y = L/jj, R = rr)
+                     es4 (male; no w: w is mapped to the vowel u)
+     Latin America:  mx1, mx2 (Mexican), vz1 (Venezuelan). None of them
+                     has T, so T -> s (seseo); mx1 and mx2 have no L either,
+                     so L -> jj / dZ (yeismo), and their w is mapped to u
+                     because they lack the rr-w diphone. mx2 writes J as
+                     "ny", vz1 has x = h and its own B D G and s2.
+     Every map was verified by running the phoneme stream of a Spanish
+     corpus against the diphone index of each database; the voices that
+     still lack diphones are es4 (x-_), es3 (d-p, j-_, l-Y, s-j) and vz1
+     (l-d and the vowel-vowel pairs it only recorded with its stressed
+     vowels). A missing diphone is a short silence in MBROLA, not an error.

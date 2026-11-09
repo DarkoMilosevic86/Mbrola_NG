@@ -101,8 +101,8 @@ def feature(lang, tagline, line2):
 
 def main():
 	icon()
-	feature("en", "Text-to-speech for Android", "Croatian and English voices for TalkBack")
-	feature("hr", "Pretvaranje teksta u govor", "Hrvatski i engleski glasovi za TalkBack")
+	feature("en", "Text-to-speech for Android", "Croatian, English and Spanish for TalkBack")
+	feature("hr", "Pretvaranje teksta u govor", "Hrvatski, engleski i španjolski za TalkBack")
 	for name in sorted(os.listdir(HERE)):
 		if name.endswith(".png"):
 			with Image.open(os.path.join(HERE, name)) as im:

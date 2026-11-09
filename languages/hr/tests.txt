@@ -6,6 +6,7 @@
 # Run by langc through the real core (every compile).
 # FORMAT:  "input" [| "input" ...] => expected words
 #          "input" [| "input" ...] => / expected phonemes /
+#          "input" [| "input" ...] => // phonemes with accent marks //
 # Every input of a line must give the expected result - Latin and Cyrillic
 # spellings of the same text are listed together (decision D1).
 # Phrases are separated by " _ " in phoneme results.

@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
 ;
 ; Built by installer\build_installer.py, which stages the files and passes:
-;   /DAppVersion=0.1.0  /DStage=<staging folder>  /DLanguages=,hr,en,
+;   /DAppVersion=0.1.0  /DStage=<staging folder>  /DLanguages=,hr,en,es,
 ;
 ; - installs MBROLA_NG.dll + mbrola_ng_synth.exe (x64 and x86) and every
 ;   language (.dat); no voices are inside the installer
@@ -14,7 +14,7 @@
 ; - only this installer registers SAPI: regsvr32 of both DLLs, whose
 ;   DllRegisterServer creates one voice token per installed voice
 ; - running the installer again = add / remove voices (unchecking removes)
-; - silent: /VOICES=cr1,us2  or  /LANGS=hr,en  (default voice of each language)
+; - silent: /VOICES=cr1,es1  or  /LANGS=hr,es  (default voice of each language)
 
 #ifndef AppVersion
   #define AppVersion "0.1.0"
@@ -23,7 +23,7 @@
   #define Stage "build\stage"
 #endif
 #ifndef Languages
-  #define Languages ",hr,en,"
+  #define Languages ",hr,en,es,"
 #endif
 ; online voice catalog (HTTPS); empty = only the catalog embedded here
 #define CatalogURL ""

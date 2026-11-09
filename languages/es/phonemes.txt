@@ -1,0 +1,78 @@
+# =============================================================================
+# MBROLA NG - Español (es) - phonemes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phoneme inventory = the Castilian SAMPA symbols of the es1 MBROLA voice
+# (dumped from the database: 26 symbols, a complete diphone matrix), plus
+# the five allophones that Spanish has and es1 does not distinguish: the
+# approximants B D G of b d g ("abogado") and the syllable-final s2 and T2
+# ("es", "feliz"). postlex.txt produces them, and the voices that have no
+# separate sound for them map them back (catalog/catalog.json): es1
+# "B=b D=d G=g s2=s T2=T". The Venezuelan voice vz1 has its own approximants
+# and its own final s and uses them.
+# The other Spanish voices are mapped to these symbols the same way.
+#
+# FORMAT:  symbol  type  duration  min-duration  partner  [features] [viseme=N]
+#   type      vowel | consonant | pause   (exactly one pause phoneme)
+#   duration  default duration in ms at normal rate
+#   min       minimum duration in ms at high rates (intelligibility)
+#   partner   voicing partner (p <-> b ...), "-" if none
+#   features  free words, for documentation
+# =============================================================================
+
+# --- vowels (Spanish has five, with no length distinction)
+a    vowel      95  45  -    open central            viseme=2
+e    vowel      85  40  -    mid front               viseme=4
+i    vowel      75  35  -    close front             viseme=6
+o    vowel      90  45  -    mid back rounded        viseme=8
+u    vowel      80  40  -    close back rounded      viseme=7
+
+# --- semivowels of the diphthongs ("tiene", "cuatro"): consonants, so that
+#     "agua" and "aire" count as two syllables, not three (syllables.txt)
+j    consonant  45  20  -    glide palatal           viseme=6
+w    consonant  50  25  -    glide labiovelar        viseme=7
+
+# --- stops
+p    consonant  80  40  b    obstruent stop labial voiceless     viseme=21
+b    consonant  70  35  p    obstruent stop labial voiced        viseme=21
+t    consonant  75  35  d    obstruent stop dental voiceless     viseme=19
+d    consonant  65  30  t    obstruent stop dental voiced        viseme=19
+k    consonant  80  40  g    obstruent stop velar voiceless      viseme=20
+g    consonant  70  35  k    obstruent stop velar voiced         viseme=20
+
+# --- affricate ("mucho")
+tS   consonant 105  50  -    obstruent affricate postalveolar voiceless viseme=16
+
+# --- fricatives (T = c/z "cinco", x = j/g "mujer")
+f    consonant  90  40  -    obstruent fricative labiodental voiceless viseme=18
+T    consonant  95  45  -    obstruent fricative dental voiceless viseme=17
+s    consonant  95  45  -    obstruent fricative alveolar voiceless viseme=15
+x    consonant  90  45  -    obstruent fricative velar voiceless  viseme=12
+jj   consonant  70  35  -    obstruent fricative palatal voiced   viseme=16
+
+# --- the syllable-final allophones of s and T ("es", "los niños", "feliz"):
+#     the same sounds as s and T in Spain, weaker or aspirated in much of
+#     Latin America (where c and z are an s as well)
+s2   consonant  85  40  -    obstruent fricative alveolar final   viseme=15
+T2   consonant  85  40  -    obstruent fricative dental final     viseme=17
+
+# --- the approximants of b, d, g between vowels and after most consonants
+#     ("abogado" = a B o G a D o, "la boca" = l a B o k a)
+B    consonant  55  25  -    approximant labial voiced            viseme=21
+D    consonant  50  25  -    approximant dental voiced            viseme=17
+G    consonant  55  25  -    approximant velar voiced             viseme=20
+
+# --- nasals
+m    consonant  65  30  -    nasal labial            viseme=21
+n    consonant  60  30  -    nasal alveolar          viseme=19
+J    consonant  75  35  -    nasal palatal           viseme=19
+
+# --- laterals and rhotics (r = tap "para", rr = trill "perro")
+l    consonant  60  30  -    lateral alveolar        viseme=14
+L    consonant  70  35  -    lateral palatal         viseme=14
+r    consonant  45  22  -    tap alveolar            viseme=13
+rr   consonant  90  45  -    trill alveolar          viseme=13
+
+# --- silence
+_    pause       0   0  -    silence                 viseme=0

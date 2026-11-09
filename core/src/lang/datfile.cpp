@@ -176,10 +176,25 @@ void r_scrp(ByteReader& r, LanguageData& d) {
 void w_g2pr(ByteWriter& w, const LanguageData& d) {
   w.count(d.g2p.size());
   for (auto& g : d.g2p) { w.ustr(g.match); w_ctx(w, g.left); w_ctx(w, g.right); w_bytes(w, g.out); w.u32(g.line); }
+  // format 1.1: accent/length marks of the produced phonemes, only for the
+  // rules that have any (older engines stop reading the section here)
+  size_t n = 0;
+  for (auto& g : d.g2p) n += !g.out_flags.empty();
+  w.count(n);
+  for (size_t i = 0; i < d.g2p.size(); ++i)
+    if (!d.g2p[i].out_flags.empty()) { w.u32(static_cast<uint32_t>(i)); w_bytes(w, d.g2p[i].out_flags); }
 }
 void r_g2pr(ByteReader& r, LanguageData& d) {
   d.g2p.resize(r.count(20));
   for (auto& g : d.g2p) { g.match = r.ustr(); g.left = r_ctx(r); g.right = r_ctx(r); g.out = r_bytes(r); g.line = r.u32(); }
+  if (r.at_end()) return;  // written by a compiler older than format 1.1
+  size_t n = r.count(5);
+  for (size_t k = 0; k < n; ++k) {
+    uint32_t i = r.u32();
+    std::vector<uint8_t> flags = r_bytes(r);
+    if (i >= d.g2p.size() || flags.size() != d.g2p[i].out.size()) throw FormatError("bad G2P accent marks");
+    d.g2p[i].out_flags = flags;
+  }
 }
 
 void w_plex(ByteWriter& w, const LanguageData& d) {
@@ -253,6 +268,11 @@ void w_accn(ByteWriter& w, const LanguageData& d) {
   for (auto& e : a.entries) {
     w.ustr(e.key); w.u8(static_cast<uint8_t>(e.syll)); w.u8(static_cast<uint8_t>(e.type)); w_bytes(w, e.long_sylls);
   }
+  // format 1.1: @ending rules (older engines stop reading the section here)
+  w.count(a.endings.size());
+  for (auto& e : a.endings) {
+    w_ctx(w, e.last); w.u8(static_cast<uint8_t>(e.syll)); w.u8(static_cast<uint8_t>(e.type));
+  }
 }
 void r_accn(ByteReader& r, LanguageData& d) {
   Accents& a = d.accents;
@@ -267,6 +287,15 @@ void r_accn(ByteReader& r, LanguageData& d) {
     uint8_t tt = r.u8();
     if (tt > 2) throw FormatError("bad accent type");
     e.type = static_cast<AccentType>(tt); e.long_sylls = r_bytes(r);
+  }
+  if (r.at_end()) return;  // written by a compiler older than format 1.1
+  a.endings.resize(r.count(9));
+  for (auto& e : a.endings) {
+    e.last = r_ctx(r);
+    e.syll = static_cast<int8_t>(r.u8());
+    uint8_t tt = r.u8();
+    if (tt > 2) throw FormatError("bad accent type");
+    e.type = static_cast<AccentType>(tt);
   }
 }
 
@@ -555,6 +584,9 @@ void read_dat(const uint8_t* p, size_t n, LanguageData& d) {
     for (auto* v : {&g.left, &g.right})
       for (auto& e : *v) if (e.kind == CtxKind::Class && e.cls >= d.letterclasses.size()) throw FormatError("bad class");
   }
+  for (auto& e : d.accents.endings)
+    for (auto& c : e.last)
+      if (c.kind == CtxKind::Class && c.cls >= d.letterclasses.size()) throw FormatError("bad class");
   auto chkp = [&](const std::vector<PElem>& v) {
     for (auto& e : v) {
       if (e.kind == PKind::Phoneme) chk(static_cast<uint8_t>(e.id));

@@ -104,11 +104,13 @@ object EngineRegistry {
 object SampleTexts {
     fun installedAndWorking(language: String): String = when (language) {
         "hr" -> "Ukoliko čujete ovu poruku, ovaj glas je instaliran i radi."
+        "es" -> "Si oyes este mensaje, esta voz está instalada y funciona."
         else -> "If you can hear this message, this voice is installed and working."
     }
 
     fun sample(language: String): String = when (language) {
         "hr" -> "Ovo je primjer sinteze govora na hrvatskom jeziku."
+        "es" -> "Este es un ejemplo de síntesis de voz en español."
         else -> "This is an example of speech synthesis in English."
     }
 }

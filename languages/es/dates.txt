@@ -1,0 +1,36 @@
+# =============================================================================
+# MBROLA NG - Español (es) - dates.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Dates and times. Spanish reads the day and the year as plain cardinals
+# ("29 de septiembre de 2026"), so only the numeric forms need rules.
+# Pattern syntax: see languages/hr/dates.txt
+#
+#   @list NAME = words...            @map NAME = 1:text 2:text ...
+#   [left context] ( pattern ) [right context] => output
+#   num num2 num1-2 num3+ 0num2, punctuation, _ whitespace, ^ $ text edges,
+#   @list, word lower upper cap, roman, x? (optional)
+#   $1 $1:%ruleset $1:@map $1:digits $1:plural(one=..,other=..)
+# =============================================================================
+
+@list months = enero febrero marzo abril mayo junio julio agosto septiembre setiembre octubre noviembre diciembre
+@map  month = 1:enero 2:febrero 3:marzo 4:abril 5:mayo 6:junio 7:julio 8:agosto 9:septiembre 10:octubre 11:noviembre 12:diciembre
+
+# --- ISO date 2026-09-29 -> veintinueve de septiembre de dos mil veintiséis
+( num4 - num2[1-12] - num2[1-31] ) => $3 de $2:@month de $1
+
+# --- 29/9/2026, 29.09.2026, 29-09-2026
+( num1-2[1-31] / num1-2[1-12] / num4 ) => $1 de $2:@month de $3
+( num1-2[1-31] . num1-2[1-12] . num4 ) => $1 de $2:@month de $3
+( num1-2[1-31] - num1-2[1-12] - num4 ) => $1 de $2:@month de $3
+
+# --- 29/9 (without a year). Only days 13-31: "3/4" is a fraction
+# ("tres cuartos", numcontext.txt), not the third of April.
+( num1-2[13-31] / num1-2[1-12] ) => $1 de $2:@month
+
+# --- time 14:30:15 / 14:00 / 7:05 / 14:30 (the hour is feminine: "la una")
+( num1-2[0-23] : num2[0-59] : num2[0-59] ) => $1:%spellout-cardinal-feminine $2 y $3 $3:plural(one=segundo,other=segundos)
+( num1-2[0-23] : num2[0] ) => $1:%spellout-cardinal-feminine $1:plural(one=hora,other=horas)
+( num1-2[0-23] : 0num2 ) => $1:%spellout-cardinal-feminine $2:digits
+( num1-2[0-23] : num2[10-59] ) => $1:%spellout-cardinal-feminine $2

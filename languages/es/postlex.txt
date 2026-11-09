@@ -1,0 +1,39 @@
+# =============================================================================
+# MBROLA NG - Español (es) - postlex.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Phrase-level (post-lexical) phoneme rules. They see the whole phrase as
+# one stream, so they also work ACROSS word boundaries ("un beso",
+# "mis sellos"). Syntax: see languages/hr/postlex.txt
+#   |  word boundary required     |?  word boundary allowed
+# =============================================================================
+
+# 1. n before a labial stop -> m ("un beso" -> u m b e s o, "invierno")
+n -> m / _ |? LABIAL_STOP
+
+# 2. n before a palatal -> J ("un chico", "con llave")
+n -> J / _ |? (tS L jj)
+
+# 3. b, d, g are approximants except after a pause or a nasal (d also
+#    keeps its stop after l): "abogado", "la boca", "verdad" - but "un
+#    beso", "el dato" and a word at the start of a phrase keep the stop
+b -> B / PRE_APPROX |? _
+d -> D / PRE_APPROX_D |? _
+g -> G / PRE_APPROX |? _
+
+# 4. s, and the c/z sound T, at the end of a syllable or of a word become
+#    the weaker s2 / T2 ("es", "los niños", "espera", "feliz"); before a
+#    vowel or a semivowel they stay s and T ("casa", "gracias"). In Spain
+#    these are the same sounds (the voices map s2 to s and T2 to T); in much
+#    of Latin America the final one is weaker or aspirated.
+s -> s2 / _ |? CONS_NG
+s -> s2 / _ |
+T -> T2 / _ |? CONS_NG
+T -> T2 / _ |
+
+# 5. identical neighbours: one longer consonant ("el lado", "mis sellos",
+#    "innato"); identical vowels merge inside a word, across words they
+#    get a tiny pause ("la amiga")
+@identical CONS within=merge:130 across=merge:130
+@identical VOWEL within=merge:160 across=pause:25

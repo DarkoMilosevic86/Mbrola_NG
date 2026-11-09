@@ -1,8 +1,8 @@
 # MBROLA NG
 
 **Open-source text-to-speech built on the MBROLA diphone synthesizer. It
-supports Croatian first and English as well. Languages are open, readable
-data files, so anyone can add a new one.**
+supports Croatian first, and English and Spanish as well. Languages are
+open, readable data files, so anyone can add a new one.**
 
 MBROLA NG turns text into speech with the classic
 [MBROLA](https://github.com/numediart/MBROLA) diphone voices. It adds what
@@ -33,16 +33,25 @@ sentence sounds the same everywhere.
   letter-to-sound rules for unknown words. Numbers, dates and units are
   supported. The American voices us1, us2 and us3 and the British voice en1
   can all be used.
-- **Emoji** are read by their Unicode CLDR names, in Croatian and in English.
+- **Spanish**: the spelling rules cover the whole language (no word list is
+  needed), including the written accent, the diphthongs, the approximants of
+  b, d and g ("abogado") and the syllable-final s. Numbers have the masculine,
+  the apocopated and the feminine forms ("un euro", "veintiún euros", "una
+  libra"), plus ordinals, dates, times, units and abbreviations. The same data
+  serves Spain and Latin America: the Latin American voices read c and z as s
+  (seseo) and ll as y (yeísmo) through their phoneme map.
+- **Emoji** are read by their Unicode CLDR names, in Croatian, English and
+  Spanish.
 - **Screen reader behaviour**: fast, immediate stop; index marks for
   say-all; character and spelling mode; rate, pitch, inflection and volume.
 - **Robust**: MBROLA runs as a separate small process (on Apple platforms
   inside the speech extension, which is a process of its own). A damaged
   voice file can never crash the screen reader.
 - **Open language format**: a language is a folder of commented text files
-  (`languages/hr`, `languages/en`). They cover phonemes, grapheme-to-phoneme
-  rules, lexicon, number grammar, dates, symbols, emoji, prosody and built-in
-  tests. `langc` compiles the folder into one `.dat` file.
+  (`languages/hr`, `languages/en`, `languages/es`). They cover phonemes,
+  grapheme-to-phoneme rules, lexicon, number grammar, dates, symbols, emoji,
+  prosody and built-in tests. `langc` compiles the folder into one `.dat`
+  file.
 
 ## Voices
 
@@ -58,13 +67,17 @@ show the license, verify the download and install it:
 | us1 | American English | female |
 | us2, us3 | American English | male |
 | en1 | British English | male |
+| es1, es2, es4 | European Spanish | male |
+| es3 | European Spanish | female |
+| mx1, mx2 | Mexican Spanish | male |
+| vz1 | Venezuelan Spanish | male |
 
 - NVDA: *NVDA menu → Tools → MBROLA NG Voice Manager*
 - Windows: choose the voices in the installer
 - Android: choose a language on the app's home screen, then a voice
 - iOS, iPadOS, macOS: choose a voice on the app's main screen
-- Linux: `mbrola-ng-voices install hr` (the distribution's `mbrola-*` voice
-  packages are also used)
+- Linux: `mbrola-ng-voices install hr` (or `es`, `en`; the distribution's
+  `mbrola-*` voice packages are also used)
 
 ## Building
 
@@ -119,7 +132,7 @@ core), `nvda/build_addon.py`, `installer/build_installer.py` and
     core/src/sapi/   SAPI 5 engine (inside MBROLA_NG.dll)
     synth/           mbrola_ng_synth: MBROLA + a small pipe front end (separate process, AGPL v3)
     external/mbrola/ MBROLA synthesizer 3.4-dev (unmodified)
-    languages/       language sources: hr (Croatian), en (English)
+    languages/       language sources: hr (Croatian), en (English), es (Spanish)
     tools/           langc (language compiler), mbtts (developer CLI), data import scripts
     nvda/            NVDA add-on (driver + Voice Manager, English / Croatian)
     installer/       Windows installer (Inno Setup, English / Croatian)
@@ -159,7 +172,8 @@ Parts with their own licenses:
 | `languages/en/lexicon.txt` (CMU Pronouncing Dictionary) | BSD-style (notice in the file header) |
 | `languages/*/emoji.txt` (Unicode CLDR emoji names) | Unicode License v3 |
 
-MBROLA voices (cr1, us1, us2, us3, en1, ...) are not part of this repository
+MBROLA voices (cr1, us1, us2, us3, en1, es1, mx1, vz1, ...) are not part of
+this repository
 or of any package. Each has its own license (use only with MBROLA, no
 commercial use).
 

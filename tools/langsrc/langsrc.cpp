@@ -85,6 +85,7 @@ class Compiler {
   void err(int line, const std::string& msg) { r_.errors.push_back(file_ + ":" + std::to_string(line) + ": " + msg); }
   void warn(int line, const std::string& msg) { r_.warnings.push_back(file_ + ":" + std::to_string(line) + ": " + msg); }
   int phoneme(const std::string& sym, int line);
+  int phoneme_marked(const std::string& tok, int line, uint8_t& flags);
   int phclass(const std::string& name) const;
   int letterclass(const std::string& name) const;
   bool pelem(const std::string& tok, int line, std::vector<PElem>& out);
@@ -168,6 +169,21 @@ int Compiler::phclass(const std::string& name) const {
   for (size_t i = 0; i < d_.phclasses.size(); ++i)
     if (d_.phclasses[i].name == name) return static_cast<int>(i);
   return -1;
+}
+
+// "a\" falling accent, "a/" rising accent, "a:" long  (lexicon.txt, g2p.txt)
+int Compiler::phoneme_marked(const std::string& tok, int line, uint8_t& flags) {
+  std::string s = tok;
+  flags = 0;
+  if (!s.empty() && (s.back() == '\\' || s.back() == '/')) {
+    flags |= s.back() == '/' ? kAccRising : kAccFalling;
+    s.pop_back();
+  }
+  if (!s.empty() && s.back() == ':') { flags |= kLong; s.pop_back(); }
+  int id = phoneme(s, line);
+  if (id >= 0 && flags && d_.phonemes[static_cast<size_t>(id)].type != PhType::Vowel)
+    warn(line, "accent or length mark on '" + s + "', which is not a vowel");
+  return id;
 }
 
 int Compiler::letterclass(const std::string& name) const {
@@ -465,11 +481,19 @@ void Compiler::g2p() {
     for (char32_t c : m)
       if (!canon_letters.count(c)) warn(l.no, "'" + u32_to_utf8(c) + "' is not a canonical letter of scripts.txt");
     r.match = m;
+    std::vector<uint8_t> out_flags;
+    bool marked = false;
     for (auto& t : split_ws(rhs)) {
       if (t == "0") continue;
-      int id = phoneme(t, l.no);
-      if (id >= 0) r.out.push_back(static_cast<uint8_t>(id));
+      uint8_t fl = 0;
+      int id = phoneme_marked(t, l.no, fl);
+      if (id >= 0) {
+        r.out.push_back(static_cast<uint8_t>(id));
+        out_flags.push_back(fl);
+        marked = marked || fl != 0;
+      }
     }
+    if (marked) r.out_flags = out_flags;
     if (!ctx.empty()) {
       // the focus marker '_' - not an underscore inside a {CLASS_NAME}
       size_t us = std::string::npos;
@@ -599,14 +623,8 @@ void Compiler::lexicon() {
     seen[e.key] = l.no;
     bool ok = true;
     for (size_t k = 1; k < t.size(); ++k) {
-      std::string s = t[k];
       PhTok tok;
-      if (!s.empty() && (s.back() == '\\' || s.back() == '/')) {
-        tok.flags |= s.back() == '/' ? kAccRising : kAccFalling;
-        s.pop_back();
-      }
-      if (!s.empty() && s.back() == ':' ) { tok.flags |= kLong; s.pop_back(); }
-      int id = phoneme(s, l.no);
+      int id = phoneme_marked(t[k], l.no, tok.flags);
       if (id < 0) { ok = false; continue; }
       tok.ph = static_cast<uint8_t>(id);
       e.phones.push_back(tok);
@@ -638,6 +656,29 @@ void Compiler::accents() {
       continue;
     }
     if (t[0] == "@never_last") { A.never_last = true; continue; }
+    if (t[0] == "@ending") {
+      AccEnding e;
+      if (t.size() < 4 || !accent_type(t.back(), e.type)) {
+        err(l.no, "@ending LETTERS... SYLLABLE falling|rising");
+        continue;
+      }
+      e.syll = static_cast<int8_t>(std::atoi(t[t.size() - 2].c_str()));
+      if (e.syll == 0) { err(l.no, "syllable number must be 1.. or -1.."); continue; }
+      bool ok = true;
+      for (size_t k = 1; k + 2 < t.size(); ++k) {
+        if (t[k].size() > 2 && t[k].front() == '{' && t[k].back() == '}') {
+          int c = letterclass(t[k].substr(1, t[k].size() - 2));
+          if (c < 0) { err(l.no, "unknown letter class " + t[k]); ok = false; continue; }
+          e.last.push_back({CtxKind::Class, 0, static_cast<uint16_t>(c)});
+          continue;
+        }
+        u32str c = parse_chars(t[k]);
+        if (c.size() != 1) { err(l.no, "one letter or {CLASS} expected, not " + t[k]); ok = false; continue; }
+        e.last.push_back({CtxKind::Char, c[0], 0});
+      }
+      if (ok && !e.last.empty()) A.endings.push_back(e);
+      continue;
+    }
     if (t.size() < 3) { err(l.no, "expected 'word syllable type [long=n,m]'"); continue; }
     AccEntry e;
     e.key = key(t[0]);
@@ -1254,7 +1295,10 @@ void Compiler::tests() {
       a = b + 1;
     }
     std::string ex = trim(l.text.substr(arrow + 2));
-    if (ex.size() >= 2 && ex.front() == '/' && ex.back() == '/') {
+    if (ex.size() >= 4 && starts_with(ex, "//") && ex.compare(ex.size() - 2, 2, "//") == 0) {
+      tc.phonemes = tc.marks = true;
+      ex = trim(ex.substr(2, ex.size() - 4));
+    } else if (ex.size() >= 2 && ex.front() == '/' && ex.back() == '/') {
       tc.phonemes = true;
       ex = trim(ex.substr(1, ex.size() - 2));
     }

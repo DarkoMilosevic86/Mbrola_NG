@@ -1,0 +1,61 @@
+# =============================================================================
+# MBROLA NG - Español (es) - abbreviations.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  abbreviation | expansion [| flags]
+#   Flags:  cs  case-sensitive
+#           end the final "." may also end the sentence
+# =============================================================================
+
+Sr.      | señor
+Sra.     | señora
+Srta.    | señorita
+D.       | don
+Dña.     | doña
+Dr.      | doctor
+Dra.     | doctora
+Prof.    | profesor
+Profa.   | profesora
+Ing.     | ingeniero
+Lic.     | licenciado
+Ud.      | usted
+Uds.     | ustedes
+Vd.      | usted
+Vds.     | ustedes
+p. ej.   | por ejemplo
+ej.      | ejemplo
+etc.     | etcétera | end
+aprox.   | aproximadamente
+máx.     | máximo
+mín.     | mínimo
+núm.     | número
+nº       | número
+n.º      | número
+pág.     | página
+págs.    | páginas
+cap.     | capítulo
+art.     | artículo
+vol.     | volumen
+tel.     | teléfono
+av.      | avenida
+avda.    | avenida
+c/       | calle
+pl.      | plaza
+izq.     | izquierda
+dcha.    | derecha
+apdo.    | apartado
+EE. UU.  | Estados Unidos | end
+EE.UU.   | Estados Unidos | end
+a. C.    | antes de Cristo | end
+d. C.    | después de Cristo | end
+a.C.     | antes de Cristo | end
+d.C.     | después de Cristo | end
+S. A.    | sociedad anónima | end
+S.A.     | sociedad anónima | end
+S. L.    | sociedad limitada | end
+S.L.     | sociedad limitada | end
+cía.     | compañía
+depto.   | departamento
+dto.     | descuento
+vs.      | versus

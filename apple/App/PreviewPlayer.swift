@@ -10,6 +10,7 @@ enum SampleTexts {
     static func installedAndWorking(_ language: String) -> String {
         switch language {
         case "hr": return "Ako čujete ovu poruku, ovaj glas je instaliran i radi."
+        case "es": return "Si oyes este mensaje, esta voz está instalada y funciona."
         default: return "If you can hear this message, this voice is installed and working."
         }
     }

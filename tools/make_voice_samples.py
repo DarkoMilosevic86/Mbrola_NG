@@ -29,6 +29,7 @@ OUT = os.path.join(ROOT, "android", "app", "src", "main", "assets", "samples")
 TEXT = {
 	"hr": "Dobar dan! Ovako zvuči ovaj glas. Instalirajte ga i čitat će vam sve na telefonu.",
 	"en": "Hello! This is how this voice sounds. Install it, and it will read everything on your phone.",
+	"es": "¡Buenos días! Así suena esta voz. Instálala y te leerá todo en el teléfono.",
 }
 
 

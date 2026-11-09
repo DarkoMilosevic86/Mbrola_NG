@@ -61,7 +61,8 @@ class Phonology {
   bool ctx_match_phones(const std::vector<Seg>& s, size_t focus, const std::vector<PElem>& left,
                         const std::vector<PElem>& right) const;
   void syllabify(PWord& w) const;
-  void accent(PWord& w, const u32str& key, bool from_lexicon) const;
+  void accent(PWord& w, const u32str& key, const u32str& canon) const;
+  const AccEnding* ending_rule(const u32str& canon) const;
 
   const Language& L;
 };

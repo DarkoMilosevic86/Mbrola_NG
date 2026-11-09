@@ -86,6 +86,8 @@ add_test(NAME lang_hr
   COMMAND langc ${CMAKE_SOURCE_DIR}/languages/hr -o ${CMAKE_BINARY_DIR}/hr.dat)
 add_test(NAME lang_en
   COMMAND langc ${CMAKE_SOURCE_DIR}/languages/en -o ${CMAKE_BINARY_DIR}/en.dat)
+add_test(NAME lang_es
+  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/es -o ${CMAKE_BINARY_DIR}/es.dat)
 
 # ---------------------------------------------------------------------------
 # Linux: Speech Dispatcher module, voice manager, install rules, packages
@@ -191,15 +193,15 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
   set(CPACK_PACKAGE_NAME "mbrola-ng")
   set(CPACK_PACKAGE_VENDOR "Darko Milošević")
   set(CPACK_PACKAGE_CONTACT "Darko Milošević <daremc86@gmail.com>")
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MBROLA NG text-to-speech (Croatian, English) for Speech Dispatcher and Orca")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MBROLA NG text-to-speech (Croatian, English, Spanish) for Speech Dispatcher and Orca")
   set(CPACK_SET_DESTDIR ON)
   set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
   set(CPACK_DEBIAN_PACKAGE_SECTION "sound")
   set(CPACK_DEBIAN_PACKAGE_DEPENDS "speech-dispatcher (>= 0.11), python3")
   set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-  set(CPACK_DEBIAN_PACKAGE_SUGGESTS "mbrola-cr1, mbrola-us1, mbrola-us2, mbrola-us3, mbrola-en1")
+  set(CPACK_DEBIAN_PACKAGE_SUGGESTS "mbrola-cr1, mbrola-us1, mbrola-us2, mbrola-us3, mbrola-en1, mbrola-es1, mbrola-es2, mbrola-es3, mbrola-es4, mbrola-mx1, mbrola-mx2, mbrola-vz1")
   set(CPACK_DEBIAN_PACKAGE_DESCRIPTION
-    "MBROLA NG text-to-speech for Speech Dispatcher and Orca.\n Croatian and English with the MBROLA diphone voices; voices are downloaded\n with mbrola-ng-voices or taken from the distribution's mbrola-* packages.")
+    "MBROLA NG text-to-speech for Speech Dispatcher and Orca.\n Croatian, English and Spanish with the MBROLA diphone voices; voices are\n downloaded with mbrola-ng-voices or taken from the distribution's mbrola-*\n packages.")
   file(WRITE "${CMAKE_BINARY_DIR}/debian/conffiles" "/etc/speech-dispatcher/modules/mbrola_ng.conf\n")
   set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_BINARY_DIR}/debian/conffiles")
   include(CPack)

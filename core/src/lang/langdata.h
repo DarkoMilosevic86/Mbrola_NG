@@ -82,6 +82,9 @@ struct G2PRule {
   std::vector<CtxElem> left;    // written left-to-right
   std::vector<CtxElem> right;
   std::vector<uint8_t> out;     // phoneme ids (may be empty)
+  // accent/length marks of the produced phonemes (kLong, kAccFalling,
+  // kAccRising), same size as `out`; empty when the rule marks nothing.
+  std::vector<uint8_t> out_flags;
   uint32_t line = 0;
 };
 
@@ -161,11 +164,21 @@ struct AccEntry {
   std::vector<uint8_t> long_sylls;  // 1-based
 };
 
+// accents.txt: @ending - the last letter of the word chooses the accented
+// syllable (Spanish: a word ending in a consonant other than n or s is
+// stressed on the last syllable, every other word on the second to last).
+struct AccEnding {
+  std::vector<CtxElem> last;  // alternatives for the last letter (Char/Class)
+  int8_t syll = -1;           // 1-based; negative counts from the end
+  AccentType type = AccentType::Falling;
+};
+
 struct Accents {
   int8_t default_syll = 1;
   AccentType default_type = AccentType::Falling;
   bool never_last = false;
-  std::vector<AccEntry> entries;  // sorted by key
+  std::vector<AccEntry> entries;    // sorted by key
+  std::vector<AccEnding> endings;   // tried in file order before the default
 };
 
 enum class CliticType : uint8_t { Pro = 1, En = 2 };

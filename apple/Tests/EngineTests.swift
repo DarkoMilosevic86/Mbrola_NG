@@ -7,7 +7,7 @@ import XCTest
 final class CatalogTests: XCTestCase {
     func testBundledCatalogAndLanguages() throws {
         let catalog = Catalog.shared
-        XCTAssertEqual(catalog.languages.map(\.code), ["hr", "en"])
+        XCTAssertEqual(catalog.languages.map(\.code), ["hr", "en", "es"])
         for language in catalog.languages {
             XCTAssertNotNil(BundledResources.languageFile(language.code), language.code)
         }
@@ -22,6 +22,15 @@ final class CatalogTests: XCTestCase {
         let en1 = try XCTUnwrap(catalog.voice("en1"))
         XCTAssertEqual(en1.locale, "en-GB")
         XCTAssertEqual(en1.phonemeMap, "A=A: AI=aI E=e EI=eI O=O: i=i: k_h=k p_h=p r==3: t_h=t u=u:")
+        let es1 = try XCTUnwrap(catalog.voice("es1"))
+        XCTAssertEqual(es1.locale, "es-ES")
+        XCTAssertEqual(es1.sampleRate, 16000)
+        XCTAssertEqual(es1.phonemeMap, "B=b D=d G=g T2=T j=i s2=s")
+        XCTAssertEqual(try XCTUnwrap(catalog.voice("es2")).sampleRate, 22050)
+        XCTAssertEqual(try XCTUnwrap(catalog.voice("es3")).gender, "female")
+        XCTAssertEqual(try XCTUnwrap(catalog.voice("mx1")).locale, "es-MX")
+        XCTAssertEqual(try XCTUnwrap(catalog.voice("vz1")).locale, "es-VE")
+        XCTAssertEqual(try XCTUnwrap(catalog.voice("vz1")).phonemeMap, "T=s T2=s2 jj=L x=h")
         for voice in catalog.voices {
             XCTAssertFalse(voice.files.isEmpty, voice.id)
             XCTAssertTrue(voice.files.contains { $0.name == voice.id }, voice.id)

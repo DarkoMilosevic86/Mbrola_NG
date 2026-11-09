@@ -1,0 +1,21 @@
+# =============================================================================
+# MBROLA NG - Español (es) - clitics.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Unstressed words that lean on a neighbouring word. Spanish spelling
+# separates them from their stressed twins by the written accent, so the
+# list is exact: el/él, mi/mí, tu/tú, se/sé, si/sí, que/qué, mas/más,
+# solo/sólo, aun/aún are different words here.
+# FORMAT:  @proclitic / @enclitic, then words (any number per line).
+# =============================================================================
+
+@proclitic
+el la lo los las un una unos unas
+de a en con por para sin sobre entre desde hasta hacia tras durante según
+al del
+y e o u ni que si como cuando donde cual cuyo cuya
+me te se nos os le les
+mi mis tu tus su sus
+
+@enclitic

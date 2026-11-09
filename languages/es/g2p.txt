@@ -1,0 +1,101 @@
+# =============================================================================
+# MBROLA NG - Español (es) - g2p.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Grapheme -> phoneme rules on CANONICAL letters (scripts.txt). Spanish
+# spelling is almost phonemic, so these rules do the whole work and
+# lexicon.txt holds only a few exceptions.
+#
+# At every position the LONGEST matching rule wins; among equally long
+# rules the first in the file wins.
+#
+# FORMAT:  letters -> phonemes [/ left _ right]
+#   ^letters  = only at the start of the word, letters$ = only at the end
+#   context:  letters, {CLASS} (letter class from classes.txt), ^ word start,
+#             $ word end
+#   phonemes: SAMPA symbols separated by spaces, 0 = nothing
+#   marks:    a\ = stressed vowel (falling accent), a/ = rising, a: = long
+#             The vowel with the written accent is marked here, which is
+#             why accents.txt only needs the rule for words without one.
+# =============================================================================
+
+# --- digraphs and letter groups (two letters, tried before single ones)
+ch -> tS
+ll -> L
+rr -> rr
+# "que", "qui", "gue", "gui": the u is not spoken
+qu -> k / _ {FRONT_L}
+gu -> g / _ {FRONT_L}
+# "gue" with dieresis is spoken: "pingüino", "vergüenza"
+gü -> g w / _ {FRONT_L}
+# word-initial "hie-", "hue-": the voices say these as jj / w
+# ("hielo" = jj e l o, "hueso" = w e s o)
+hi -> jj / ^ _ {VOWEL_L}
+hu -> w / ^ _ {VOWEL_L}
+
+# --- vowels (the accented letters carry the word stress)
+a -> a
+á -> a\
+e -> e
+é -> e\
+o -> o
+ó -> o\
+# i and u are semivowels next to another vowel: "tiene" = t j e n e,
+# "cuatro" = k w a t r o, "aire" = a j r e, "auto" = a w t o.
+# After i/u they stay vowels ("ruido" = rr w i d o, "ciudad" = T j u d a d),
+# and an accented i/u is always a vowel ("día" = d i\ a, "país" = p a i\ s).
+i -> j / _ {VOWEL_L}
+i -> j / {STRONG_L} _
+i -> i
+í -> i\
+u -> w / _ {VOWEL_L}
+u -> w / {STRONG_L} _
+u -> u
+ú -> u\
+ü -> u
+
+# --- consonants
+b -> b
+# c: T before e/i (Castilian; the Latin American voices map T to s),
+# otherwise k - "acción" = a k T j o\ n
+c -> T / _ {FRONT_L}
+c -> k
+d -> d
+f -> f
+# g: x before e/i ("gente", "girar"), otherwise g
+g -> x / _ {FRONT_L}
+g -> g
+# h is silent
+h -> 0
+j -> x
+k -> k
+l -> l
+m -> m
+n -> n
+ñ -> J
+p -> p
+q -> k
+# r is a trill at the start of a word and after n, l, s
+r -> rr / ^ _
+r -> rr / {TRILL_L} _
+r -> r
+s -> s
+t -> t
+v -> b
+w -> w
+# x: s before a consonant ("extraño"), k s elsewhere ("examen", "éxito").
+# "México" and the other words with x = jota are in lexicon.txt.
+x -> s / _ {CONS_L}
+x -> k s
+# y: the conjunction is a vowel, before a vowel it is jj ("yo", "ayer"),
+# after a vowel it closes a diphthong ("rey", "hoy")
+^y$ -> i
+y -> jj / _ {VOWEL_L}
+y -> j / {VOWEL_L} _
+y -> i
+z -> T
+# the ordinal indicators: "1.º" -> primero (numcontext.txt); on their own
+# they are read as the letters o and a
+º -> o
+ª -> a

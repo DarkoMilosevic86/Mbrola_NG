@@ -1,0 +1,64 @@
+# =============================================================================
+# MBROLA NG - Español (es) - symbols.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# FORMAT:  character | level | name [| break]
+#   level  the symbol is spoken when the punctuation level (host setting)
+#          is at least this:  none (always) some most all  never
+#          Defaults: SAPI/Android "some", NVDA "none".
+#   break  pause/intonation it causes: comma semicolon colon dash period
+#          question exclaim paragraph
+# Characters may be written as U+XXXX (needed for | and #).
+# The opening marks ¿ and ¡ only have a name; the closing ? and ! at the end
+# of the sentence give the question and exclamation intonation.
+# =============================================================================
+
+.       | all  | punto | period
+,       | all  | coma | comma
+;       | most | punto y coma | semicolon
+:       | most | dos puntos | colon
+?       | all  | interrogación | question
+¿       | all  | abre interrogación
+!       | all  | exclamación | exclaim
+¡       | all  | abre exclamación
+-       | most | guion | dash
+(       | most | abre paréntesis | comma
+)       | most | cierra paréntesis | comma
+[       | most | abre corchete | comma
+]       | most | cierra corchete | comma
+{       | most | abre llave | comma
+}       | most | cierra llave | comma
+"       | most | comillas
+'       | all  | apóstrofo
+@       | some | arroba
+U+0023  | some | almohadilla
+$       | some | dólar
+%       | some | por ciento
+&       | some | y
+*       | some | asterisco
++       | some | más
+=       | some | igual
+/       | some | barra
+\       | most | barra inversa
+_       | most | guion bajo
+<       | some | menor que
+>       | some | mayor que
+U+007C  | most | barra vertical
+~       | most | virgulilla
+^       | most | circunflejo
+`       | most | acento grave
+€       | some | euro
+£       | some | libra
+¥       | some | yen
+§       | some | párrafo
+©       | some | copyright
+®       | some | registrado
+™       | some | marca registrada
+°       | some | grado
+×       | some | por
+÷       | some | entre
+±       | some | más menos
+•       | most | viñeta
+·       | most | punto medio
+¶       | most | calderón

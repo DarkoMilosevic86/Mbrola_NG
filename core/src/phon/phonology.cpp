@@ -18,7 +18,8 @@ std::vector<PhTok> Phonology::transcribe(const u32str& canon, u32str* unknown) c
       const G2PRule& r = rules[idx];
       if (canon.compare(pos, r.match.size(), r.match) != 0) continue;
       if (!ctx_match_letters(canon, pos, r.match.size(), r)) continue;
-      for (uint8_t ph : r.out) out.push_back({ph, 0});
+      for (size_t k = 0; k < r.out.size(); ++k)
+        out.push_back({r.out[k], r.out_flags.empty() ? static_cast<uint8_t>(0) : r.out_flags[k]});
       pos += r.match.size();
       done = true;
       break;
@@ -136,17 +137,26 @@ void Phonology::syllabify(PWord& w) const {
   }
 }
 
-void Phonology::accent(PWord& w, const u32str& key, bool from_lexicon) const {
+const AccEnding* Phonology::ending_rule(const u32str& canon) const {
+  if (canon.empty()) return nullptr;
+  const char32_t last = canon.back();
+  for (const AccEnding& e : L.d().accents.endings)
+    for (const CtxElem& c : e.last)
+      if (c.kind == CtxKind::Char ? last == c.ch : L.in_letterclass(c.cls, last)) return &e;
+  return nullptr;
+}
+
+void Phonology::accent(PWord& w, const u32str& key, const u32str& canon) const {
   if (w.clitic || w.nsyll == 0) return;
   auto nucleus_of = [&](int syll) -> Seg* {
     for (auto& g : w.segs)
       if ((g.flags & kSegNucleus) && g.syll == syll) return &g;
     return nullptr;
   };
-  if (from_lexicon) {
-    for (auto& g : w.segs)
-      if (g.flags & kSegStressed) return;  // accent given by the lexicon
-  }
+  // an accent that the lexicon or a G2P rule has already placed (the written
+  // accent of Spanish, the stress marks of the English lexicon) stays
+  for (auto& g : w.segs)
+    if (g.flags & kSegStressed) return;
   const Accents& A = L.d().accents;
   int syll;
   AccentType type;
@@ -156,6 +166,9 @@ void Phonology::accent(PWord& w, const u32str& key, bool from_lexicon) const {
     type = e->type;
     for (uint8_t ls : e->long_sylls)
       if (Seg* g = nucleus_of(ls - 1)) g->flags |= kSegLong;
+  } else if (const AccEnding* en = ending_rule(canon)) {
+    syll = en->syll > 0 ? en->syll - 1 : w.nsyll + en->syll;
+    type = en->type;
   } else {
     syll = A.default_syll > 0 ? A.default_syll - 1 : w.nsyll + A.default_syll;
     type = A.default_type;
@@ -187,7 +200,7 @@ PWord Phonology::analyse(const u32str& canon) const {
   if (w.clitic) {
     for (auto& g : w.segs) g.flags &= static_cast<uint8_t>(~(kSegStressed | kSegRising));
   }
-  accent(w, key, lex != nullptr);
+  accent(w, key, canon);
   return w;
 }
 

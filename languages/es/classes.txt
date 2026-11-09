@@ -1,0 +1,47 @@
+# =============================================================================
+# MBROLA NG - Español (es) - classes.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Named sets used by the rule files.
+# FORMAT:  [phonemes] / [letters] section, then  NAME = items
+#   NAME   CAPITALS, at least 2 characters, must not be a phoneme symbol
+#   items  phoneme symbols / canonical letters, or names of earlier classes
+# =============================================================================
+
+[phonemes]
+VOWEL     = a e i o u
+GLIDE     = j w
+NASAL     = m n J
+LIQUID    = l L r rr
+SONORANT  = GLIDE NASAL LIQUID
+OBS_VL    = p t k tS f T T2 s s2 x
+OBS_VD    = b d g B D G jj
+OBS       = OBS_VL OBS_VD
+CONS      = SONORANT OBS
+# consonants without the semivowels: before j or w an s is still the start
+# of a syllable ("gracias", "suave"), so it does not weaken (postlex.txt)
+CONS_NG   = NASAL LIQUID OBS
+LABIAL_STOP = p b
+# b, d, g become the approximants B, D, G after these (that is, everywhere
+# except after a pause or a nasal; d also keeps its stop after l)
+PRE_APPROX   = VOWEL GLIDE l L r rr OBS
+PRE_APPROX_D = VOWEL GLIDE L r rr OBS
+ANY       = VOWEL CONS
+
+[letters]
+# canonical letters (scripts.txt)
+VOWEL_L   = a e i o u á é í ó ú ü
+# vowels that turn a neighbouring i/u into a semivowel ("aire", "auto",
+# "tiene"); i and u next to each other keep the second one as the nucleus
+# ("ruido", "ciudad")
+STRONG_L  = a e o á é í ó ú
+CONS_L    = b c d f g h j k l m n ñ p q r s t v w x y z
+# e, i (also accented): c -> T, g -> x, qu/gu -> k/g
+FRONT_L   = e i é í
+# r is a trill after these letters ("honra", "alrededor", "Israel")
+TRILL_L   = n l s
+# a word ending in one of these is stressed on its last syllable
+# ("hablar", "verdad", "feliz"); words ending in a vowel, n or s are
+# stressed on the second to last (accents.txt)
+FINAL_STRESS_L = b c d f g h j k l m p q r t v w x y z

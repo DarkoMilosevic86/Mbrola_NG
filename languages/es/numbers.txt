@@ -1,0 +1,149 @@
+# =============================================================================
+# MBROLA NG - Español (es) - numbers.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Numbers are always Spanish: mil, millón, mil millones ...
+#
+# FORMAT - rule-based number format (subset of ICU/CLDR RBNF syntax)
+#   %name:            starts a ruleset (%%name: = private helper)
+#   base: text;       rule for numbers >= base (up to the next rule)
+#     <<              quotient (number / divisor), same ruleset
+#     >>              remainder (number % divisor), same ruleset
+#     <%set<  >%set>  the same with another ruleset
+#     =%set=          the whole number with another ruleset
+#     [ ... ]         left out when the remainder is 0
+#     divisor = 10^(number of digits of base - 1)
+#   -x: text;         negative numbers (>> = absolute value)
+#
+#   @plural CATEGORY: condition     CLDR plural rules (operands n i v f t)
+#
+# Three genders/forms are needed:
+#   -masculine     standalone: "uno", "veintiuno"      (default)
+#   -masculine-un  before a masculine noun: "un euro", "veintiún euros"
+#   -feminine      "una libra", "doscientas páginas"
+# The numbers with a written accent (dieciséis, veintidós, millón) are
+# written out, because the accent is what makes the stress right.
+# =============================================================================
+
+@plural one: i = 1 and v = 0
+
+# -----------------------------------------------------------------------------
+%spellout-cardinal-masculine:
+  -x: menos >>;
+  0: cero; 1: uno; 2: dos; 3: tres; 4: cuatro; 5: cinco; 6: seis; 7: siete;
+  8: ocho; 9: nueve; 10: diez; 11: once; 12: doce; 13: trece; 14: catorce;
+  15: quince; 16: dieciséis; 17: diecisiete; 18: dieciocho; 19: diecinueve;
+  20: veinte; 21: veintiuno; 22: veintidós; 23: veintitrés;
+  24: veinticuatro; 25: veinticinco; 26: veintiséis; 27: veintisiete;
+  28: veintiocho; 29: veintinueve;
+  30: treinta[ y >>]; 40: cuarenta[ y >>]; 50: cincuenta[ y >>];
+  60: sesenta[ y >>]; 70: setenta[ y >>]; 80: ochenta[ y >>];
+  90: noventa[ y >>];
+  100: cien; 101: ciento >>;
+  200: doscientos[ >>]; 300: trescientos[ >>]; 400: cuatrocientos[ >>];
+  500: quinientos[ >>]; 600: seiscientos[ >>]; 700: setecientos[ >>];
+  800: ochocientos[ >>]; 900: novecientos[ >>];
+  1000: mil[ >>];
+  2000: <%spellout-cardinal-masculine-un< mil[ >>];
+  1000000: un millón[ >>];
+  2000000: <%spellout-cardinal-masculine-un< millones[ >>];
+  1000000000: mil millones[ >>];
+  2000000000: <%spellout-cardinal-masculine-un< mil millones[ >>];
+  1000000000000: un billón[ >>];
+  2000000000000: <%spellout-cardinal-masculine-un< billones[ >>];
+
+# "un euro", "veintiún euros", "treinta y un euros", "ciento un euros"
+%spellout-cardinal-masculine-un:
+  -x: menos >>;
+  0: =%spellout-cardinal-masculine=;
+  1: un;
+  2: =%spellout-cardinal-masculine=;
+  21: veintiún;
+  22: =%spellout-cardinal-masculine=;
+  30: treinta[ y >>]; 40: cuarenta[ y >>]; 50: cincuenta[ y >>];
+  60: sesenta[ y >>]; 70: setenta[ y >>]; 80: ochenta[ y >>];
+  90: noventa[ y >>];
+  100: cien; 101: ciento >>;
+  200: doscientos[ >>]; 300: trescientos[ >>]; 400: cuatrocientos[ >>];
+  500: quinientos[ >>]; 600: seiscientos[ >>]; 700: setecientos[ >>];
+  800: ochocientos[ >>]; 900: novecientos[ >>];
+  1000: mil[ >>];
+  2000: <%spellout-cardinal-masculine-un< mil[ >>];
+  1000000: un millón[ >>];
+  2000000: <%spellout-cardinal-masculine-un< millones[ >>];
+  1000000000: mil millones[ >>];
+  2000000000: <%spellout-cardinal-masculine-un< mil millones[ >>];
+  1000000000000: un billón[ >>];
+  2000000000000: <%spellout-cardinal-masculine-un< billones[ >>];
+
+# "una libra", "veintiuna", "doscientas páginas"
+%spellout-cardinal-feminine:
+  -x: menos >>;
+  0: cero;
+  1: una;
+  2: =%spellout-cardinal-masculine=;
+  21: veintiuna;
+  22: =%spellout-cardinal-masculine=;
+  30: treinta[ y >>]; 40: cuarenta[ y >>]; 50: cincuenta[ y >>];
+  60: sesenta[ y >>]; 70: setenta[ y >>]; 80: ochenta[ y >>];
+  90: noventa[ y >>];
+  100: cien; 101: ciento >>;
+  200: doscientas[ >>]; 300: trescientas[ >>]; 400: cuatrocientas[ >>];
+  500: quinientas[ >>]; 600: seiscientas[ >>]; 700: setecientas[ >>];
+  800: ochocientas[ >>]; 900: novecientas[ >>];
+  1000: mil[ >>];
+  2000: <%spellout-cardinal-masculine-un< mil[ >>];
+  1000000: un millón[ >>];
+  2000000: <%spellout-cardinal-masculine-un< millones[ >>];
+  1000000000: mil millones[ >>];
+  2000000000: <%spellout-cardinal-masculine-un< mil millones[ >>];
+  1000000000000: un billón[ >>];
+  2000000000000: <%spellout-cardinal-masculine-un< billones[ >>];
+
+# -----------------------------------------------------------------------------
+# Ordinals: the stem (without the final -o / -a) for 0 to 20; the tens,
+# hundreds and thousands are written out in the public rulesets, because
+# both words are inflected ("vigésimo primero", "vigésima primera").
+%%ord-stem:
+  0: cer; 1: primer; 2: segund; 3: tercer; 4: cuart; 5: quint; 6: sext;
+  7: séptim; 8: octav; 9: noven; 10: décim; 11: undécim; 12: duodécim;
+  13: decimotercer; 14: decimocuart; 15: decimoquint; 16: decimosext;
+  17: decimoséptim; 18: decimoctav; 19: decimonoven; 20: vigésim;
+
+%spellout-ordinal-masculine:
+  0: =%%ord-stem=o;
+  21: vigésimo[ >>];
+  30: trigésimo[ >>]; 40: cuadragésimo[ >>]; 50: quincuagésimo[ >>];
+  60: sexagésimo[ >>]; 70: septuagésimo[ >>]; 80: octogésimo[ >>];
+  90: nonagésimo[ >>];
+  100: centésimo[ >>]; 200: ducentésimo[ >>]; 300: tricentésimo[ >>];
+  400: cuadringentésimo[ >>]; 500: quingentésimo[ >>];
+  600: sexcentésimo[ >>]; 700: septingentésimo[ >>];
+  800: octingentésimo[ >>]; 900: noningentésimo[ >>];
+  1000: milésimo[ >>];
+  2000: <%spellout-cardinal-masculine-un< milésimo[ >>];
+  1000000: millonésimo[ >>];
+
+# "1.er premio" -> "primer premio", "3.er" -> "tercer" (only 1 and 3 have
+# a short form; every other number keeps the full one)
+%spellout-ordinal-masculine-apocopated:
+  0: =%spellout-ordinal-masculine=;
+  1: primer;
+  2: =%spellout-ordinal-masculine=;
+  3: tercer;
+  4: =%spellout-ordinal-masculine=;
+
+%spellout-ordinal-feminine:
+  0: =%%ord-stem=a;
+  21: vigésima[ >>];
+  30: trigésima[ >>]; 40: cuadragésima[ >>]; 50: quincuagésima[ >>];
+  60: sexagésima[ >>]; 70: septuagésima[ >>]; 80: octogésima[ >>];
+  90: nonagésima[ >>];
+  100: centésima[ >>]; 200: ducentésima[ >>]; 300: tricentésima[ >>];
+  400: cuadringentésima[ >>]; 500: quingentésima[ >>];
+  600: sexcentésima[ >>]; 700: septingentésima[ >>];
+  800: octingentésima[ >>]; 900: noningentésima[ >>];
+  1000: milésima[ >>];
+  2000: <%spellout-cardinal-masculine-un< milésima[ >>];
+  1000000: millonésima[ >>];

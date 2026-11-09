@@ -11,7 +11,9 @@
 #   ^letters  = only at the start of the word, letters$ = only at the end
 #   context:  letters, {CLASS} (letter class from classes.txt), ^ word start,
 #             $ word end
-#   phonemes: SAMPA symbols separated by spaces, 0 = nothing
+#   phonemes: SAMPA symbols separated by spaces, 0 = nothing; a phoneme may
+#             carry the marks of lexicon.txt (a\ falling accent, a/ rising,
+#             a: long) - used by languages whose spelling writes the stress
 # =============================================================================
 
 # --- plain letters

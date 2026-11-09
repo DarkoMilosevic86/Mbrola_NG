@@ -1,0 +1,28 @@
+# =============================================================================
+# MBROLA NG - Español (es) - accents.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Spanish stress is completely predictable from the spelling:
+#   1. a word with a written accent is stressed on that vowel - this comes
+#      from g2p.txt ("á" -> "a" with the falling-accent mark), and such a
+#      word never reaches the rules below;
+#   2. a word ending in a consonant other than n or s: last syllable
+#      ("hablar", "verdad", "feliz")  -> @ending below;
+#   3. every other word (vowel, n, s): second to last syllable
+#      ("casa", "hablan", "virus")    -> @default below.
+# Clitics (clitics.txt) are unstressed.
+#
+# FORMAT
+#   @default SYLLABLE falling|rising
+#   @ending LETTERS... SYLLABLE falling|rising
+#     the rule applies when the word ends with one of the letters (a
+#     letter or {CLASS} from classes.txt); tried in file order, before
+#     @default
+#   @never_last
+#   word  SYLLABLE  falling|rising|none  [long=N,M]
+#     SYLLABLE: 1 = first, 2 = second ..., -1 = last, -2 = second to last
+# =============================================================================
+
+@default -2 falling
+@ending {FINAL_STRESS_L} -1 falling

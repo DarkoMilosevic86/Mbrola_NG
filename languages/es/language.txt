@@ -1,0 +1,48 @@
+# =============================================================================
+# MBROLA NG - Español (es) - language.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Language metadata and global options.  FORMAT:  key = value
+#
+# Spanish. The phoneme inventory is the Castilian SAMPA set of the es1
+# voice; the voices that use other symbols (es2, es3, es4, mx1, mx2, vz1)
+# get a phoneme_map in the voice catalog (catalog/catalog.json), so one
+# language serves Spain and Latin America: the Latin American voices map
+# T (c/z) to s (seseo) and L (ll) to their palatal sound (yeísmo).
+# =============================================================================
+
+code          = es
+name          = Español
+name_en       = Spanish
+iso639_1      = es
+iso639_3      = spa
+android_locale = spa-ESP
+sapi_lcid     = 0C0A
+version       = 0.1
+author        = Darko Milošević
+copyright     = Copyright (c) 2026 Darko Milošević
+license       = GPL-2.0-or-later
+voice         = es1
+
+# Number reading (numbers.txt rulesets)
+default_cardinal   = %spellout-cardinal-masculine
+digit_ruleset      = %spellout-cardinal-masculine
+decimal_separator  = ,
+decimal_word       = coma
+# up to this many digits after the comma are read as a number ("3,14" ->
+# "coma catorce"), longer ones digit by digit
+decimal_max_digits = 2
+# longer numbers are read digit by digit
+max_number_digits  = 15
+# numbers starting with 0 (phone numbers, codes) are read digit by digit
+leading_zero_digits = 1
+# "1.000.000" and "1 000 000"
+thousands_separators = . space
+
+# Emoji: 3 or more identical emoji in a row are collapsed
+emoji_repeat_min = 3
+emoji_repeat     = $n veces $name
+
+# Pattern files, applied in this order (first matching rule wins)
+normalize_files = dates.txt numcontext.txt

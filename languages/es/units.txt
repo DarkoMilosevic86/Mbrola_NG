@@ -1,0 +1,76 @@
+# =============================================================================
+# MBROLA NG - Español (es) - units.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Units and currencies after a number ("5 km", "5%", "20 °C") or - with the
+# prefix flag - also before it ("€5", "EUR 5"). The number is read in the
+# gender of the unit and in the form the number requires ("un euro",
+# "dos euros"; "una libra", "dos libras").
+#
+#   @forms CATEGORIES               order of the form columns (CLDR names)
+#   @gender NAME %ruleset           number ruleset for a gender
+#   keys | gender | forms... [| flags]
+#     keys    spellings separated by spaces (U+XXXX allowed)
+#     gender  a @gender name, or - (default cardinal: "uno")
+#     flags   prefix  (may stand before the number)
+#             cs      (keys are case-sensitive)
+# =============================================================================
+
+@forms one other
+@gender m %spellout-cardinal-masculine-un
+@gender f %spellout-cardinal-feminine
+
+# --- currencies
+€ EUR eur euro euros | m | euro | euros | prefix
+$ USD dólar dólares | m | dólar | dólares | prefix
+£ GBP libra libras | f | libra | libras | prefix
+¥ JPY              | m | yen | yenes | prefix
+CHF                | m | franco suizo | francos suizos | prefix
+MXN                | m | peso | pesos | prefix
+ARS COP CLP PEN    | m | peso | pesos | prefix
+ct                 | m | céntimo | céntimos
+
+# --- percent, degrees
+%                  | - | por ciento | por ciento
+‰                  | - | por mil | por mil
+°C                 | m | grado Celsius | grados Celsius
+°F                 | m | grado Fahrenheit | grados Fahrenheit
+°                  | m | grado | grados
+
+# --- length, area, volume, mass
+km                 | m | kilómetro | kilómetros
+m                  | m | metro | metros | cs
+cm                 | m | centímetro | centímetros
+mm                 | m | milímetro | milímetros
+km² km2            | m | kilómetro cuadrado | kilómetros cuadrados
+m² m2              | m | metro cuadrado | metros cuadrados
+m³ m3              | m | metro cúbico | metros cúbicos
+l                  | m | litro | litros | cs
+ml                 | m | mililitro | mililitros
+kg                 | m | kilogramo | kilogramos
+g                  | m | gramo | gramos | cs
+t                  | f | tonelada | toneladas | cs
+
+# --- speed, time
+km/h               | m | kilómetro por hora | kilómetros por hora
+m/s                | m | metro por segundo | metros por segundo
+h                  | f | hora | horas | cs
+min                | m | minuto | minutos
+s                  | m | segundo | segundos | cs
+ms                 | m | milisegundo | milisegundos
+
+# --- computing, electricity
+kB KB              | m | kilobyte | kilobytes
+MB                 | m | megabyte | megabytes
+GB                 | m | gigabyte | gigabytes
+TB                 | m | terabyte | terabytes
+Hz                 | m | hercio | hercios
+kHz                | m | kilohercio | kilohercios
+MHz                | m | megahercio | megahercios
+GHz                | m | gigahercio | gigahercios
+W                  | m | vatio | vatios | cs
+kW                 | m | kilovatio | kilovatios
+kWh                | m | kilovatio hora | kilovatios hora
+V                  | m | voltio | voltios | cs
+mAh                | m | miliamperio hora | miliamperios hora

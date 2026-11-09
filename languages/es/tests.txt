@@ -1,0 +1,159 @@
+# =============================================================================
+# MBROLA NG - Español (es) - tests.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Run by langc through the real core (every compile).
+# FORMAT:  "input" [| "input" ...] => expected words
+#          "input" [| "input" ...] => / expected phonemes /
+#          "input" [| "input" ...] => // phonemes with accent marks //
+# Phrases are separated by " _ " in phoneme results, words by " | " when
+# accent marks are shown.
+# =============================================================================
+
+# --- letters and digraphs
+"casa"                                   => / k a s a /
+"mucho"                                  => / m u tS o /
+"calle"                                  => / k a L e /
+"perro"                                  => / p e rr o /
+"año"                                    => / a J o /
+"cinco"                                  => / T i n k o /
+"zapato"                                 => / T a p a t o /
+"gente"                                  => / x e n t e /
+"mujer"                                  => / m u x e r /
+"queso"                                  => / k e s o /
+"guitarra"                               => / g i t a rr a /
+"pingüino"                               => / p i n g w i n o /
+"hola"                                   => / o l a /
+"vino"                                   => / b i n o /
+"examen"                                 => / e k s a m e n /
+"extraño"                                => / e s2 t r a J o /
+"yo"                                     => / jj o /
+"rosa"                                   => / rr o s a /
+"honra"                                  => / o n rr a /
+"México"                                 => / m e x i k o /
+
+# --- diphthongs: i and u are semivowels next to another vowel
+"tiene"                                  => / t j e n e /
+"cuatro"                                 => / k w a t r o /
+"aire"                                   => / a j r e /
+"auto"                                   => / a w t o /
+"agua"                                   => / a G w a /
+"ruido"                                  => / rr w i D o /
+"ciudad"                                 => / T j u D a D /
+"día"                                    => / d i a /
+"país"                                   => / p a i s2 /
+"rey"                                    => / rr e j /
+"muy"                                    => / m u j /
+"hielo"                                  => / jj e l o /
+"hueso"                                  => / w e s o /
+
+# --- stress: the mark \ stands on the stressed vowel
+"casa"                                   => // k a\ s a //
+"hablar"                                 => // a b l a\ r //
+"verdad"                                 => // b e r d a\ d //
+"feliz"                                  => // f e l i\ T //
+"joven"                                  => // x o\ b e n //
+"virus"                                  => // b i\ r u s //
+"árbol"                                  => // a\ r b o l //
+"está"                                   => // e s t a\ //
+"teléfono"                               => // t e l e\ f o n o //
+"agua"                                   => // a\ g w a //
+"aire"                                   => // a\ j r e //
+"familia"                                => // f a m i\ l j a //
+"ciudad"                                 => // T j u d a\ d //
+"día"                                    => // d i\ a //
+"idea"                                   => // i d e\ a //
+"después"                                => // d e s p w e\ s //
+
+# --- post-lexical rules, also across words
+"un beso"                                => / u m b e s o /
+"invierno"                               => / i m b j e r n o /
+"el lado"                                => / e l a D o /
+"mis sellos"                             => / m i s2 s e L o s2 /
+"abogado"                                => / a B o G a D o /
+"la boca"                                => / l a B o k a /
+"Bueno, vino"                            => / b w e n o _ b i n o /
+"el dato"                                => / e l d a t o /
+"los amigos"                             => / l o s2 a m i G o s2 /
+"espera"                                 => / e s2 p e r a /
+
+# --- numbers
+"0"                                      => cero
+"16"                                     => dieciséis
+"21"                                     => veintiuno
+"22"                                     => veintidós
+"31"                                     => treinta y uno
+"100"                                    => cien
+"101"                                    => ciento uno
+"150"                                    => ciento cincuenta
+"200"                                    => doscientos
+"500"                                    => quinientos
+"1000" | "1.000"                         => mil
+"1500"                                   => mil quinientos
+"2026"                                   => dos mil veintiséis
+"21000"                                  => veintiún mil
+"100000"                                 => cien mil
+"1000000" | "1 000 000"                  => un millón
+"2500000"                                => dos millones quinientos mil
+"-5"                                     => menos cinco
+"3,14"                                   => tres coma catorce
+"3,05"                                   => tres coma cero cinco
+"091"                                    => cero nueve uno
+
+# --- units and currencies
+"1 euro"                                 => un euro
+"2 €" | "EUR 2"                          => dos euros
+"21 €"                                   => veintiún euros
+"1 £"                                    => una libra
+"2 £"                                    => dos libras
+"5%"                                     => cinco por ciento
+"20 °C"                                  => veinte grados celsius
+"2,5 kg"                                 => dos coma cinco kilogramos
+"1 km"                                   => un kilómetro
+"10 km"                                  => diez kilómetros
+
+# --- dates and times
+"2026-09-29"                             => veintinueve de septiembre de dos mil veintiséis
+"29/9/2026" | "29.09.2026"               => veintinueve de septiembre de dos mil veintiséis
+"29 de septiembre de 2026"               => veintinueve de septiembre de dos mil veintiséis
+"14:00"                                  => catorce horas
+"1:00"                                   => una hora
+"7:05"                                   => siete cero cinco
+"14:30"                                  => catorce treinta
+"14:30:15"                               => catorce treinta y quince segundos
+
+# --- ordinals, roman numerals, ranges
+"2.ª"                                    => segunda
+"21.º"                                   => vigésimo primero
+"siglo XX"                               => siglo veinte
+"Juan Pablo II"                          => juan pablo segundo
+"5-10"                                   => cinco a diez
+
+# --- abbreviations, acronyms, spelling
+"Sr. García"                             => señor garcía
+"p. ej."                                 => por ejemplo
+"etc. Mañana"                            => etcétera mañana
+"OTAN"                                   => otan
+"ADN"                                    => a de ene
+"UE"                                     => u e
+"5G"                                     => cinco ge
+
+# --- symbols (default level "some"), emoji
+"a & b"                                  => a y be
+"😀"                                     => cara sonriendo
+"😂😂😂"                                  => tres veces cara llorando de risa
+"1.º"                                    => primero
+
+# --- ordinals written with letters, fractions and short dates
+"1.er premio"                            => primer premio
+"3.er"                                   => tercer
+"2do"                                    => segundo
+"3/4 de hora"                            => tres cuartos de hora
+"1/2 litro"                              => un medio litro
+"el 29/9"                                => el veintinueve de septiembre
+"1.º"                                    => primero
+
+# --- spelling mode and a longer sentence
+"La OMS publicó 120 páginas"             => la o eme ese publicó ciento veinte páginas
+"1.500,75 USD"                           => mil quinientos coma setenta y cinco dólares

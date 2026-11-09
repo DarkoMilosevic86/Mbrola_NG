@@ -21,6 +21,7 @@ struct TestCase {
   std::vector<std::string> inputs;  // every input must give `expected`
   std::string expected;
   bool phonemes = false;            // compare phonemes instead of words
+  bool marks = false;               // ... with accent and length marks
 };
 
 struct CompileResult {

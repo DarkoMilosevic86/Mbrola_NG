@@ -1,0 +1,10 @@
+# =============================================================================
+# MBROLA NG - Español (es) - syllables.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Syllable nuclei: the five vowels of phonemes.txt. Spanish has no syllabic
+# consonants, and the semivowels of the diphthongs are the consonants j and
+# w (g2p.txt), so "agua" (a-gua) and "aire" (ai-re) have two syllables -
+# which is what the stress rules of accents.txt count.
+# =============================================================================

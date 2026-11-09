@@ -32,6 +32,16 @@ TestReport run_tests(std::shared_ptr<const Language> lang, const std::vector<Tes
         p.add_text_utf8(in);
         Chunk ch;
         while (p.next_chunk(ch)) {
+          if (tc.marks) {
+            // accents are a property of the word: analyse every word on its
+            // own (the same output as "mbtts --phonemes --marks")
+            for (const std::string& w : split_ws(ch.debug_words)) {
+              PWord pw = p.phonology().analyse(utf8_to_u32(w));
+              if (!got.empty()) got += " | ";
+              got += p.phonology().to_string(pw.segs, true);
+            }
+            continue;
+          }
           const std::string& part = tc.phonemes ? ch.debug_phones : ch.debug_words;
           if (part.empty()) continue;
           if (!got.empty()) got += tc.phonemes ? " _ " : " ";

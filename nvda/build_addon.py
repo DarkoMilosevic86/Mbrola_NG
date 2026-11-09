@@ -165,7 +165,7 @@ ADDON_README = (
 	"(Copyright (c) Faculte Polytechnique de Mons - TCTS lab) with a small\n"
 	"pipe front end, licensed under the GNU AGPL v3\n"
 	"(AGPL-3.0-mbrola_ng_synth.txt).\n\n"
-	"Emoji names (Croatian, English): Unicode CLDR, Copyright (c) 1991-2025\n"
+	"Emoji names (Croatian, English, Spanish): Unicode CLDR, Copyright (c) 1991-2025\n"
 	"Unicode, Inc., Unicode License v3 (https://www.unicode.org/license.txt).\n\n"
 	"English pronunciations: CMU Pronouncing Dictionary, Copyright (C) 1993-2015\n"
 	"Carnegie Mellon University. All rights reserved. BSD-style license:\n"

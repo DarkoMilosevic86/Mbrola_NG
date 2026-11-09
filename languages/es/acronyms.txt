@@ -1,0 +1,15 @@
+# =============================================================================
+# MBROLA NG - Español (es) - acronyms.txt
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Words written in CAPITALS:
+#   listed in @words  -> read as a word
+#   listed in @spell  -> spelled (ADN -> a de ene)
+#   otherwise: spelled if not longer than @spell_max_len or without a vowel,
+#   else read as a word.
+# =============================================================================
+
+@spell_max_len 2
+@words OTAN UNESCO UNICEF ONU OVNI SIDA RENFE IVA PIB IPC ESO PSOE UNAM
+@spell ADN DNI IRPF ONG CIA FBI USB CPU GPU URL IMEI OMS UE EUA
