@@ -7,6 +7,7 @@
 # FORMAT:  "input" [| "input" ...] => expected words
 #          "input" [| "input" ...] => / expected phonemes /
 #          "input" [| "input" ...] => // phonemes with accent marks //
+#          !spell "input" => ...   read in character / spelling mode
 # Every input of a line must give the expected result - Latin and Cyrillic
 # spellings of the same text are listed together (decision D1).
 # Phrases are separated by " _ " in phoneme results.
@@ -91,6 +92,22 @@
 "Ivan Pavao II."                         => ivan pavao drugi
 "XX. stoljeće"                           => dvadeseto stoljeće
 "5-10"                                   => pet do deset
+
+# --- character mode (spelling.txt third field): the consonants are named
+#     with a schwa, which cr1 realizes as its vocalic r. The names in
+#     running text are unchanged (the acronyms below).
+!spell "bcd" | "бцд"                     => / b @ ts @ d @ /
+!spell "pvgt"                            => / p @ v @ g @ t @ /
+# the Cyrillic њ is one letter, the Latin "nj" is two
+!spell "њ"                               => / J @ /
+!spell "nj"                              => / n @ j @ /
+# the letter r is the schwa alone ("ər")
+!spell "r" | "р"                         => / @ /
+# two schwas in a row: cr1 has no r-r diphone, so a short pause is inserted
+!spell "br"                              => / b @ _ @ /
+# vowels, digits and the capital prefix are unchanged
+!spell "Ab"                              => veliko a [b @]
+!spell "a5"                              => / a p e t /
 
 # --- abbreviations, acronyms, spelling
 "npr." | "нпр."                          => na primjer

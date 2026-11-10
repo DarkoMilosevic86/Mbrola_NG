@@ -1234,13 +1234,35 @@ void Compiler::spelling() {
       continue;
     }
     auto f = split_on(l.text, '|');
-    if (f.size() != 2 || f[1].empty()) { err(l.no, "expected 'characters | name'"); continue; }
+    if (f.size() < 2 || f.size() > 3 || f[1].empty()) {
+      err(l.no, "expected 'characters | name' or 'characters | name | spelled'");
+      continue;
+    }
+    // third field: the name used in character / spelling mode, either text
+    // or phonemes between slashes ("/b @/")
+    std::string char_name;
+    std::vector<uint8_t> char_phones;
+    if (f.size() == 3 && !f[2].empty()) {
+      const std::string& sp = f[2];
+      if (sp.size() >= 2 && sp.front() == '/' && sp.back() == '/') {
+        bool ok = true;
+        for (auto& sym : split_ws(sp.substr(1, sp.size() - 2))) {
+          int id = d_.find_phoneme(sym);
+          if (id < 0) { err(l.no, "unknown phoneme '" + sym + "'"); ok = false; break; }
+          char_phones.push_back(static_cast<uint8_t>(id));
+        }
+        if (!ok) continue;
+        if (char_phones.empty()) { err(l.no, "no phonemes between the slashes"); continue; }
+      } else {
+        char_name = sp;
+      }
+    }
     for (auto& tok : split_ws(f[0])) {
       u32str c = parse_chars(tok);
       if (c.size() != 1) { err(l.no, "one character expected: " + tok); continue; }
       char32_t lc = canon_->lower(c[0]);
       if (!seen.insert(lc).second) { err(l.no, "character listed twice: " + tok); continue; }
-      d_.spelling.push_back({lc, f[1]});
+      d_.spelling.push_back({lc, f[1], char_name, char_phones});
     }
   }
   std::sort(d_.spelling.begin(), d_.spelling.end(), [](const SpellEntry& a, const SpellEntry& b) { return a.ch < b.ch; });
@@ -1287,6 +1309,10 @@ void Compiler::tests() {
     TestCase tc;
     tc.where = "tests.txt:" + std::to_string(l.no);
     std::string in = l.text.substr(0, arrow);
+    if (starts_with(trim(in), "!spell")) {
+      tc.spell = true;
+      in = in.substr(in.find("!spell") + 6);
+    }
     size_t a = 0;
     while ((a = in.find('"', a)) != std::string::npos) {
       size_t b = in.find('"', a + 1);

@@ -28,7 +28,9 @@ sentence sounds the same everywhere.
 - **Croatian**: Latin and Cyrillic spelling (both give the same speech),
   numbers with the correct case and gender, ordinals, dates, times, units,
   currencies, abbreviations and acronyms, voicing assimilation across word
-  boundaries, clitics, and spelling mode.
+  boundaries, clitics, and spelling mode (spelled out, the consonants are named with a
+  schwa - "bə cə də" instead of "be ce de" - while acronyms keep the usual
+  names: "HDZ" stays "ha de ze").
 - **English**: CMU Pronouncing Dictionary (about 125,000 words) plus
   letter-to-sound rules for unknown words. Numbers, dates and units are
   supported. The American voices us1, us2 and us3 and the British voice en1

@@ -1185,6 +1185,20 @@ who knows software licensing.
      Croatian letter names: a, be, ce, če, će, de, dže, đe, e, ef, ge, ha, i,
      je, ka, el, elj, em, en, enj, o, pe, er, es, eš, te, u, ve, ze, že;
      foreign: ku (q), dvostruko ve (w), iks (x), ipsilon (y).
+     Those names are what an ACRONYM is read with (HDZ -> ha de ze, 7.11).
+     SPELLING a word out, however, uses a SCHWA on the consonants
+     ("bə cə də", spelling.txt third field): with "be ce de" the vowel is
+     the loudest part of the name and b/v/g/d/p/t/z/c run together at
+     speed, while with a schwa only the consonant differs. cr1 has no
+     schwa phoneme, so the language's schwa (@, phonemes.txt) is realized
+     through the voice's phoneme map (10.3) as the VOCALIC r of "prst",
+     whose vowel part is a true mid-central vowel (measured on cr1:
+     F1 ~475 Hz / F2 ~1365 Hz, against e 441/1627 and a 592/1232). The
+     name of the letter r is that schwa alone ("ər"); two schwas meeting
+     ("br" spelled) are separated by the pause of the @identical rule,
+     because cr1 has no r-r diphone. A voice that does have a schwa only
+     needs its own map entry. Spelling the alphabet this way is also about
+     20 % shorter than with the traditional names.
      Cyrillic letters get the same Croatian names (б "be", њ "enj" ...);
      Macedonian ѓ, ќ, ѕ get descriptive names; other Cyrillic letters are
      not part of Croatian (7.6).
@@ -1238,7 +1252,9 @@ non-programmer.
     symbols.txt       Symbol and punctuation names with reading levels.
     emoji.txt         Emoji names (EXISTS: 3944 entries from CLDR 48.2,
                       hand-editable; format in 7.8).
-    spelling.txt      Character names for spell mode (all scripts).
+    spelling.txt      Character names: the name in running text (acronyms)
+                      and, optionally, the name used when a word is spelled
+                      out (7.10: the consonants with a schwa). All scripts.
     acronyms.txt      Acronyms read as words / spelled.
     prosody.txt       Duration factors, pause lengths, F0 model, contours.
     tests.txt         Test cases: input -> expected words and/or phonemes,
@@ -2210,16 +2226,16 @@ numcontext.txt
   "u" ORDINAL NOUN_LOC          -> %spellout-ordinal-masculine-locative
   NUMBER UNIT                   -> gender of UNIT, plural by CLDR category
 
-spelling.txt
-  a а      a
-  b б      be
-  č ч      če
-  dž џ     dže
-  nj њ     enj
-  q        ku
-  w        dvostruko ve
-  @        et
-  CAPITAL_PREFIX  veliko
+spelling.txt   (third field: the name used when spelling a word out)
+  a а      | a
+  b б      | be      | /b @/
+  č ч      | če      | /tS @/
+  ǆ џ      | dže     | /dZ @/
+  ǌ њ      | enj     | /J @/
+  r р      | er      | /@/
+  q        | kve
+  w        | dvostruko ve
+  @capital veliko
 
 tests.txt   (each test is also run automatically in the other script)
   "Dana 29. 9. 2026. u 14:30"  => dana dvadeset devetog rujna dvije tisuće

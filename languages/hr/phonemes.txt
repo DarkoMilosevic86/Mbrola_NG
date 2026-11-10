@@ -21,6 +21,17 @@ i    vowel      75  35  -    close front            viseme=6
 o    vowel      90  45  -    mid back rounded       viseme=8
 u    vowel      80  40  -    close back rounded     viseme=7
 
+# --- schwa: NOT a sound of Croatian words. It is only the name of the
+# consonant letters in character/spelling mode ("bə cə də" instead of
+# "be ce de", spelling.txt). cr1 has no schwa, so its phoneme map
+# (catalog/catalog.json: "@": "r") realizes it as the vocalic r of "prst":
+# measured on cr1 the vowel part of that r is a true mid-central vowel
+# (F1 ~475 Hz, F2 ~1365 Hz; e is 441/1627, a is 592/1232 - the r is by far
+# the closest to a schwa this voice has). Keep the duration short: it is
+# what keeps the trill out of the letter name. 68 ms here is 80 ms spoken
+# (x 0.9 unstressed x 1.3 final lengthening), the length chosen by listening.
+@    vowel      68  30  -    mid central schwa (letter names) viseme=1
+
 # --- sonorants (r is also syllabic: syllables.txt)
 r    consonant  50  25  -    trill alveolar syllabic viseme=13
 l    consonant  60  30  -    lateral alveolar       viseme=14

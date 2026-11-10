@@ -10,7 +10,7 @@
 # =============================================================================
 
 [phonemes]
-VOWEL     = a e i o u
+VOWEL     = a e i o u @
 SONORANT  = r l L m n J j v
 OBS_VL    = p t k ts tS tS' f s S x
 OBS_VD    = b d g dZ dZ' z Z

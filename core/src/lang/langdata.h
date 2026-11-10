@@ -327,7 +327,11 @@ struct EmojiEntry {
 
 struct SpellEntry {
   char32_t ch = 0;  // lowercase character
-  std::string name;
+  std::string name;       // name in running text (acronyms: "ha de ze")
+  // Character / spelling mode may use another name: phonemes when
+  // char_phones is set, otherwise char_name, otherwise name.
+  std::string char_name;
+  std::vector<uint8_t> char_phones;
 };
 
 struct Acronyms {

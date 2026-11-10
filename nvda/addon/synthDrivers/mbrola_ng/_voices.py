@@ -260,10 +260,11 @@ def basePitch(voice):
 
 
 def phonemeMap(voice):
-	"""Language->voice symbol map of an installed voice ("A=A: E=e ...")."""
-	if "phoneme_map" in voice["info"]:
-		return voice["info"]["phoneme_map"]
-	return _mapText(voice["catalog"].get("voice_config", {}).get("phoneme_map"))
+	"""Language->voice symbol map of an installed voice ("A=A: E=e ...").
+	The catalog wins over the .voice file written at install time: a voice
+	installed by an older version has an out-of-date (often empty) map."""
+	fromCatalog = _mapText(voice["catalog"].get("voice_config", {}).get("phoneme_map"))
+	return fromCatalog or voice["info"].get("phoneme_map", "")
 
 
 # ------------------------------------------------------------- verification

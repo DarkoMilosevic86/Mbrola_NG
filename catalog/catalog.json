@@ -62,7 +62,8 @@
           "hr": "Glas cr1 (Sveučilište u Zagrebu, Odsjek za fonetiku) smije se koristiti samo s programom MBROLA, besplatno i ne u komercijalne svrhe."
         }
       },
-      "voice_config": { "base_pitch": 105, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0, "phoneme_map": {} },
+      "voice_config": { "base_pitch": 105, "pitch_range": 1.0, "rate_factor": 1.0, "volume": 1.0,
+                        "phoneme_map": { "@": "r" } },
       "phonemes": "a b d dZ dZ' e f g i j k l m n o p r s t tS tS' ts u v x z S Z J L _"
     },
     {

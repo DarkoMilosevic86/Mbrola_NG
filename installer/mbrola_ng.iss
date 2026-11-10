@@ -781,6 +781,13 @@ begin
           Log('could not copy ' + Name);
       end;
       WriteVoiceFile(I);
+    end else if VoiceSelected[I] and VoiceWasInstalled[I] then begin
+      { The database is already there and is not downloaded again, but its }
+      { description comes from the catalog of THIS version: rewrite it, so  }
+      { that a changed phoneme map (cr1: the schwa @ is its vocalic r) or   }
+      { base pitch reaches the SAPI voice token.                            }
+      Log('refreshing the description of voice ' + VId(I));
+      WriteVoiceFile(I);
     end;
   end;
   WriteRegistry;

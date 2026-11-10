@@ -11,6 +11,7 @@
 //   --events     events of the C API with sample positions
 //   --wav FILE   speech through mbrola_ng_synth into a WAV file
 //                (-v voice database, -s synthesizer; default: next to mbtts)
+//   -m MAP       voice phoneme map, as in catalog.json ("@=r k_h=k")
 // options:
 //   -o FILE      write the output to FILE
 //   -r PERCENT   rate (100 = normal)     -p PERCENT  pitch
@@ -51,12 +52,13 @@ static int usage() {
   std::fprintf(stderr,
                "usage: mbtts -l <lang.dat|source-folder> [--words|--phonemes|--pho|--events]\n"
                "             [-o file] [-r rate%%] [-p pitch%%] [--punct 0-3] [--spell] [--marks]\n"
+               "             [-v voice] [-s synth] [-m \"@=r\"] [--wav out.wav]\n"
                "             (\"text\" | -f file)\n");
   return 2;
 }
 
 static int run(const std::vector<std::string>& args) {
-  std::string lang_path, text, out_path, mode = "words", voice, synth, wav;
+  std::string lang_path, text, out_path, mode = "words", voice, synth, wav, pmap;
   int rate = 100, pitch = 100, punct = 1, digits = 0;
   bool spell = false, marks = false, have_text = false;
   for (size_t i = 0; i < args.size(); ++i) {
@@ -69,6 +71,7 @@ static int run(const std::vector<std::string>& args) {
     else if (a == "--events") mode = "events";
     else if (a == "--wav") { mode = "wav"; wav = next(); }
     else if (a == "-v") voice = next();
+    else if (a == "-m" || a == "--phoneme-map") pmap = next();
     else if (a == "-s") synth = next();
     else if (a == "-o") out_path = next();
     else if (a == "-r") rate = std::atoi(next().c_str());
@@ -103,6 +106,7 @@ static int run(const std::vector<std::string>& args) {
     cfg.language_path = lang_path.c_str();
     cfg.voice_path = voice.c_str();
     cfg.synth_path = synth.c_str();
+    if (!pmap.empty()) cfg.phoneme_map = pmap.c_str();
     int err = 0;
     mbng_engine* e = mbng_create(&cfg, &err);
     if (!e) { std::fprintf(stderr, "error %d: %s\n", err, mbng_last_error(nullptr)); return 1; }

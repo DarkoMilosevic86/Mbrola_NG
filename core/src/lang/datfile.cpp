@@ -459,12 +459,22 @@ void r_emoj(ByteReader& r, LanguageData& d) {
 void w_spel(ByteWriter& w, const LanguageData& d) {
   w.str(d.spell_capital);
   w.count(d.spelling.size());
-  for (auto& s : d.spelling) { w.u32(s.ch); w.str(s.name); }
+  for (auto& s : d.spelling) {
+    w.u32(s.ch);
+    w.str(s.name);
+    w.str(s.char_name);
+    w_bytes(w, s.char_phones);
+  }
 }
 void r_spel(ByteReader& r, LanguageData& d) {
   d.spell_capital = r.str();
   d.spelling.resize(r.count(8));
-  for (auto& s : d.spelling) { s.ch = r.u32(); s.name = r.str(); }
+  for (auto& s : d.spelling) {
+    s.ch = r.u32();
+    s.name = r.str();
+    s.char_name = r.str();
+    s.char_phones = r_bytes(r);
+  }
 }
 
 void w_acro(ByteWriter& w, const LanguageData& d) {

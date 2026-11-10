@@ -225,7 +225,7 @@ def _mapText(m):
 	return " ".join("%s=%s" % (k, v) for k, v in m.items() if k and v and " " not in k + v)
 
 
-def writeVoiceFile(folder, entry):
+def voiceFileText(entry):
 	cfg = entry.get("voice_config", {})
 	lines = [
 		"# MBROLA NG voice description - written by mbrola-ng-voices",
@@ -243,8 +243,12 @@ def writeVoiceFile(folder, entry):
 	]
 	for k, v in entry.get("names", {}).items():
 		lines.append("name_%s = %s" % (k, v))
+	return "\n".join(lines) + "\n"
+
+
+def writeVoiceFile(folder, entry):
 	with open(os.path.join(folder, entry["id"] + ".voice"), "w", encoding="utf-8", newline="\n") as f:
-		f.write("\n".join(lines) + "\n")
+		f.write(voiceFileText(entry))
 
 
 # --------------------------------------------------------- installed voices
@@ -622,10 +626,23 @@ def cmdUpdate(args, cat):
 		entry = known.get(vid)
 		if not entry or os.path.dirname(os.path.dirname(db)) != root:
 			continue
-		info = readVoiceFile(os.path.join(os.path.dirname(db), vid + ".voice"))
+		folder = os.path.dirname(db)
+		info = readVoiceFile(os.path.join(folder, vid + ".voice"))
 		files = [f for f in entry.get("files", []) if f.get("name") == vid]
 		sha = str(files[0].get("sha256", "")).lower() if files else ""
 		if info.get("version") == str(entry.get("version")) and (not sha or sha256File(db) == sha):
+			# The database is current, but its description may not be (a new
+			# phoneme map, base pitch, name ...). The speech-dispatcher
+			# module reads those from the .voice file, and rewriting it needs
+			# no download.
+			try:
+				with open(os.path.join(folder, vid + ".voice"), "r", encoding="utf-8") as f:
+					current = f.read()
+			except OSError:
+				current = ""
+			if current != voiceFileText(entry):
+				writeVoiceFile(folder, entry)
+				changed = True
 			continue
 		if installEntry(entry, root, args.yes):
 			changed = True

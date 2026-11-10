@@ -30,7 +30,8 @@
 namespace mbng {
 
 constexpr uint16_t kDatMajor = 1;
-constexpr uint16_t kDatMinor = 1;  // 1.1: G2P accent marks, accents.txt @ending
+constexpr uint16_t kDatMinor = 2;  // 1.1: G2P accent marks, accents.txt @ending
+                                   // 1.2: spelling.txt character-mode names
 constexpr uint32_t kCompilerVersion = 0x000100;  // 0.1.0
 
 std::vector<uint8_t> write_dat(const LanguageData& d, uint64_t timestamp);
