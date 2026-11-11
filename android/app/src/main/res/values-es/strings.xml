@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MBROLA NG - Copyright (c) 2026 Darko Milošević
+     SPDX-License-Identifier: GPL-2.0-or-later -->
+<resources>
+    <!-- Voice manager -->
+    <string name="installed_voices">Voces instaladas</string>
+    <string name="no_voice_installed">Aún no hay ninguna voz instalada. Elige un idioma abajo e instala una voz.</string>
+    <string name="install_voices">Instalar voces</string>
+    <string name="choose_language_hint">Elige un idioma para ver sus voces.</string>
+    <plurals name="voice_count">
+        <item quantity="one">%d voz</item>
+        <item quantity="many">%d de voces</item>
+        <item quantity="other">%d voces</item>
+    </plurals>
+    <string name="installed_count">instaladas: %d</string>
+    <string name="installed">Instalada</string>
+    <string name="voice_settings">Ajustes de la voz</string>
+    <string name="try_voice">Probar</string>
+    <string name="loading_sample">Preparando la muestra…</string>
+    <string name="stop">Detener</string>
+    <string name="remove">Eliminar</string>
+    <string name="install">Instalar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="back">Atrás</string>
+    <string name="remove_title">Eliminar voz</string>
+    <string name="remove_message">¿Eliminar la voz %s de este dispositivo?</string>
+    <string name="license_title">Licencia de la voz %s</string>
+    <string name="accept_and_install">Aceptar e instalar</string>
+    <string name="decline">Rechazar</string>
+    <string name="downloading">Descargando: %1$s de %2$s</string>
+    <string name="voice_installed">La voz %s está instalada.</string>
+    <string name="error_download">La descarga ha fallado. Comprueba la conexión a Internet e inténtalo de nuevo.</string>
+    <string name="error_damaged">El archivo descargado está dañado. Inténtalo de nuevo.</string>
+    <string name="error_sample">No se ha podido descargar la muestra. Comprueba la conexión a Internet e inténtalo de nuevo.</string>
+    <string name="error_not_mbrola">El archivo descargado no es una voz MBROLA.</string>
+    <string name="error_generic">No se ha podido instalar la voz: %s</string>
+    <string name="error_speak">La voz no ha podido hablar: %s</string>
+    <string name="system_engine_title">Usar como voz del sistema</string>
+    <string name="system_engine_text">Para que TalkBack y otras aplicaciones hablen con MBROLA NG, elígelo como motor preferido en los ajustes de texto a voz del sistema.</string>
+    <string name="open_tts_settings">Abrir los ajustes de texto a voz</string>
+    <string name="about_text">MBROLA NG %s. Software libre bajo la licencia GNU GPL, versión 2 o posterior. El sintetizador MBROLA se distribuye bajo la GNU AGPL v3. Cada voz tiene su propia licencia.</string>
+    <string name="source_code">Código fuente y licencias</string>
+
+    <!-- Voice settings -->
+    <string name="voice">Voz</string>
+    <string name="no_voice_for_settings">Aún no hay ninguna voz instalada. Instala primero una voz.</string>
+    <string name="open_voice_manager">Abrir MBROLA NG</string>
+    <string name="always_use_voice">Usar siempre esta voz, para todos los idiomas</string>
+    <string name="always_use_voice_hint">Actívalo si tu teléfono está configurado en un idioma que MBROLA NG no tiene: TalkBack y otras aplicaciones hablarán entonces con esta voz, sea cual sea el idioma que pidan.</string>
+    <string name="use_own_rate">Usar esta velocidad en lugar de la del sistema</string>
+    <string name="rate_from_system">La velocidad la determina TalkBack o los ajustes de texto a voz del sistema.</string>
+    <string name="speed">Velocidad</string>
+    <string name="pitch">Tono</string>
+    <string name="modulation">Modulación</string>
+    <string name="use_own_volume">Usar este volumen en lugar del volumen del sistema</string>
+    <string name="volume_from_system">El volumen lo determina TalkBack o la aplicación que habla.</string>
+    <string name="volume">Volumen</string>
+    <string name="read_emoji">Leer emojis</string>
+    <string name="numbers">Cómo se leen los números</string>
+    <string name="numbers_whole">Como números enteros</string>
+    <string name="numbers_digits">Dígito por dígito</string>
+    <string name="numbers_pairs">De dos en dos</string>
+    <string name="reset">Restablecer valores predeterminados</string>
+    <string name="percent">%d %%</string>
+</resources>
