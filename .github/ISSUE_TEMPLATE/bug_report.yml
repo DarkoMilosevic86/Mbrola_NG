@@ -1,0 +1,42 @@
+name: Bug report
+description: Something is read wrongly, does not install or does not work
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: MBROLA NG version
+      description: For example 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where
+      options:
+        - NVDA add-on
+        - Windows (SAPI 5, installer)
+        - Linux (Speech Dispatcher, Orca)
+        - Android
+        - iOS / iPadOS / macOS
+    validations:
+      required: true
+  - type: input
+    id: voice
+    attributes:
+      label: Voice and language
+      description: For example cr1 (Croatian) or es2 (Spanish)
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: What you gave it to read, and what you expected
+      description: A word or sentence that reads wrongly, how it sounds and how it should sound. A wrong pronunciation is fixed in the language data and is easy to test.
+    validations:
+      required: true
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Error messages, and for the Android app the output of `adb logcat -s MbrolaNG`.

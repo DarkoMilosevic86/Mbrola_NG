@@ -1,0 +1,38 @@
+name: Language or voice request
+description: Ask for a new language, or for another voice of a language that is already there
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A language is plain text (see the README of the
+        [languages repository](https://github.com/Mbrola-NG/languages)) and
+        needs an MBROLA voice to speak. Anyone can add one; this issue is the
+        place to say what is missing and to find help.
+  - type: input
+    id: language
+    attributes:
+      label: Language and variety
+      description: For example "German (Austria)" or "Spanish (Argentina)".
+    validations:
+      required: true
+  - type: input
+    id: voice
+    attributes:
+      label: MBROLA voice you would use
+      description: The voice name from https://github.com/numediart/MBROLA-voices (for example de2). If you do not know, leave it empty.
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Could you help with the language data?
+      options:
+        - "Yes, I can write it"
+        - "I can test and give feedback"
+        - "No, I am only asking"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Where you use it (NVDA, Orca, Android, ...), words or numbers that must be read in a special way.
