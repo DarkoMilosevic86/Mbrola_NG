@@ -90,9 +90,6 @@ targets:
         excludes:
           - "*.entitlements"
           - Info.plist
-      - path: ../android/app/src/main/assets/samples
-        type: folder
-        buildPhase: resources
     settings:
       base:
         PRODUCT_NAME: MBROLA NG
@@ -120,7 +117,7 @@ targets:
         excludes:
           - "*.entitlements"
           - Info.plist
-      - path: ../catalog/catalog.json
+      - path: ../Resources/catalog/catalog.json
         group: Resources
         buildPhase: resources
     settings:

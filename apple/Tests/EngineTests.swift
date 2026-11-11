@@ -53,6 +53,36 @@ final class CatalogTests: XCTestCase {
         XCTAssertEqual(catalog.voices[0].locale, "hr")
     }
 
+    func testSampleAndSchema() throws {
+        let json = """
+        {"schema":1,
+         "languages":[{"code":"hr"}],
+         "voices":[{"id":"v1","language":"hr",
+                    "sample":{"name":"v1.wav","urls":["https://a/v1.wav"],"size":12,"sha256":"ab"},
+                    "files":[{"name":"v1","urls":["https://a/v1"],"size":40}]}]}
+        """
+        let catalog = try Catalog(json: Data(json.utf8)) { $0 == "hr" }
+        XCTAssertEqual(catalog.schema, 1)
+        XCTAssertTrue(catalog.isUsable)
+        let voice = try XCTUnwrap(catalog.voice("v1"))
+        XCTAssertEqual(voice.sample?.name, "v1.wav")
+        XCTAssertEqual(voice.sample?.size, 12)
+        XCTAssertEqual(voice.sample?.urls.map(\.absoluteString), ["https://a/v1.wav"])
+        // the sample is not one of the files: it is never installed with the
+        // voice and never counts towards its download size
+        XCTAssertEqual(voice.files.map(\.name), ["v1"])
+        XCTAssertEqual(voice.downloadSize, 40)
+    }
+
+    func testCatalogWithoutASchemaIsNotUsed() throws {
+        let json = """
+        {"languages":[{"code":"hr"}],"voices":[{"id":"v1","language":"hr"}]}
+        """
+        let catalog = try Catalog(json: Data(json.utf8)) { $0 == "hr" }
+        XCTAssertEqual(catalog.schema, 0)
+        XCTAssertFalse(catalog.isUsable)
+    }
+
     func testSystemIdentifier() {
         XCTAssertEqual(Voice.id(fromSystemIdentifier: "cr1"), "cr1")
         XCTAssertEqual(Voice.id(fromSystemIdentifier: "io.github.darkomilosevic86.mbrolang.speech.us1"), "us1")

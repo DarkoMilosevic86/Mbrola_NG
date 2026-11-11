@@ -16,8 +16,11 @@ val keystore = Properties().apply {
     if (keystoreFile.isFile) keystoreFile.reader(Charsets.UTF_8).use { load(it) }
 }
 
-// Language data (.dat), the voice catalog and the voice samples are put here
-// by `python build.py android` (languages are compiled by the desktop build).
+// Language data (.dat) and the fallback voice catalog are put here by
+// `python build.py android` (languages are compiled by the desktop build;
+// the catalog comes from the Resources submodule). The voice samples are NOT
+// in the app: the catalog gives their addresses and they are downloaded when
+// "Try" is pressed - see Remote.kt.
 val generatedAssets = rootProject.file("generated/assets")
 
 android {
@@ -91,7 +94,7 @@ android {
     }
     androidResources {
         // .dat files are memory-friendly when stored uncompressed
-        noCompress += listOf("dat", "wav")
+        noCompress += listOf("dat")
         generateLocaleConfig = true
     }
     lint {

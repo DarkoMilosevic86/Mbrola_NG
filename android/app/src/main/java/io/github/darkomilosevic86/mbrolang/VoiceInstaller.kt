@@ -73,6 +73,28 @@ object VoiceInstaller {
         return md.digest().joinToString("") { "%02x".format(it) }
     }
 
+    /**
+     * The recorded "Try" sample of a voice that is not installed: downloaded
+     * from the Resources repository (the "sample" entry of the catalog, see
+     * [Remote]) and kept in the cache folder, which the system may empty.
+     * Verified like every other download; the cached file is reused.
+     */
+    suspend fun sample(context: Context, file: VoiceFile): File = withContext(Dispatchers.IO) {
+        val dir = File(context.cacheDir, "samples")
+        val dest = File(dir, file.name)
+        if (dest.isFile && (file.size <= 0 || dest.length() == file.size)) return@withContext dest
+        dir.mkdirs()
+        val part = File(dir, file.name + ".part")
+        try {
+            download(file, part) {}
+            dest.delete()
+            if (!part.renameTo(dest)) throw IOException("cannot write $dest")
+        } finally {
+            part.delete()
+        }
+        dest
+    }
+
     /** Step 1: the license text (shown before anything else is downloaded). */
     suspend fun fetchLicense(context: Context, voice: VoiceEntry): String = withContext(Dispatchers.IO) {
         val dir = staging(context, voice.id)

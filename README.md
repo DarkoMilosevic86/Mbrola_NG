@@ -74,6 +74,14 @@ show the license, verify the download and install it:
 | mx1, mx2 | Mexican Spanish | male |
 | vz1 | Venezuelan Spanish | male |
 
+The catalog that says where the voices are, what they weigh and how they are
+configured is published in
+[Mbrola-NG/Resources](https://github.com/Mbrola-NG/Resources) and fetched at
+run time, so a new or corrected voice entry reaches installed copies without
+an update. Every package also carries the catalog it was built with, and uses
+it whenever there is no network - or, on Android and iOS, before the first
+unlock after a restart, when the screen reader has to speak already.
+
 - NVDA: *NVDA menu → Tools → MBROLA NG Voice Manager*
 - Windows: choose the voices in the installer
 - Android: choose a language on the app's home screen, then a voice
@@ -83,7 +91,13 @@ show the license, verify the download and install it:
 
 ## Building
 
-Everything is built with one command:
+The language sources, the voice catalog and the voice samples live in
+submodules, so clone with them (an existing clone: `git submodule update
+--init`):
+
+    git clone --recurse-submodules https://github.com/DarkoMilosevic86/Mbrola_NG
+
+Everything is then built with one command:
 
     python build.py [targets] [options]
 
@@ -135,7 +149,7 @@ core), `nvda/build_addon.py`, `installer/build_installer.py` and
     core/src/sapi/   SAPI 5 engine (inside MBROLA_NG.dll)
     synth/           mbrola_ng_synth: MBROLA + a small pipe front end (separate process, AGPL v3)
     external/mbrola/ MBROLA synthesizer 3.4-dev (unmodified)
-    languages/       language sources: hr (Croatian), en (English), es (Spanish)
+    languages/       submodule: language sources hr (Croatian), en (English), es (Spanish)
     tools/           langc (language compiler), mbtts (developer CLI), data import scripts
     nvda/            NVDA add-on (driver + Voice Manager, English / Croatian)
     installer/       Windows installer (Inno Setup, English / Croatian)
@@ -143,7 +157,7 @@ core), `nvda/build_addon.py`, `installer/build_installer.py` and
     android/         Android app: TTS engine, voice manager, store graphics
     apple/           iOS, iPadOS and macOS app: speech synthesis extension, voice manager
     cmake/           source lists shared by the desktop and Android builds
-    catalog/         voice catalog (download locations, checksums, voice settings)
+    Resources/       submodule: voice catalog and the voice samples of the apps
     ANALYSIS.txt     design document: architecture, formats, decisions
 
 ## Adding a language

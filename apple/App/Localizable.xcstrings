@@ -388,6 +388,22 @@
         }
       }
     },
+    "Preparing the sample…": {
+      "localizations": {
+        "hr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pripremam uzorak…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing the sample…"
+          }
+        }
+      }
+    },
     "Remove Voice": {
       "localizations": {
         "hr": {

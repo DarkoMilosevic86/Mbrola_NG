@@ -17,7 +17,6 @@
 		2513C16678D4C44B0499F514 /* AudioUnitFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC97DD8E5B5A25E0D515766 /* AudioUnitFactory.swift */; };
 		2D524E14D6B950D3537B9FFF /* VoiceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA92C6F3A0ED4DA316A258 /* VoiceListView.swift */; };
 		2DA1BC875BC4DED10CFEA011 /* synthproc_inproc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1C431928A0CFDD62AC1F1CE /* synthproc_inproc.cpp */; };
-		2DE84E77FE1F94C00F22A03B /* samples in Resources */ = {isa = PBXBuildFile; fileRef = 32E0218BF5AC818463B59A8F /* samples */; };
 		333243B5113680242CC63CCF /* SSML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2116E149A857524DA377AF97 /* SSML.swift */; };
 		385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4E61143BC0A158656E9F1532 /* Localizable.xcstrings */; };
 		3BF88A524EB17CC5A78ED21F /* langdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A3BC6EFF5FAC4C13BAD87FB /* langdata.cpp */; };
@@ -110,7 +109,6 @@
 		26E7386B4B261089901B8E2D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2AB51C524AC6D5D2FE7FD6AC /* VoiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceDetailView.swift; sourceTree = "<group>"; };
 		30E7D0400043D92D634FFCF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		32E0218BF5AC818463B59A8F /* samples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = samples; path = ../android/app/src/main/assets/samples; sourceTree = SOURCE_ROOT; };
 		38DB6D8EF03B4F1867ADC3C9 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		402BFDE25360859796F5B044 /* Resampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resampler.swift; sourceTree = "<group>"; };
 		482471B9021C1C7433763675 /* normalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = normalizer.cpp; sourceTree = "<group>"; };
@@ -128,7 +126,7 @@
 		A4707675DB7AFB17C6F56952 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		A6B470A3DE09834C8FE0CD80 /* MbrolaNGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MbrolaNGApp.swift; sourceTree = "<group>"; };
 		A818AE50EB75ADC388CEDFEC /* MbrolaNG.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MbrolaNG.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A98077274C6D0CE84F351BAD /* catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = catalog.json; path = ../catalog/catalog.json; sourceTree = "<group>"; };
+		A98077274C6D0CE84F351BAD /* catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = catalog.json; path = ../Resources/catalog/catalog.json; sourceTree = "<group>"; };
 		ACF7F8FBA90633AC087FDB4E /* rbnf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rbnf.cpp; sourceTree = "<group>"; };
 		ADDE02CA5F0E17B5E099605C /* VoiceInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInstaller.swift; sourceTree = "<group>"; };
 		B1FCB121B00CB977DB60CF28 /* language.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = language.cpp; sourceTree = "<group>"; };
@@ -169,22 +167,6 @@
 			path = phon;
 			sourceTree = "<group>";
 		};
-		150A6D5D76326DF05863CA67 /* assets */ = {
-			isa = PBXGroup;
-			children = (
-				32E0218BF5AC818463B59A8F /* samples */,
-			);
-			path = assets;
-			sourceTree = "<group>";
-		};
-		1AD211FBA59BDAC4B9541971 /* main */ = {
-			isa = PBXGroup;
-			children = (
-				150A6D5D76326DF05863CA67 /* assets */,
-			);
-			path = main;
-			sourceTree = "<group>";
-		};
 		1BD59FEBDD25D95BE9F67003 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,18 +205,9 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		32DF9E731A56765A0998EF42 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				1AD211FBA59BDAC4B9541971 /* main */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
 		344ED2594BFAE88480759586 /* mbrola_ng */ = {
 			isa = PBXGroup;
 			children = (
-				5A74609F3AF4C9757E842378 /* android */,
 				784CE9D6E38AB350F3F6EDFA /* core */,
 			);
 			name = mbrola_ng;
@@ -258,14 +231,6 @@
 				482471B9021C1C7433763675 /* normalizer.cpp */,
 			);
 			path = text;
-			sourceTree = "<group>";
-		};
-		5A74609F3AF4C9757E842378 /* android */ = {
-			isa = PBXGroup;
-			children = (
-				A7257A3636D498F718C24DE6 /* app */,
-			);
-			path = android;
 			sourceTree = "<group>";
 		};
 		6D4E9D981249F7FD637592FC /* SpeechExtension */ = {
@@ -334,14 +299,6 @@
 				89B1DBCCED45060902A35B64 /* prosody.cpp */,
 			);
 			path = prosody;
-			sourceTree = "<group>";
-		};
-		A7257A3636D498F718C24DE6 /* app */ = {
-			isa = PBXGroup;
-			children = (
-				32DF9E731A56765A0998EF42 /* src */,
-			);
-			path = app;
 			sourceTree = "<group>";
 		};
 		AFE6DC8E1BFAABFD013ABBFB /* Tests */ = {
@@ -499,7 +456,6 @@
 				038084ADA9A86963082B8720 /* Assets.xcassets in Resources */,
 				385A3E2CF1FD2104B17F7F87 /* Localizable.xcstrings in Resources */,
 				F7F9F8D932508D3ADB777BA1 /* PrivacyInfo.xcprivacy in Resources */,
-				2DE84E77FE1F94C00F22A03B /* samples in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

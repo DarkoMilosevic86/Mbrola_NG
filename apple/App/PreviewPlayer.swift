@@ -20,19 +20,22 @@ enum SampleTexts {
 final class PreviewPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// Id of the voice that is heard now.
     @Published private(set) var playing: String?
+    /// Id of the voice whose sample is being downloaded.
+    @Published private(set) var preparing: String?
     @Published var failure: VoiceLibrary.Failure?
 
     private var player: AVAudioPlayer?
     private var task: Task<Void, Never>?
 
-    /// Samples are samples/<voice id>.wav, made by tools/make_voice_samples.py.
-    static func sampleURL(_ voice: Voice) -> URL? {
-        Bundle.main.url(forResource: voice.id, withExtension: "wav", subdirectory: "samples")
-    }
+    /// Samples are made by tools/make_voice_samples.py and kept in the
+    /// Resources repository, not in the app: the catalog entry of the voice
+    /// says where to download one from (see `Remote`).
+    static func hasSample(_ voice: Voice) -> Bool { voice.sample != nil }
 
     func stop() {
         task?.cancel()
         task = nil
+        preparing = nil
         player?.stop()
         player = nil
         if playing != nil {
@@ -43,11 +46,28 @@ final class PreviewPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
 
-    /// Plays the recorded sample of a voice that is not installed.
+    /// Downloads the recorded sample of a voice that is not installed (kept
+    /// in the caches folder afterwards) and plays it.
     func playSample(_ voice: Voice) {
         stop()
-        guard let url = PreviewPlayer.sampleURL(voice), let data = try? Data(contentsOf: url) else { return }
-        start(data, voice: voice)
+        guard let file = voice.sample else { return }
+        playing = voice.id
+        preparing = voice.id
+        task = Task {
+            do {
+                let url = try await VoiceInstaller.sample(file)
+                if preparing == voice.id { preparing = nil }
+                guard !Task.isCancelled, playing == voice.id else { return }
+                let wav = try Data(contentsOf: url)
+                start(wav, voice: voice)
+            } catch {
+                if preparing == voice.id { preparing = nil }
+                if playing == voice.id { playing = nil }
+                if !(error is CancellationError) {
+                    failure = .init(message: error.localizedDescription)
+                }
+            }
+        }
     }
 
     /// Speaks `text` with an installed voice and `settings` through an engine

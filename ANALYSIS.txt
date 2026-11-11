@@ -229,6 +229,35 @@ REVISION HISTORY
                   tests.txt also accepts "// phonemes with accent marks //",
                   so a language can test its stress rules. Described in
                   Appendix D; sections 1-19 are otherwise unchanged.
+  r20 2026-11-11  The voice catalog and the voice samples moved out of this
+                  repository into the Resources submodule
+                  (github.com/Mbrola-NG/Resources), and are now fetched over
+                  HTTPS instead of being built in (10.5 is thereby settled):
+                    - catalog: Resources/catalog/catalog.json. CATALOG_URL /
+                      CatalogURL / Remote.CATALOG_URL / Remote.catalogURL all
+                      point at it on the main branch. Every package still
+                      carries the catalog it was built with: it is the
+                      fallback when there is no network, and on Android and
+                      Apple it is what the TTS service and the speech
+                      extension read before the first unlock after a restart
+                      (direct boot, 14.7 / C.6), when nothing may be
+                      downloaded. A downloaded catalog replaces the one in
+                      use only when it parses, carries schema 1 and still
+                      offers a language the build can speak; the last good
+                      copy is kept (Android: device-protected storage, Apple:
+                      the App Group container, NVDA/Linux: the cache file).
+                      A new language therefore still needs a new build - the
+                      catalog is filtered by the .dat files that are present.
+                    - samples: a "sample" entry per voice (name, mirrors,
+                      size, SHA-256) next to "files". The apps download the
+                      recording when "Try" is pressed and keep it in their
+                      cache folder, verified like a voice database; it is no
+                      longer in the apk or the app bundle (2.4 MB). The
+                      "sample" entry is deliberately not part of "files", so
+                      it never counts towards the download size of a voice
+                      and is never installed with one.
+                  tools/make_voice_samples.py writes the samples into the
+                  submodule and prints the catalog entries (--catalog-entries).
 
 CONTENTS
   1.  Goal, scope and fixed decisions
@@ -2368,7 +2397,7 @@ D.4 Numbers, dates, units (numbers.txt, dates.txt, numcontext.txt, units.txt)
      "1.o" and "2.a" are letters of their own, which keeps the abbreviation
      "no" (numero) apart from the word "no".
 
-D.5 The seven voices and their phoneme maps (catalog/catalog.json)
+D.5 The seven voices and their phoneme maps (Resources/catalog/catalog.json)
      Spain:          es1 (male, 16 kHz, full matrix - the default voice)
                      es2 (male, 22 kHz; T is only an alias of s there, so
                           the map sends T to s)

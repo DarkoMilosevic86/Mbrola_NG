@@ -31,7 +31,10 @@ import zipfile
 
 VERSION = "@MBNG_VERSION@"
 DATADIR = "@MBNG_DATADIR@"  # set by the build (CMake configure_file)
-CATALOG_URL = None          # online catalog, decided at release time (10.5)
+# online catalog: the Resources repository (github.com/Mbrola-NG/Resources).
+# The catalog installed next to the languages is the fallback; a catalog
+# with another schema is ignored, so an old version keeps working.
+CATALOG_URL = "https://raw.githubusercontent.com/Mbrola-NG/Resources/main/catalog/catalog.json"
 CATALOG_SCHEMA = 1
 ENGINE_VERSION = "0.1"
 

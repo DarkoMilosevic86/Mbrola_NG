@@ -15,10 +15,13 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 LANG_DIR = os.path.join(_HERE, "languages")
 BUNDLED_CATALOG = os.path.join(_HERE, "catalog.json")
 
-# Online catalog (HTTPS). The final location is decided at release time
-# (10.5); until then the catalog bundled with the add-on is used. A file
-# <NVDA config>\mbrola_ng\catalog.json overrides both (developer testing).
-CATALOG_URL = None
+# Online catalog (HTTPS): the Resources repository
+# (github.com/Mbrola-NG/Resources), which carries the catalog and the
+# voice samples of the apps. The catalog bundled with the add-on is the
+# fallback, and a catalog with another schema is ignored, so an older
+# add-on keeps working. A file <NVDA config>\mbrola_ng\catalog.json
+# overrides both (developer testing).
+CATALOG_URL = "https://raw.githubusercontent.com/Mbrola-NG/Resources/main/catalog/catalog.json"
 CATALOG_SCHEMA = 1
 ENGINE_VERSION = "0.1"
 

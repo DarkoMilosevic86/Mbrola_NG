@@ -16,6 +16,7 @@
     <string name="installed">Instaliran</string>
     <string name="voice_settings">Postavke glasa</string>
     <string name="try_voice">Isprobaj</string>
+    <string name="loading_sample">Pripremam uzorak…</string>
     <string name="stop">Zaustavi</string>
     <string name="remove">Ukloni</string>
     <string name="install">Instaliraj</string>
@@ -30,6 +31,7 @@
     <string name="voice_installed">Glas %s je instaliran.</string>
     <string name="error_download">Preuzimanje nije uspjelo. Provjerite internetsku vezu i pokušajte ponovno.</string>
     <string name="error_damaged">Preuzeta datoteka je oštećena. Pokušajte ponovno.</string>
+    <string name="error_sample">Uzorak nije moguće preuzeti. Provjerite internetsku vezu i pokušajte ponovno.</string>
     <string name="error_not_mbrola">Preuzeta datoteka nije MBROLA glas.</string>
     <string name="error_generic">Glas nije moguće instalirati: %s</string>
     <string name="error_speak">Glas ne može govoriti: %s</string>

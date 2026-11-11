@@ -1,10 +1,17 @@
-// MBROLA NG - voice catalog (catalog/catalog.json, bundled in the app)
+// MBROLA NG - voice catalog (Resources/catalog/catalog.json: downloaded by
+// Catalog.refresh, with the copy in the assets as the fallback - see Remote)
 // Copyright (c) 2026 Darko Milošević
 // SPDX-License-Identifier: GPL-2.0-or-later
 package io.github.darkomilosevic86.mbrolang
 
 import android.content.Context
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Locale
 
 data class VoiceFile(val name: String, val urls: List<String>, val size: Long, val sha256: String)
@@ -18,6 +25,8 @@ data class VoiceEntry(
     val basePitch: Int,
     val phonemeMap: String,             // "A=A: E=e ..." (the form the core takes)
     val files: List<VoiceFile>,
+    /** The recorded "Try" sample, downloaded on demand; not part of the voice. */
+    val sample: VoiceFile?,
     val licenseFile: String?,
     val licenseSummary: Map<String, String>,
     val androidLocale: String,          // "hrv-HRV"
@@ -62,16 +71,82 @@ class Catalog(val languages: List<LanguageEntry>) {
     companion object {
         @Volatile private var cached: Catalog? = null
 
-        /** The bundled catalog, limited to languages whose .dat is in the app. */
+        /**
+         * The catalog in use, limited to languages whose .dat is in the app:
+         * the downloaded one ([refresh]) when there is one, else the copy in
+         * the assets. Never touches the network - the TTS service calls this
+         * before the first unlock.
+         */
         fun get(context: Context): Catalog = cached ?: synchronized(this) {
             cached ?: load(context.applicationContext).also { cached = it }
         }
 
-        private fun load(context: Context): Catalog {
-            val text = context.assets.open("catalog.json").bufferedReader().use { it.readText() }
-            val available = (context.assets.list("languages") ?: emptyArray())
+        /**
+         * Downloads the catalog and takes it into use. Returns true when the
+         * catalog in use changed. A catalog that does not parse, has another
+         * schema or no language this build can speak is ignored, and the one
+         * in use stays - as it does when there is no network.
+         */
+        suspend fun refresh(context: Context): Boolean = withContext(Dispatchers.IO) {
+            val app = context.applicationContext
+            try {
+                val connection = URL(Remote.CATALOG_URL).openConnection() as HttpURLConnection
+                connection.connectTimeout = 15000
+                connection.readTimeout = 20000
+                val text = try {
+                    if (connection.responseCode != 200) throw java.io.IOException("HTTP ${connection.responseCode}")
+                    connection.inputStream.bufferedReader().use { it.readText() }
+                } finally {
+                    connection.disconnect()
+                }
+                val fresh = parse(text, available(app))
+                if (fresh.languages.isEmpty()) throw java.io.IOException("no usable language in the catalog")
+                val file = cacheFile(app)
+                val tmp = File(file.parentFile, "catalog.json.new")
+                file.parentFile?.mkdirs()
+                tmp.writeText(text)
+                if (!tmp.renameTo(file)) {
+                    tmp.delete()
+                    throw java.io.IOException("cannot write $file")
+                }
+                cached = fresh
+                true
+            } catch (e: Exception) {
+                // offline, or a catalog this version will not take: keep the one in use
+                Log.i(TAG, "catalog not refreshed: ${e.message}")
+                false
+            }
+        }
+
+        /** The downloaded catalog; in device-protected storage, like the voices. */
+        private fun cacheFile(context: Context): File =
+            File(VoiceStore.storage(context).filesDir, "catalog.json")
+
+        /** Languages this build can speak: those whose compiled .dat is in the assets. */
+        private fun available(context: Context): Set<String> =
+            (context.assets.list("languages") ?: emptyArray())
                 .filter { it.endsWith(".dat") }.map { it.removeSuffix(".dat") }.toSet()
+
+        private fun load(context: Context): Catalog {
+            val codes = available(context)
+            val downloaded = runCatching { cacheFile(context).takeIf { it.isFile }?.readText() }.getOrNull()
+            if (downloaded != null) {
+                val catalog = runCatching { parse(downloaded, codes) }.getOrNull()
+                if (catalog != null && catalog.languages.isNotEmpty()) return catalog
+                Log.w(TAG, "the downloaded catalog is unusable: falling back to the bundled one")
+            }
+            val bundled = runCatching {
+                context.assets.open("catalog.json").bufferedReader().use { it.readText() }
+            }.getOrNull() ?: return Catalog(emptyList())
+            return runCatching { parse(bundled, codes) }.getOrNull() ?: Catalog(emptyList())
+        }
+
+        /** Parses catalog.json; throws when it is not a catalog this version understands. */
+        private fun parse(text: String, available: Set<String>): Catalog {
             val root = JSONObject(text)
+            require(root.optInt("schema") == Remote.CATALOG_SCHEMA) {
+                "catalog schema ${root.optInt("schema")}, expected ${Remote.CATALOG_SCHEMA}"
+            }
             val voiceArray = root.getJSONArray("voices")
             val languageArray = root.getJSONArray("languages")
             val languages = ArrayList<LanguageEntry>()
@@ -93,6 +168,13 @@ class Catalog(val languages: List<LanguageEntry>) {
             return Catalog(languages)
         }
 
+        private fun parseFile(f: JSONObject): VoiceFile {
+            val urls = ArrayList<String>()
+            val ua = f.optJSONArray("urls")
+            if (ua != null) for (k in 0 until ua.length()) urls += ua.getString(k)
+            return VoiceFile(f.getString("name"), urls, f.optLong("size"), f.optString("sha256"))
+        }
+
         fun parseVoice(v: JSONObject, languageLocale: String): VoiceEntry {
             val cfg = v.optJSONObject("voice_config") ?: JSONObject()
             val map = cfg.optJSONObject("phoneme_map")
@@ -103,13 +185,7 @@ class Catalog(val languages: List<LanguageEntry>) {
             }
             val files = ArrayList<VoiceFile>()
             val fa = v.optJSONArray("files")
-            if (fa != null) for (i in 0 until fa.length()) {
-                val f = fa.getJSONObject(i)
-                val urls = ArrayList<String>()
-                val ua = f.optJSONArray("urls")
-                if (ua != null) for (k in 0 until ua.length()) urls += ua.getString(k)
-                files += VoiceFile(f.getString("name"), urls, f.optLong("size"), f.optString("sha256"))
-            }
+            if (fa != null) for (i in 0 until fa.length()) files += parseFile(fa.getJSONObject(i))
             val license = v.optJSONObject("license")
             return VoiceEntry(
                 id = v.getString("id"),
@@ -120,12 +196,15 @@ class Catalog(val languages: List<LanguageEntry>) {
                 basePitch = cfg.optDouble("base_pitch", 0.0).toInt(),
                 phonemeMap = pairs.joinToString(" "),
                 files = files,
+                sample = v.optJSONObject("sample")?.let { parseFile(it) },
                 licenseFile = license?.optString("file")?.takeIf { it.isNotEmpty() },
                 licenseSummary = stringMap(license?.optJSONObject("summary")),
                 androidLocale = v.optString("android_locale").ifEmpty { languageLocale },
                 json = v.toString(),
             )
         }
+
+        private const val TAG = "MbrolaNG"
 
         private fun stringMap(o: JSONObject?): Map<String, String> {
             val m = LinkedHashMap<String, String>()

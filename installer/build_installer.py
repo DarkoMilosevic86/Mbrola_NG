@@ -68,13 +68,21 @@ def stage():
 			shutil.copy2(os.path.join(ROOT, "build", arch, name), out)
 	langs = os.path.join(STAGE, "languages")
 	os.makedirs(langs)
-	codes = sorted(os.listdir(os.path.join(ROOT, "languages")))
+	# a language folder is one with a language.txt: languages/ is a submodule
+	# and also holds a .git, which is not a language
+	src = os.path.join(ROOT, "languages")
+	codes = sorted(c for c in os.listdir(src)
+		if os.path.isfile(os.path.join(src, c, "language.txt")))
 	for code in codes:
 		dat = os.path.join(ROOT, "build", "x64", code + ".dat")
 		if not os.path.isfile(dat):
 			raise SystemExit("missing %s - did the language compile?" % dat)
 		shutil.copy2(dat, langs)
-	shutil.copy2(os.path.join(ROOT, "catalog", "catalog.json"), STAGE)
+	catalog = os.path.join(ROOT, "Resources", "catalog", "catalog.json")
+	if not os.path.isfile(catalog):
+		raise SystemExit("Resources/catalog/catalog.json is missing. The Resources submodule is "
+			"not checked out - run: git submodule update --init")
+	shutil.copy2(catalog, STAGE)
 	lic = os.path.join(STAGE, "licenses")
 	build_addon.write_licenses(lic, README)
 	return codes

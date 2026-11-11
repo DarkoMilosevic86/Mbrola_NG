@@ -25,8 +25,10 @@
 #ifndef Languages
   #define Languages ",hr,en,es,"
 #endif
-; online voice catalog (HTTPS); empty = only the catalog embedded here
-#define CatalogURL ""
+; online voice catalog (HTTPS): the Resources repository
+; (github.com/Mbrola-NG/Resources); the catalog embedded here is the
+; fallback, and one with another schema is ignored
+#define CatalogURL "https://raw.githubusercontent.com/Mbrola-NG/Resources/main/catalog/catalog.json"
 ; /DTestMode: developer test without admin rights - no SAPI registration,
 ; voices go to the folder given by /VOICEROOT=<folder>
 #ifdef TestMode
