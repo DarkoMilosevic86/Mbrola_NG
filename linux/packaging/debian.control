@@ -1,0 +1,25 @@
+# MBROLA NG - Debian/Ubuntu recipe (openSUSE Build Service)
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# The Build-Depends of mbrola-ng.dsc are the ones OBS resolves: keep them equal.
+Source: mbrola-ng
+Section: sound
+Priority: optional
+Maintainer: Darko Milošević <daremc86@gmail.com>
+Build-Depends: debhelper-compat (= 13), cmake (>= 3.20), g++, python3, pkg-config, libspeechd-dev
+Standards-Version: 4.7.0
+Homepage: https://github.com/Mbrola-NG/Mbrola-NG
+Rules-Requires-Root: no
+
+Package: mbrola-ng
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, speech-dispatcher (>= 0.11), python3
+Suggests: mbrola-cr1, mbrola-us1, mbrola-us2, mbrola-us3, mbrola-en1, mbrola-es1, mbrola-es2, mbrola-es3, mbrola-es4, mbrola-mx1, mbrola-mx2, mbrola-vz1
+Description: MBROLA NG text-to-speech for Speech Dispatcher and Orca
+ Croatian, English and Spanish speech with the MBROLA diphone voices, as an
+ output module for Speech Dispatcher, so Orca and every other program that
+ speaks through it can use it.
+ .
+ The voices are not part of the package, each has its own license: install
+ them with mbrola-ng-voices or take the distribution's mbrola-* packages.

@@ -1,0 +1,43 @@
+<!--
+  MBROLA NG - Open Build Service source service (build.opensuse.org)
+  Copyright (c) 2026 Darko Milošević
+  SPDX-License-Identifier: GPL-2.0-or-later
+
+  Put this file in the OBS package as "_service". OBS does not watch git: after
+  a release run "Trigger Services" on the package (or `osc service remoterun`),
+  see README.md.
+
+  obs_scm   clones the repository WITH its submodules (languages/, Resources/),
+            takes the version from the nearest tag (v0.3.0 -> 0.3.0) and
+            extracts the recipe files from linux/packaging/ into the package.
+  tar, recompress, set_version   run when the package is built.
+
+  revision: master carries the stable releases. Until the first release that
+  contains linux/packaging/ has been merged into master, use "dev" here.
+-->
+<services>
+  <service name="obs_scm">
+    <param name="scm">git</param>
+    <param name="url">https://github.com/Mbrola-NG/Mbrola-NG.git</param>
+    <param name="revision">master</param>
+    <param name="submodules">enable</param>
+    <param name="filename">mbrola-ng</param>
+    <param name="versionformat">@PARENT_TAG@</param>
+    <param name="versionrewrite-pattern">v(.*)</param>
+    <!-- the voice samples are not needed to build and are not part of the sources -->
+    <param name="exclude">Resources/assets</param>
+    <!-- the recipes live in the repository -->
+    <param name="extract">linux/packaging/mbrola-ng.spec</param>
+    <param name="extract">linux/packaging/mbrola-ng.dsc</param>
+    <param name="extract">linux/packaging/debian.control</param>
+    <param name="extract">linux/packaging/debian.rules</param>
+    <param name="extract">linux/packaging/debian.changelog</param>
+    <param name="extract">linux/packaging/debian.copyright</param>
+  </service>
+  <service name="tar" mode="buildtime"/>
+  <service name="recompress" mode="buildtime">
+    <param name="file">*.tar</param>
+    <param name="compression">xz</param>
+  </service>
+  <service name="set_version" mode="buildtime"/>
+</services>

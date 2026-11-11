@@ -1,0 +1,32 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: MBROLA NG
+Upstream-Contact: Darko Milošević <daremc86@gmail.com>
+Source: https://github.com/Mbrola-NG/Mbrola-NG
+
+Files: *
+Copyright: 2026 Darko Milošević
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation; either version 2 of the License, or (at your option)
+ any later version. On Debian systems the full text is in
+ /usr/share/common-licenses/GPL-2.
+
+Files: external/mbrola/* synth/*
+Copyright: Faculte Polytechnique de Mons (TCTS lab), University of Mons
+License: AGPL-3
+ The MBROLA synthesizer and mbrola_ng_synth are under the GNU Affero General
+ Public License, version 3. The full text is in external/mbrola/LICENSE and
+ synth/LICENSE of the source.
+
+Files: languages/en/lexicon.txt
+Copyright: 1993-2015 Carnegie Mellon University
+License: BSD-2-clause
+ CMU Pronouncing Dictionary. The license notice is reproduced in the header of
+ the file and must stay with it.
+
+Files: languages/*/emoji.txt
+Copyright: 1991-2025 Unicode, Inc.
+License: Unicode-3.0
+ Unicode CLDR emoji names, under the Unicode License v3
+ (https://www.unicode.org/license.txt).
