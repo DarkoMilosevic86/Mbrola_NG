@@ -82,12 +82,18 @@ add_executable(mbtts tools/mbtts/main.cpp)
 target_link_libraries(mbtts PRIVATE mbng_langsrc)
 
 enable_testing()
-add_test(NAME lang_hr
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/hr -o ${CMAKE_BINARY_DIR}/hr.dat)
-add_test(NAME lang_en
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/en -o ${CMAKE_BINARY_DIR}/en.dat)
-add_test(NAME lang_es
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/es -o ${CMAKE_BINARY_DIR}/es.dat)
+# one test per language: compiling a language runs its tests.txt. A language
+# folder is one with a language.txt (languages/ is a submodule and also
+# holds a .git), so a new folder is tested without touching this file.
+file(GLOB _test_lang_dirs LIST_DIRECTORIES true CONFIGURE_DEPENDS
+     "${CMAKE_SOURCE_DIR}/languages/*")
+foreach(_dir ${_test_lang_dirs})
+  if(EXISTS "${_dir}/language.txt")
+    get_filename_component(_code "${_dir}" NAME)
+    add_test(NAME lang_${_code}
+      COMMAND langc ${_dir} -o ${CMAKE_BINARY_DIR}/${_code}.dat)
+  endif()
+endforeach()
 
 # ---------------------------------------------------------------------------
 # Linux: Speech Dispatcher module, voice manager, install rules, packages
