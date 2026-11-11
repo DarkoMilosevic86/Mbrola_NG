@@ -35,9 +35,12 @@ CACHE = os.path.join(ROOT, "build", "voices-cache")
 OUT = os.path.join(ROOT, "Resources", "assets", "samples")
 
 # where the apps download a sample from (the "sample" entry of the catalog)
+# The jsDelivr mirror is pinned to a tag of the Resources repository (r-1, r-2, ...):
+# a branch is cached there for hours, so a replaced file would fail its checksum.
+# Make a new tag whenever a .wav changes, then point the catalog at it.
 SAMPLE_URLS = (
 	"https://raw.githubusercontent.com/Mbrola-NG/Resources/main/assets/samples/%s",
-	"https://cdn.jsdelivr.net/gh/Mbrola-NG/Resources@main/assets/samples/%s",
+	"https://cdn.jsdelivr.net/gh/Mbrola-NG/Resources@r-1/assets/samples/%s",
 )
 
 TEXT = {
