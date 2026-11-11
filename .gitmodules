@@ -1,3 +1,6 @@
 [submodule "Resources"]
 	path = Resources
 	url = https://github.com/Mbrola-NG/Resources.git
+[submodule "languages"]
+	path = languages
+	url = https://github.com/Mbrola-NG/languages.git
