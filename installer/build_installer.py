@@ -6,7 +6,7 @@
 #
 # 1. builds x64 and x86 (build.cmd)
 # 2. stages installer\build\stage: binaries, languages, licenses, catalog
-# 3. compiles installer\mbrola_ng.iss with Inno Setup 6 (ISCC.exe) into
+# 3. compiles installer\mbrola_ng.iss with Inno Setup 7 (ISCC.exe) into
 #    installer\MBROLA_NG-<version>-setup.exe
 import argparse
 import os
@@ -14,7 +14,7 @@ import shutil
 import subprocess
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -48,14 +48,14 @@ def find_iscc():
 	for base in (os.environ.get("LOCALAPPDATA"), os.environ.get("ProgramFiles(x86)"), os.environ.get("ProgramFiles")):
 		if not base:
 			continue
-		for sub in (os.path.join("Programs", "Inno Setup 6"), "Inno Setup 6"):
+		for sub in (os.path.join("Programs", "Inno Setup 7"), "Inno Setup 7"):
 			exe = os.path.join(base, sub, "ISCC.exe")
 			if os.path.isfile(exe):
 				return exe
 	exe = shutil.which("ISCC")
 	if exe:
 		return exe
-	raise SystemExit("Inno Setup 6 (ISCC.exe) not found - winget install JRSoftware.InnoSetup")
+	raise SystemExit("Inno Setup 7 (ISCC.exe) not found - winget install JRSoftware.InnoSetup")
 
 
 def stage():
