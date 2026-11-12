@@ -16,8 +16,11 @@ val keystore = Properties().apply {
     if (keystoreFile.isFile) keystoreFile.reader(Charsets.UTF_8).use { load(it) }
 }
 
-// Language data (.dat), the voice catalog and the voice samples are put here
-// by `python build.py android` (languages are compiled by the desktop build).
+// Language data (.dat) and the fallback voice catalog are put here by
+// `python build.py android` (languages are compiled by the desktop build;
+// the catalog comes from the Resources submodule). The voice samples are NOT
+// in the app: the catalog gives their addresses and they are downloaded when
+// "Try" is pressed - see Remote.kt.
 val generatedAssets = rootProject.file("generated/assets")
 
 android {
@@ -29,8 +32,8 @@ android {
         applicationId = "io.github.darkomilosevic86.mbrolang"
         minSdk = 29
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.2.1"
 
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
@@ -91,7 +94,7 @@ android {
     }
     androidResources {
         // .dat files are memory-friendly when stored uncompressed
-        noCompress += listOf("dat", "wav")
+        noCompress += listOf("dat")
         generateLocaleConfig = true
     }
     lint {

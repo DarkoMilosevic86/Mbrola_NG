@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# MBROLA NG - Debian/Ubuntu recipe (openSUSE Build Service)
+# Copyright (c) 2026 Darko Milošević
+# SPDX-License-Identifier: GPL-2.0-or-later
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@
+
+# the documentation folder is named after the project (MBROLA_NG) by default
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/mbrola-ng

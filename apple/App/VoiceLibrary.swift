@@ -17,7 +17,9 @@ final class VoiceLibrary: ObservableObject {
         let message: String
     }
 
-    let catalog = Catalog.shared
+    /// The catalog in use: the bundled one until `Catalog.refresh` brings a
+    /// newer one from the Resources repository.
+    @Published private(set) var catalog = Catalog.shared
     /// false: the build is not signed with its App Group, so the speech
     /// extension could never see a voice installed here.
     let storageAvailable = SharedContainer.voicesDirectory != nil
@@ -32,6 +34,7 @@ final class VoiceLibrary: ObservableObject {
     init() {
         VoiceInstaller.removeLeftovers()
         refresh()
+        refreshCatalog()
         // the system may hold a voice list from before an update or a restore
         SystemVoices.update()
         #if DEBUG
@@ -41,6 +44,17 @@ final class VoiceLibrary: ObservableObject {
 
     func refresh() {
         installed = VoiceStore.installed(in: catalog)
+    }
+
+    /// Fetches the catalog; the screens follow when a newer one arrives. A
+    /// failure is silent: the catalog in use stays, and so do the voices.
+    private func refreshCatalog() {
+        Task {
+            guard let fresh = await Catalog.refresh() else { return }
+            catalog = fresh
+            refresh()
+            SystemVoices.update()
+        }
     }
 
     func isInstalled(_ voice: Voice) -> Bool { installed.contains(voice) }

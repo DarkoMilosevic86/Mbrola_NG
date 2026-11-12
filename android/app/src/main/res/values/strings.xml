@@ -17,6 +17,7 @@
     <string name="installed">Installed</string>
     <string name="voice_settings">Voice settings</string>
     <string name="try_voice">Try</string>
+    <string name="loading_sample">Preparing the sample…</string>
     <string name="stop">Stop</string>
     <string name="remove">Remove</string>
     <string name="install">Install</string>
@@ -25,12 +26,14 @@
     <string name="remove_title">Remove voice</string>
     <string name="remove_message">Remove the voice %s from this device?</string>
     <string name="license_title">License of the voice %s</string>
+    <string name="waiting_license">Waiting for the license…</string>
     <string name="accept_and_install">Accept and install</string>
     <string name="decline">Decline</string>
     <string name="downloading">Downloading: %1$s of %2$s</string>
     <string name="voice_installed">The voice %s is installed.</string>
     <string name="error_download">The download failed. Check the internet connection and try again.</string>
     <string name="error_damaged">The downloaded file is damaged. Try again.</string>
+    <string name="error_sample">The sample could not be downloaded. Check the internet connection and try again.</string>
     <string name="error_not_mbrola">The downloaded file is not an MBROLA voice.</string>
     <string name="error_generic">The voice could not be installed: %s</string>
     <string name="error_speak">The voice could not speak: %s</string>

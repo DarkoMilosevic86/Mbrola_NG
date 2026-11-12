@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class Player(private val context: Context) {
     private var job: Job? = null
@@ -27,10 +28,6 @@ class Player(private val context: Context) {
         .setUsage(AudioAttributes.USAGE_MEDIA)
         .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
         .build()
-
-    /** Samples are assets/samples/<voice id>.wav, made by tools/make_voice_samples.py. */
-    fun hasSample(voiceId: String): Boolean =
-        runCatching { context.assets.open("samples/$voiceId.wav").close() }.isSuccess
 
     fun stop() {
         engine?.cancel()
@@ -43,15 +40,17 @@ class Player(private val context: Context) {
         media = null
     }
 
-    /** Plays the recorded sample; [onDone] runs on the main thread. */
-    fun playSample(voiceId: String, onDone: () -> Unit) {
+    /**
+     * Plays a recorded sample, downloaded by [VoiceInstaller.sample] into the
+     * cache folder (made by tools/make_voice_samples.py, kept in the
+     * Resources repository). [onDone] runs on the main thread.
+     */
+    fun playSample(file: File, onDone: () -> Unit) {
         stop()
         try {
-            val fd = context.assets.openFd("samples/$voiceId.wav")
             val mp = MediaPlayer()
             mp.setAudioAttributes(attributes)
-            mp.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
-            fd.close()
+            mp.setDataSource(file.absolutePath)
             mp.setOnCompletionListener {
                 it.release()
                 if (media === it) media = null
@@ -61,7 +60,7 @@ class Player(private val context: Context) {
             mp.start()
             media = mp
         } catch (e: Exception) {
-            Log.e(TAG, "sample $voiceId", e)
+            Log.e(TAG, "sample ${file.name}", e)
             onDone()
         }
     }

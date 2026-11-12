@@ -6,7 +6,7 @@
 #
 # 1. builds x64 and x86 (build.cmd)
 # 2. stages installer\build\stage: binaries, languages, licenses, catalog
-# 3. compiles installer\mbrola_ng.iss with Inno Setup 6 (ISCC.exe) into
+# 3. compiles installer\mbrola_ng.iss with Inno Setup 7 (ISCC.exe) into
 #    installer\MBROLA_NG-<version>-setup.exe
 import argparse
 import os
@@ -14,7 +14,7 @@ import shutil
 import subprocess
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -48,14 +48,14 @@ def find_iscc():
 	for base in (os.environ.get("LOCALAPPDATA"), os.environ.get("ProgramFiles(x86)"), os.environ.get("ProgramFiles")):
 		if not base:
 			continue
-		for sub in (os.path.join("Programs", "Inno Setup 6"), "Inno Setup 6"):
+		for sub in (os.path.join("Programs", "Inno Setup 7"), "Inno Setup 7"):
 			exe = os.path.join(base, sub, "ISCC.exe")
 			if os.path.isfile(exe):
 				return exe
 	exe = shutil.which("ISCC")
 	if exe:
 		return exe
-	raise SystemExit("Inno Setup 6 (ISCC.exe) not found - winget install JRSoftware.InnoSetup")
+	raise SystemExit("Inno Setup 7 (ISCC.exe) not found - winget install JRSoftware.InnoSetup")
 
 
 def stage():
@@ -68,13 +68,21 @@ def stage():
 			shutil.copy2(os.path.join(ROOT, "build", arch, name), out)
 	langs = os.path.join(STAGE, "languages")
 	os.makedirs(langs)
-	codes = sorted(os.listdir(os.path.join(ROOT, "languages")))
+	# a language folder is one with a language.txt: languages/ is a submodule
+	# and also holds a .git, which is not a language
+	src = os.path.join(ROOT, "languages")
+	codes = sorted(c for c in os.listdir(src)
+		if os.path.isfile(os.path.join(src, c, "language.txt")))
 	for code in codes:
 		dat = os.path.join(ROOT, "build", "x64", code + ".dat")
 		if not os.path.isfile(dat):
 			raise SystemExit("missing %s - did the language compile?" % dat)
 		shutil.copy2(dat, langs)
-	shutil.copy2(os.path.join(ROOT, "catalog", "catalog.json"), STAGE)
+	catalog = os.path.join(ROOT, "Resources", "catalog", "catalog.json")
+	if not os.path.isfile(catalog):
+		raise SystemExit("Resources/catalog/catalog.json is missing. The Resources submodule is "
+			"not checked out - run: git submodule update --init")
+	shutil.copy2(catalog, STAGE)
 	lic = os.path.join(STAGE, "licenses")
 	build_addon.write_licenses(lic, README)
 	return codes

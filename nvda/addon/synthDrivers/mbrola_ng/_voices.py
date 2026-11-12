@@ -15,10 +15,13 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 LANG_DIR = os.path.join(_HERE, "languages")
 BUNDLED_CATALOG = os.path.join(_HERE, "catalog.json")
 
-# Online catalog (HTTPS). The final location is decided at release time
-# (10.5); until then the catalog bundled with the add-on is used. A file
-# <NVDA config>\mbrola_ng\catalog.json overrides both (developer testing).
-CATALOG_URL = None
+# Online catalog (HTTPS): the Resources repository
+# (github.com/Mbrola-NG/Resources), which carries the catalog and the
+# voice samples of the apps. The catalog bundled with the add-on is the
+# fallback, and a catalog with another schema is ignored, so an older
+# add-on keeps working. A file <NVDA config>\mbrola_ng\catalog.json
+# overrides both (developer testing).
+CATALOG_URL = "https://raw.githubusercontent.com/Mbrola-NG/Resources/main/catalog/catalog.json"
 CATALOG_SCHEMA = 1
 ENGINE_VERSION = "0.1"
 
@@ -260,10 +263,11 @@ def basePitch(voice):
 
 
 def phonemeMap(voice):
-	"""Language->voice symbol map of an installed voice ("A=A: E=e ...")."""
-	if "phoneme_map" in voice["info"]:
-		return voice["info"]["phoneme_map"]
-	return _mapText(voice["catalog"].get("voice_config", {}).get("phoneme_map"))
+	"""Language->voice symbol map of an installed voice ("A=A: E=e ...").
+	The catalog wins over the .voice file written at install time: a voice
+	installed by an older version has an out-of-date (often empty) map."""
+	fromCatalog = _mapText(voice["catalog"].get("voice_config", {}).get("phoneme_map"))
+	return fromCatalog or voice["info"].get("phoneme_map", "")
 
 
 # ------------------------------------------------------------- verification

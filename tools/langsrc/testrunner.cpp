@@ -29,6 +29,7 @@ TestReport run_tests(std::shared_ptr<const Language> lang, const std::vector<Tes
       std::string got;
       try {
         p.begin();
+        p.norm().spell = tc.spell;
         p.add_text_utf8(in);
         Chunk ch;
         while (p.next_chunk(ch)) {

@@ -229,6 +229,35 @@ REVISION HISTORY
                   tests.txt also accepts "// phonemes with accent marks //",
                   so a language can test its stress rules. Described in
                   Appendix D; sections 1-19 are otherwise unchanged.
+  r20 2026-11-11  The voice catalog and the voice samples moved out of this
+                  repository into the Resources submodule
+                  (github.com/Mbrola-NG/Resources), and are now fetched over
+                  HTTPS instead of being built in (10.5 is thereby settled):
+                    - catalog: Resources/catalog/catalog.json. CATALOG_URL /
+                      CatalogURL / Remote.CATALOG_URL / Remote.catalogURL all
+                      point at it on the main branch. Every package still
+                      carries the catalog it was built with: it is the
+                      fallback when there is no network, and on Android and
+                      Apple it is what the TTS service and the speech
+                      extension read before the first unlock after a restart
+                      (direct boot, 14.7 / C.6), when nothing may be
+                      downloaded. A downloaded catalog replaces the one in
+                      use only when it parses, carries schema 1 and still
+                      offers a language the build can speak; the last good
+                      copy is kept (Android: device-protected storage, Apple:
+                      the App Group container, NVDA/Linux: the cache file).
+                      A new language therefore still needs a new build - the
+                      catalog is filtered by the .dat files that are present.
+                    - samples: a "sample" entry per voice (name, mirrors,
+                      size, SHA-256) next to "files". The apps download the
+                      recording when "Try" is pressed and keep it in their
+                      cache folder, verified like a voice database; it is no
+                      longer in the apk or the app bundle (2.4 MB). The
+                      "sample" entry is deliberately not part of "files", so
+                      it never counts towards the download size of a voice
+                      and is never installed with one.
+                  tools/make_voice_samples.py writes the samples into the
+                  submodule and prints the catalog entries (--catalog-entries).
 
 CONTENTS
   1.  Goal, scope and fixed decisions
@@ -1185,6 +1214,20 @@ who knows software licensing.
      Croatian letter names: a, be, ce, če, će, de, dže, đe, e, ef, ge, ha, i,
      je, ka, el, elj, em, en, enj, o, pe, er, es, eš, te, u, ve, ze, že;
      foreign: ku (q), dvostruko ve (w), iks (x), ipsilon (y).
+     Those names are what an ACRONYM is read with (HDZ -> ha de ze, 7.11).
+     SPELLING a word out, however, uses a SCHWA on the consonants
+     ("bə cə də", spelling.txt third field): with "be ce de" the vowel is
+     the loudest part of the name and b/v/g/d/p/t/z/c run together at
+     speed, while with a schwa only the consonant differs. cr1 has no
+     schwa phoneme, so the language's schwa (@, phonemes.txt) is realized
+     through the voice's phoneme map (10.3) as the VOCALIC r of "prst",
+     whose vowel part is a true mid-central vowel (measured on cr1:
+     F1 ~475 Hz / F2 ~1365 Hz, against e 441/1627 and a 592/1232). The
+     name of the letter r is that schwa alone ("ər"); two schwas meeting
+     ("br" spelled) are separated by the pause of the @identical rule,
+     because cr1 has no r-r diphone. A voice that does have a schwa only
+     needs its own map entry. Spelling the alphabet this way is also about
+     20 % shorter than with the traditional names.
      Cyrillic letters get the same Croatian names (б "be", њ "enj" ...);
      Macedonian ѓ, ќ, ѕ get descriptive names; other Cyrillic letters are
      not part of Croatian (7.6).
@@ -1238,7 +1281,9 @@ non-programmer.
     symbols.txt       Symbol and punctuation names with reading levels.
     emoji.txt         Emoji names (EXISTS: 3944 entries from CLDR 48.2,
                       hand-editable; format in 7.8).
-    spelling.txt      Character names for spell mode (all scripts).
+    spelling.txt      Character names: the name in running text (acronyms)
+                      and, optionally, the name used when a word is spelled
+                      out (7.10: the consonants with a schwa). All scripts.
     acronyms.txt      Acronyms read as words / spelled.
     prosody.txt       Duration factors, pause lengths, F0 model, contours.
     tests.txt         Test cases: input -> expected words and/or phonemes,
@@ -2210,16 +2255,16 @@ numcontext.txt
   "u" ORDINAL NOUN_LOC          -> %spellout-ordinal-masculine-locative
   NUMBER UNIT                   -> gender of UNIT, plural by CLDR category
 
-spelling.txt
-  a а      a
-  b б      be
-  č ч      če
-  dž џ     dže
-  nj њ     enj
-  q        ku
-  w        dvostruko ve
-  @        et
-  CAPITAL_PREFIX  veliko
+spelling.txt   (third field: the name used when spelling a word out)
+  a а      | a
+  b б      | be      | /b @/
+  č ч      | če      | /tS @/
+  ǆ џ      | dže     | /dZ @/
+  ǌ њ      | enj     | /J @/
+  r р      | er      | /@/
+  q        | kve
+  w        | dvostruko ve
+  @capital veliko
 
 tests.txt   (each test is also run automatically in the other script)
   "Dana 29. 9. 2026. u 14:30"  => dana dvadeset devetog rujna dvije tisuće
@@ -2352,7 +2397,7 @@ D.4 Numbers, dates, units (numbers.txt, dates.txt, numcontext.txt, units.txt)
      "1.o" and "2.a" are letters of their own, which keeps the abbreviation
      "no" (numero) apart from the word "no".
 
-D.5 The seven voices and their phoneme maps (catalog/catalog.json)
+D.5 The seven voices and their phoneme maps (Resources/catalog/catalog.json)
      Spain:          es1 (male, 16 kHz, full matrix - the default voice)
                      es2 (male, 22 kHz; T is only an alias of s there, so
                           the map sends T to s)

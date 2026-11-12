@@ -99,12 +99,21 @@ struct VoiceDetailView: View {
                 }
                 .disabled(!library.storageAvailable)
             }
-            if PreviewPlayer.sampleURL(voice) != nil {
+            if PreviewPlayer.hasSample(voice) {
+                let preparing = player.preparing == voice.id
                 Button {
                     if isPlaying { player.stop() } else { player.playSample(voice) }
                 } label: {
-                    Label(isPlaying ? "Stop" : "Play a Sample", systemImage: isPlaying ? "stop.fill" : "play.fill")
+                    if preparing {
+                        // the sample is downloaded on the first press
+                        Label("Preparing the sample…", systemImage: "arrow.down.circle")
+                    } else {
+                        Label(
+                            isPlaying ? "Stop" : "Play a Sample",
+                            systemImage: isPlaying ? "stop.fill" : "play.fill")
+                    }
                 }
+                .accessibilityAddTraits(preparing ? .updatesFrequently : [])
             }
         } footer: {
             Text("The voice is downloaded from the MBROLA voices repository on GitHub after you accept its license.")

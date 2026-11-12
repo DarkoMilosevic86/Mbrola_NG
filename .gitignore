@@ -43,7 +43,6 @@ CMakeUserPresets.json
 
 # Local test output
 *.wav
-!/android/app/src/main/assets/samples/*.wav
 *.pho.out
 
 # MBROLA voices are never committed: each has its own license and is

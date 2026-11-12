@@ -22,6 +22,7 @@ struct TestCase {
   std::string expected;
   bool phonemes = false;            // compare phonemes instead of words
   bool marks = false;               // ... with accent and length marks
+  bool spell = false;               // read in character / spelling mode
 };
 
 struct CompileResult {

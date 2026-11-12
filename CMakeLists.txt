@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 cmake_minimum_required(VERSION 3.20)
-project(MBROLA_NG VERSION 0.2.0 LANGUAGES C CXX)
+project(MBROLA_NG VERSION 0.2.1 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -82,12 +82,18 @@ add_executable(mbtts tools/mbtts/main.cpp)
 target_link_libraries(mbtts PRIVATE mbng_langsrc)
 
 enable_testing()
-add_test(NAME lang_hr
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/hr -o ${CMAKE_BINARY_DIR}/hr.dat)
-add_test(NAME lang_en
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/en -o ${CMAKE_BINARY_DIR}/en.dat)
-add_test(NAME lang_es
-  COMMAND langc ${CMAKE_SOURCE_DIR}/languages/es -o ${CMAKE_BINARY_DIR}/es.dat)
+# one test per language: compiling a language runs its tests.txt. A language
+# folder is one with a language.txt (languages/ is a submodule and also
+# holds a .git), so a new folder is tested without touching this file.
+file(GLOB _test_lang_dirs LIST_DIRECTORIES true CONFIGURE_DEPENDS
+     "${CMAKE_SOURCE_DIR}/languages/*")
+foreach(_dir ${_test_lang_dirs})
+  if(EXISTS "${_dir}/language.txt")
+    get_filename_component(_code "${_dir}" NAME)
+    add_test(NAME lang_${_code}
+      COMMAND langc ${_dir} -o ${CMAKE_BINARY_DIR}/${_code}.dat)
+  endif()
+endforeach()
 
 # ---------------------------------------------------------------------------
 # Linux: Speech Dispatcher module, voice manager, install rules, packages
@@ -154,7 +160,9 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
   file(GLOB _lang_dirs LIST_DIRECTORIES true "${CMAKE_SOURCE_DIR}/languages/*")
   set(_dats "")
   foreach(_dir ${_lang_dirs})
-    if(IS_DIRECTORY "${_dir}")
+    # a language folder is one with a language.txt: languages/ is a submodule
+    # and also holds a .git, which is not a language
+    if(IS_DIRECTORY "${_dir}" AND EXISTS "${_dir}/language.txt")
       get_filename_component(_code "${_dir}" NAME)
       file(GLOB _srcs CONFIGURE_DEPENDS "${_dir}/*")
       add_custom_command(OUTPUT "${MBNG_STAGE}/languages/${_code}.dat"
@@ -165,14 +173,18 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
       list(APPEND _dats "${MBNG_STAGE}/languages/${_code}.dat")
     endif()
   endforeach()
-  configure_file(catalog/catalog.json "${MBNG_STAGE}/catalog.json" COPYONLY)
+  # the catalog comes from the Resources submodule (github.com/Mbrola-NG/Resources)
+  if(NOT EXISTS "${CMAKE_SOURCE_DIR}/Resources/catalog/catalog.json")
+    message(FATAL_ERROR "Resources/catalog/catalog.json is missing. The Resources submodule is not checked out - run: git submodule update --init")
+  endif()
+  configure_file(Resources/catalog/catalog.json "${MBNG_STAGE}/catalog.json" COPYONLY)
   set(MBNG_VERSION "${PROJECT_VERSION}")
   configure_file(linux/mbrola-ng-voices.py "${CMAKE_BINARY_DIR}/mbrola-ng-voices" @ONLY)
   add_custom_command(OUTPUT "${MBNG_STAGE}/voices.d/.stamp"
     COMMAND Python3::Interpreter "${CMAKE_SOURCE_DIR}/linux/mbrola-ng-voices.py"
-            --catalog "${CMAKE_SOURCE_DIR}/catalog/catalog.json" write-voice-files "${MBNG_STAGE}/voices.d"
+            --catalog "${CMAKE_SOURCE_DIR}/Resources/catalog/catalog.json" write-voice-files "${MBNG_STAGE}/voices.d"
     COMMAND ${CMAKE_COMMAND} -E touch "${MBNG_STAGE}/voices.d/.stamp"
-    DEPENDS catalog/catalog.json linux/mbrola-ng-voices.py
+    DEPENDS Resources/catalog/catalog.json linux/mbrola-ng-voices.py
     COMMENT "Writing voice descriptions")
   add_custom_target(mbng_linux_data ALL DEPENDS ${_dats} "${MBNG_STAGE}/voices.d/.stamp")
 
@@ -180,7 +192,7 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
   install(TARGETS sd_mbrola_ng DESTINATION "${MBNG_SPEECHD_MODULE_DIR}")
   install(PROGRAMS "${CMAKE_BINARY_DIR}/mbrola-ng-voices" DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}")
   install(FILES ${_dats} DESTINATION "${MBNG_DATADIR}/languages")
-  install(FILES catalog/catalog.json DESTINATION "${MBNG_DATADIR}")
+  install(FILES Resources/catalog/catalog.json DESTINATION "${MBNG_DATADIR}")
   install(DIRECTORY "${MBNG_STAGE}/voices.d/" DESTINATION "${MBNG_DATADIR}/voices.d"
           FILES_MATCHING PATTERN "*.voice")
   if(NOT MBNG_USER_INSTALL)

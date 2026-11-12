@@ -93,6 +93,27 @@ enum VoiceInstaller {
         throw last
     }
 
+    /// The recorded sample of a voice that is not installed: downloaded from
+    /// the Resources repository (the "sample" entry of the catalog, see
+    /// `Remote`) and kept in the caches folder, which the system may empty.
+    /// Verified like every other download; a file already there is reused.
+    static func sample(_ file: VoiceFile) async throws -> URL {
+        let fm = FileManager.default
+        let directory = try fm.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil)
+            .appendingPathComponent("samples", isDirectory: true)
+        try fm.createDirectory(at: directory, withIntermediateDirectories: true)
+        let destination = directory.appendingPathComponent(file.name)
+        let cached = (try? destination.resourceValues(forKeys: [.fileSizeKey]))?.fileSize
+        if let cached, file.size <= 0 || Int64(cached) == file.size { return destination }
+
+        let part = directory.appendingPathComponent(file.name + ".part")
+        defer { try? fm.removeItem(at: part) }
+        try await download(file, to: part) { _ in }
+        if fm.fileExists(atPath: destination.path) { try fm.removeItem(at: destination) }
+        try fm.moveItem(at: part, to: destination)
+        return destination
+    }
+
     /// Step 1: the license text (shown before anything else is downloaded).
     static func fetchLicense(_ voice: Voice, into dir: URL) async throws -> String {
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)

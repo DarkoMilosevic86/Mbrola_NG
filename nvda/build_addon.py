@@ -16,7 +16,7 @@ import subprocess
 import sys
 import zipfile
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -46,14 +46,21 @@ def stage():
 			shutil.copy2(os.path.join(ROOT, "build", arch, name), out)
 	langs = os.path.join(DRIVER, "languages")
 	os.makedirs(langs)
-	# all compiled languages (build.cmd compiles every folder of languages\)
-	for code in sorted(os.listdir(os.path.join(ROOT, "languages"))):
+	# all compiled languages: a language folder is one with a language.txt
+	# (languages/ is a submodule and also holds a .git, not a language)
+	src = os.path.join(ROOT, "languages")
+	for code in sorted(c for c in os.listdir(src)
+			if os.path.isfile(os.path.join(src, c, "language.txt"))):
 		dat = os.path.join(ROOT, "build", "x64", code + ".dat")
 		if not os.path.isfile(dat):
 			raise SystemExit("missing %s - did the language compile?" % dat)
 		shutil.copy2(dat, langs)
 	# voice catalog known to this version (used when the online one is unavailable)
-	shutil.copy2(os.path.join(ROOT, "catalog", "catalog.json"), DRIVER)
+	catalog = os.path.join(ROOT, "Resources", "catalog", "catalog.json")
+	if not os.path.isfile(catalog):
+		raise SystemExit("Resources/catalog/catalog.json is missing. The Resources submodule is "
+			"not checked out - run: git submodule update --init")
+	shutil.copy2(catalog, DRIVER)
 	compile_translations()
 
 

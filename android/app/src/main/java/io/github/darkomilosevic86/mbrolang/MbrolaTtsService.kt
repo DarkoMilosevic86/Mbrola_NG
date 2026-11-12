@@ -41,14 +41,14 @@ class MbrolaTtsService : TextToSpeechService() {
     /** "hr" or "hrv" -> "hrv". */
     private fun iso3Language(lang: String?): String {
         if (lang.isNullOrEmpty()) return ""
-        return runCatching { Locale(lang).isO3Language }.getOrNull()?.takeIf { it.isNotEmpty() }
+        return runCatching { Locale.Builder().setLanguage(lang).build().isO3Language }.getOrNull()?.takeIf { it.isNotEmpty() }
             ?: lang.lowercase(Locale.ROOT)
     }
 
     /** "US" or "USA" -> "USA". */
     private fun iso3Country(country: String?): String {
         if (country.isNullOrEmpty()) return ""
-        return runCatching { Locale("", country).isO3Country }.getOrNull()?.takeIf { it.isNotEmpty() }
+        return runCatching { Locale.Builder().setRegion(country).build().isO3Country }.getOrNull()?.takeIf { it.isNotEmpty() }
             ?: country.uppercase(Locale.ROOT)
     }
 

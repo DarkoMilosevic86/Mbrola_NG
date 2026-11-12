@@ -74,7 +74,7 @@ class Normalizer {
   void word(Ctx& c, size_t i) const;
   void symbol(Ctx& c, size_t i) const;
   size_t emoji(Ctx& c, size_t i) const;
-  void spell_range(Ctx& c, uint32_t b, uint32_t e, bool caps_prefix) const;
+  void spell_range(Ctx& c, uint32_t b, uint32_t e, bool char_mode) const;
 
   std::string digits_text(const u32str& digits) const;
   std::string pairs_text(const u32str& digits) const;
@@ -82,6 +82,8 @@ class Normalizer {
   void emit_word(Ctx& c, const u32str& canon, uint32_t b, uint32_t e, uint8_t flags = 0) const;
   void emit_break(Ctx& c, BreakType brk, uint32_t b, uint32_t e) const;
   void emit_text(Ctx& c, const std::string& text, uint32_t b, uint32_t e, uint8_t flags = 0) const;
+  void emit_phones(Ctx& c, const std::vector<uint8_t>& phones, uint32_t b, uint32_t e,
+                   uint8_t flags = 0) const;
   bool next_starts_sentence(const Ctx& c, size_t i) const;
 
   const Language& L;

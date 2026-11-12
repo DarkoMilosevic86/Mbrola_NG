@@ -25,8 +25,10 @@
 #ifndef Languages
   #define Languages ",hr,en,es,"
 #endif
-; online voice catalog (HTTPS); empty = only the catalog embedded here
-#define CatalogURL ""
+; online voice catalog (HTTPS): the Resources repository
+; (github.com/Mbrola-NG/Resources); the catalog embedded here is the
+; fallback, and one with another schema is ignored
+#define CatalogURL "https://raw.githubusercontent.com/Mbrola-NG/Resources/main/catalog/catalog.json"
 ; /DTestMode: developer test without admin rights - no SAPI registration,
 ; voices go to the folder given by /VOICEROOT=<folder>
 #ifdef TestMode
@@ -780,6 +782,13 @@ begin
         if not FileCopy(ExpandConstant('{tmp}\') + TempName(I, F), Dir + '\' + Name, False) then
           Log('could not copy ' + Name);
       end;
+      WriteVoiceFile(I);
+    end else if VoiceSelected[I] and VoiceWasInstalled[I] then begin
+      { The database is already there and is not downloaded again, but its }
+      { description comes from the catalog of THIS version: rewrite it, so  }
+      { that a changed phoneme map (cr1: the schwa @ is its vocalic r) or   }
+      { base pitch reaches the SAPI voice token.                            }
+      Log('refreshing the description of voice ' + VId(I));
       WriteVoiceFile(I);
     end;
   end;

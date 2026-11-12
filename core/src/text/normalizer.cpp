@@ -561,8 +561,11 @@ void Normalizer::word(Ctx& c, size_t i) const {
   else emit_word(c, t.canon, t.b, t.e);
 }
 
-// caps_prefix: say the capital prefix (character mode only, not acronyms)
-void Normalizer::spell_range(Ctx& c, uint32_t b, uint32_t e, bool caps_prefix) const {
+// char_mode: character / spelling mode, not an acronym read in running text.
+// Only there is the capital prefix said, and only there do the letters use
+// the spelled name of spelling.txt ("b | be | /b @/": "be" in "HDZ", "b@" when
+// the word is spelled out).
+void Normalizer::spell_range(Ctx& c, uint32_t b, uint32_t e, bool char_mode) const {
   const Canonicalizer& cz = L.canon();
   for (uint32_t k = b; k < e; ++k) {
     char32_t ch = c.t[k];
@@ -572,14 +575,20 @@ void Normalizer::spell_range(Ctx& c, uint32_t b, uint32_t e, bool caps_prefix) c
     const SpellEntry* se = L.spelling(lc);
     if (!se && ce && !ce->canon.empty()) se = L.spelling(ce->canon[0]);
     std::string name;
-    if (se) name = se->name;
+    const std::vector<uint8_t>* phones = nullptr;
+    if (se) {
+      if (char_mode && !se->char_phones.empty()) phones = &se->char_phones;
+      else if (char_mode && !se->char_name.empty()) name = se->char_name;
+      else name = se->name;
+    }
     else if (const Symbol* sy = L.symbol(ch)) name = sy->name;
     else if (is_digit(ch)) name = number_text(ch - '0', L.digit_ruleset());
     else if (const SpellEntry* unk = L.spelling(0)) name = unk->name;  // "unknown character"
-    if (name.empty()) continue;
-    if (caps_prefix && ce && ce->upper && c.opt.capitals && !L.d().spell_capital.empty())
+    if (!phones && name.empty()) continue;
+    if (char_mode && ce && ce->upper && c.opt.capitals && !L.d().spell_capital.empty())
       emit_text(c, L.d().spell_capital, k, k + 1);
-    emit_text(c, name, k, k + 1, kItemLetter);
+    if (phones) emit_phones(c, *phones, k, k + 1, kItemLetter);
+    else emit_text(c, name, k, k + 1, kItemLetter);
   }
 }
 
@@ -642,6 +651,18 @@ void Normalizer::emit_break(Ctx& c, BreakType brk, uint32_t b, uint32_t e) const
   it.src_b = c.host_b(b);
   it.src_e = c.host_e(e);
   out.push_back(std::move(it));
+}
+
+void Normalizer::emit_phones(Ctx& c, const std::vector<uint8_t>& phones, uint32_t b, uint32_t e,
+                             uint8_t flags) const {
+  if (phones.empty()) return;
+  Item it;
+  it.kind = ItemKind::Phonemes;
+  it.phones = phones;
+  it.src_b = c.host_b(b);
+  it.src_e = c.host_e(e);
+  it.flags = flags;
+  c.out->push_back(std::move(it));
 }
 
 void Normalizer::emit_text(Ctx& c, const std::string& text, uint32_t b, uint32_t e, uint8_t flags) const {

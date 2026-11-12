@@ -140,9 +140,37 @@ def android_environment():
 	return env
 
 
+def language_codes():
+	"""The language folders of languages/ - the ones with a language.txt.
+	languages/ is a submodule, so it also holds a .git that is not a language
+	(build.cmd's `for /d` skips it, os.listdir does not)."""
+	root = os.path.join(ROOT, "languages")
+	codes = sorted(c for c in os.listdir(root)
+		if os.path.isfile(os.path.join(root, c, "language.txt")))
+	if not codes:
+		raise SystemExit(
+			"no language found in languages/. The languages submodule is not "
+			"checked out - run: git submodule update --init")
+	return codes
+
+
+def require_resources():
+	"""Resources is a submodule (github.com/Mbrola-NG/Resources): the voice
+	catalog and the samples live there, not in this repository."""
+	catalog = os.path.join(ROOT, "Resources", "catalog", "catalog.json")
+	if not os.path.isfile(catalog):
+		raise SystemExit(
+			"%s is missing. The Resources submodule is not checked out - run:"
+			% os.path.relpath(catalog, ROOT) + chr(10) + "  git submodule update --init")
+	return catalog
+
+
 def prepare_android_assets(a):
-	"""Language .dat files (compiled by the desktop build) and the voice
-	catalog -> android/generated/assets (an assets folder of the app)."""
+	"""Language .dat files (compiled by the desktop build) and the fallback
+	voice catalog -> android/generated/assets (an assets folder of the app).
+	The voice samples are not bundled: the app downloads them from the
+	Resources repository, at the addresses the catalog gives."""
+	require_resources()
 	if WINDOWS:
 		out = os.path.join(ROOT, "build", "x64")
 		if not glob.glob(os.path.join(out, "*.dat")):
@@ -156,12 +184,12 @@ def prepare_android_assets(a):
 	if os.path.isdir(assets):
 		shutil.rmtree(assets)
 	os.makedirs(langs)
-	for code in sorted(os.listdir(os.path.join(ROOT, "languages"))):
+	for code in language_codes():
 		dat = os.path.join(out, code + ".dat")
 		if not os.path.isfile(dat):
 			raise SystemExit("missing %s - did the language compile?" % dat)
 		shutil.copy2(dat, langs)
-	shutil.copy2(os.path.join(ROOT, "catalog", "catalog.json"), assets)
+	shutil.copy2(os.path.join(ROOT, "Resources", "catalog", "catalog.json"), assets)
 	print("->", os.path.relpath(assets, ROOT))
 
 

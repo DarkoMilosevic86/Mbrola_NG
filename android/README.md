@@ -68,10 +68,28 @@ Both are linked for 16 KB memory pages.
 
 ## Voice samples
 
-`app/src/main/assets/samples/<voice>.wav` are the recordings played by "Try"
-for voices that are not installed. Recreate them with
-`python tools/make_voice_samples.py` (Windows, after `build.cmd x64`).
-A voice without a sample simply has no Try button until it is installed.
+The recordings "Try" plays for a voice that is not installed are **not** in
+the apk. They live in the `Resources` submodule
+([Mbrola-NG/Resources](https://github.com/Mbrola-NG/Resources)) as
+`assets/samples/<voice>.wav`, and the `"sample"` entry of the voice in the
+catalog gives their addresses, size and SHA-256. The app downloads one when
+"Try" is pressed and keeps it in its cache folder, verified exactly like a
+voice database (`Remote.kt`, `VoiceInstaller.sample`). A voice whose catalog
+entry has no sample simply has no Try button until it is installed.
+
+Recreate the files with `python tools/make_voice_samples.py` (Windows, after
+`build.cmd x64`), then `python tools/make_voice_samples.py --catalog-entries`
+and paste the printed blocks into the catalog, so the checksums match. Push
+the `Resources` repository before the apk that relies on it.
+
+## Voice catalog
+
+`assets/catalog.json` is only the fallback. `Catalog.refresh` fetches the
+catalog from the `Resources` repository when the app starts and keeps it in
+device-protected storage; the bundled copy is what the TTS service reads
+before the first unlock after a restart, when nothing may be downloaded.
+A downloaded catalog is taken into use only when it parses, carries the
+schema this build understands and still offers a language the apk can speak.
 
 ## Store graphics (`images/`)
 

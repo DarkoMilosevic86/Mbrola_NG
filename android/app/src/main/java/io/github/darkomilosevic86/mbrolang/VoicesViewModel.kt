@@ -5,6 +5,7 @@ package io.github.darkomilosevic86.mbrolang
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,14 +25,25 @@ data class LicenseRequest(val voice: VoiceEntry, val text: String)
 
 class VoicesViewModel(app: Application) : AndroidViewModel(app) {
     private val context get() = getApplication<Application>()
-    val catalog: Catalog = Catalog.get(app)
+
+    /** Replaced when [Catalog.refresh] brings a newer catalog from the network. */
+    var catalog by mutableStateOf(Catalog.get(app))
+        private set
+
     private val player = Player(app)
 
     var installed by mutableStateOf<List<VoiceEntry>>(emptyList())
         private set
 
-    /** Voice id -> progress, while its license or files are being downloaded. */
+    /** Voice id -> progress, while the files of the voice are being downloaded (after the license was accepted). */
     val downloads = mutableStateMapOf<String, Download>()
+
+    /**
+     * Ids of the voices whose license is being fetched or is waiting for the
+     * user's decision. Nothing of the voice itself is downloaded in this
+     * state, so the card must not show a download.
+     */
+    val licensePending = mutableStateListOf<String>()
     var license by mutableStateOf<LicenseRequest?>(null)
         private set
 
@@ -42,7 +54,12 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
     var playing by mutableStateOf<String?>(null)
         private set
 
+    /** Voice whose sample is being downloaded for "Try". */
+    var preparing by mutableStateOf<String?>(null)
+        private set
+
     private val jobs = HashMap<String, Job>()
+    private var sampleJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -50,17 +67,25 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
                 installed = withContext(Dispatchers.IO) { VoiceStore.installed(context) }
             }
         }
+        // the catalog of the app is the one in the assets until this succeeds
+        viewModelScope.launch {
+            if (Catalog.refresh(context)) {
+                catalog = Catalog.get(context)
+                VoiceStore.notifyChanged()
+            }
+        }
     }
 
     fun isInstalled(voice: VoiceEntry): Boolean = installed.any { it.id == voice.id }
 
-    fun hasSample(voice: VoiceEntry): Boolean = player.hasSample(voice.id)
+    /** True when the catalog offers a recorded sample for the voice. */
+    fun hasSample(voice: VoiceEntry): Boolean = voice.sample != null
 
     // ---------------------------------------------------------------- install
     /** Install, step 1: fetch the license and ask. */
     fun requestInstall(voice: VoiceEntry) {
-        if (voice.id in downloads) return
-        downloads[voice.id] = Download(0, voice.downloadSize)
+        if (voice.id in downloads || voice.id in licensePending) return
+        licensePending += voice.id
         jobs[voice.id] = viewModelScope.launch {
             try {
                 val text = VoiceInstaller.fetchLicense(context, voice)
@@ -68,7 +93,7 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                downloads.remove(voice.id)
+                licensePending.remove(voice.id)
                 message = errorText(e)
             }
         }
@@ -78,6 +103,9 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
     fun acceptLicense() {
         val voice = license?.voice ?: return
         license = null
+        // the download of the voice starts here, and only here
+        licensePending.remove(voice.id)
+        downloads[voice.id] = Download(0, voice.downloadSize)
         jobs[voice.id] = viewModelScope.launch {
             try {
                 VoiceInstaller.install(context, voice) { done, total ->
@@ -97,13 +125,14 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
     fun declineLicense() {
         val voice = license?.voice ?: return
         license = null
-        downloads.remove(voice.id)
+        licensePending.remove(voice.id)
         VoiceInstaller.discard(context, voice)
     }
 
     fun cancelDownload(voice: VoiceEntry) {
         jobs.remove(voice.id)?.cancel()
         downloads.remove(voice.id)
+        licensePending.remove(voice.id)
         if (license?.voice?.id == voice.id) license = null
         VoiceInstaller.discard(context, voice)
     }
@@ -125,6 +154,10 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
             stopPlaying()
             return
         }
+        // a sample still being fetched for another voice is no longer wanted
+        sampleJob?.cancel()
+        sampleJob = null
+        preparing = null
         playing = voice.id
         if (isInstalled(voice)) {
             player.speak(
@@ -135,18 +168,41 @@ class VoicesViewModel(app: Application) : AndroidViewModel(app) {
                 if (error != null) message = context.getString(R.string.error_speak, error)
             }
         } else {
-            player.playSample(voice.id) {
-                if (playing == voice.id) playing = null
+            val sample = voice.sample
+            if (sample == null) {
+                playing = null
+                return
+            }
+            preparing = voice.id
+            sampleJob = viewModelScope.launch {
+                try {
+                    val file = VoiceInstaller.sample(context, sample)
+                    if (preparing == voice.id) preparing = null
+                    if (playing != voice.id) return@launch
+                    player.playSample(file) {
+                        if (playing == voice.id) playing = null
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    if (preparing == voice.id) preparing = null
+                    if (playing == voice.id) playing = null
+                    message = context.getString(R.string.error_sample)
+                }
             }
         }
     }
 
     fun stopPlaying() {
+        sampleJob?.cancel()
+        sampleJob = null
+        preparing = null
         player.stop()
         playing = null
     }
 
     override fun onCleared() {
+        sampleJob?.cancel()
         player.stop()
     }
 }
