@@ -22,10 +22,12 @@ a built-in voice manager. Android 10 or newer; arm64-v8a, armeabi-v7a, x86_64.
   once. For any other language, "Always use this voice, for every language"
   in the voice settings makes one voice answer every request - without it
   Android reports "language not supported" and TalkBack stays silent.
+  The Spanish voices are offered for Spain, Mexico, Argentina, Colombia,
+  Chile, Peru, Venezuela and the USA in the same way.
 - **Direct boot**: the engine speaks before the first unlock after a reboot
   (TalkBack on the lock screen). Voices, language data and voice settings
   are kept in device-protected storage for that.
-- UI in English and Croatian. The voice catalog is bundled in the app.
+- UI in English, Croatian and Spanish. The voice catalog is bundled in the app.
 
 ## Building
 

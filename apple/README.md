@@ -78,7 +78,10 @@ unpack it and move the app to Applications.
 
 The Croatian voice is registered for `hr-HR` and also announces that it can
 read Serbian, Bosnian and Montenegrin text (`apple_also_for` in the catalog;
-the Croatian data reads Cyrillic too).
+the Croatian data reads Cyrillic too). The Spanish voices are registered for
+`es-ES` and also announce `es-MX`, `es-AR`, `es-CO`, `es-CL`, `es-PE`, `es-VE`
+and `es-US`; for example
+`say -v "MBROLA NG European Spanish male (es1)" "Buenos días"`.
 
 ## How it works
 

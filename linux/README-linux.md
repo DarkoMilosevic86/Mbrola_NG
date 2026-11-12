@@ -15,7 +15,21 @@ every other program that speaks through Speech Dispatcher (`spd-say`,
 Speech Note, browsers, ...) can use it. Requirements: speech-dispatcher 0.11
 or newer (Debian 13, Ubuntu 24.04 / 26.04, current Fedora and Arch).
 
-## Building and installing
+## Installing from the repository (recommended)
+
+Packages for Debian 13, Ubuntu 24.04 / 26.04 and Fedora 44 are built on the
+openSUSE Build Service. Open
+
+<https://software.opensuse.org/download/package?project=home:daremc86:Mbrola-NG&package=mbrola-ng>
+
+choose your distribution and follow the commands it shows (add the
+repository, then `sudo apt install mbrola-ng` or `sudo dnf install mbrola-ng`).
+Updates arrive with `apt upgrade` / `dnf upgrade`. The package contains the
+Speech Dispatcher module, `mbrola-ng-voices` and the language data
+(Croatian, English, Spanish); voices are installed as described under
+"Voices" below. Other distributions, or a build from source: the next section.
+
+## Building and installing (manual)
 
     sudo apt install build-essential cmake python3 pkg-config    # Debian/Ubuntu
     sudo dnf install gcc-c++ cmake python3 pkgconf               # Fedora
@@ -43,6 +57,7 @@ with the voice manager, a normal terminal program:
     mbrola-ng-voices available            # voices of the catalog
     mbrola-ng-voices install hr           # Croatian: cr1 (shows the license)
     mbrola-ng-voices install us2 en1      # English voices
+    mbrola-ng-voices install es           # Spanish: es1, es2, es3, es4, mx1, mx2, vz1
     mbrola-ng-voices list                 # installed voices
     mbrola-ng-voices remove us2
     mbrola-ng-voices update
@@ -62,11 +77,13 @@ by itself when a program needs it):
     spd-say -O                                  # output modules: mbrola_ng
     spd-say -o mbrola_ng -L                     # its voices
     spd-say -o mbrola_ng -l hr "Dobar dan, ovo je MBROLA NG."
+    spd-say -o mbrola_ng -l es "Buenos días, esto es MBROLA NG."
 
 Orca: Preferences (Orca+Space), Speech: Speech system "Speech Dispatcher",
 Speech synthesizer "MBROLA NG" (listed as mbrola_ng), Voice: cr1. Rate,
 pitch and volume of Orca are used; Orca's language/voice settings choose the
-voice (Croatian text: cr1, English: us1/us2/us3/en1 when installed).
+voice (Croatian text: cr1, English: us1/us2/us3/en1, Spanish: es1-es4/mx1/
+mx2/vz1, when installed).
 
 Settings of the module (all optional) are in
 `/etc/speech-dispatcher/modules/mbrola_ng.conf`, or a copy in

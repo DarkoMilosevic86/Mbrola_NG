@@ -17,9 +17,14 @@ fix a few things, see "First build" below.
 ## Setting up the package (once)
 
 1. In the OBS project, create the package `mbrola-ng`.
-2. Upload **only** `_service` (*Add file*). OBS runs it at once: it clones the
-   repository with its submodules, makes the source archive and takes the
-   recipe files from `linux/packaging/` into the package.
+2. Do **not** give the package a git repository (the *SCM* / `scmsync` field):
+   then OBS builds straight from the repository root, where there is no
+   recipe. Add `_service` as a file instead: *Add file*, file name `_service`,
+   file URL
+   `https://raw.githubusercontent.com/Mbrola-NG/Mbrola-NG/master/linux/packaging/_service`.
+   OBS runs it at once: it clones the repository with its submodules, makes
+   the source archive and takes the recipe files from `linux/packaging/` into
+   the package. The project must not be *managed in SCM* either.
 3. The repositories of the project (Fedora, Debian, Ubuntu) are built
    automatically from then on. The status is on the package page, *Build
    results* (green = built, red = failed: click it for the log).
@@ -41,12 +46,17 @@ OBS does not watch git. After a release:
 A change to the recipes in this folder needs the same trigger, because OBS
 reads them from the repository.
 
-## Before the first release that contains this folder
+## The source services
 
-`_service` takes the source from `master`, which does not contain
-`linux/packaging/` yet. Until it does, change `revision` to `dev` in the
-**OBS copy** of `_service` (the copy in this folder is the final one), and
-change it back when the release is on `master`.
+`_service` runs `tar_scm` (clones the repository with its submodules, version
+from the nearest tag, makes `mbrola-ng-<version>.tar`), `recompress` (`.tar.xz`)
+and `set_version`. All of them run **on the OBS server**: do not give them
+`mode="buildtime"`, because Debian and Ubuntu have no `obs-service-*`
+packages and no target would be buildable. The server has `tar_scm`, not
+`obs_scm` + `tar`. `revision` is `master`, which carries the stable releases.
+
+The OBS copy of `_service` is a copy: after a change in this folder, paste the
+new content into the package (*Files*, `_service`) and run **Trigger Services**.
 
 ## Version numbers
 
