@@ -7,17 +7,20 @@
   a release run "Trigger Services" on the package (or `osc service remoterun`),
   see README.md.
 
-  obs_scm   clones the repository WITH its submodules (languages/, Resources/),
-            takes the version from the nearest tag (v0.3.0 -> 0.3.0) and
-            extracts the recipe files from linux/packaging/ into the package.
-  tar, recompress, set_version   run on the OBS server together with obs_scm
-            (NOT at build time: Debian and Ubuntu have no obs-service-* packages).
+  tar_scm   clones the repository WITH its submodules (languages/, Resources/),
+            takes the version from the nearest tag (v0.3.0 -> 0.3.0), makes
+            mbrola-ng-<version>.tar and extracts the recipe files from
+            linux/packaging/ into the package.
+  recompress   turns the .tar into .tar.xz.
+  set_version   writes the version into the recipes.
+  All of them run on the OBS server (NOT at build time: Debian and Ubuntu have no
+  obs-service-* packages, and the server has no "tar" service, only tar_scm).
 
   revision: master carries the stable releases. Until the first release that
   contains linux/packaging/ has been merged into master, use "dev" here.
 -->
 <services>
-  <service name="obs_scm">
+  <service name="tar_scm">
     <param name="scm">git</param>
     <param name="url">https://github.com/Mbrola-NG/Mbrola-NG.git</param>
     <param name="revision">master</param>
@@ -35,7 +38,6 @@
     <param name="extract">linux/packaging/debian.changelog</param>
     <param name="extract">linux/packaging/debian.copyright</param>
   </service>
-  <service name="tar"/>
   <service name="recompress">
     <param name="file">*.tar</param>
     <param name="compression">xz</param>
