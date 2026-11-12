@@ -50,9 +50,10 @@ data class VoiceEntry(
     /** java.util.Locale of the voice (two-letter codes where they exist). */
     val locale: Locale by lazy {
         val country = Locale.getISOCountries().firstOrNull {
-            runCatching { Locale("", it).isO3Country }.getOrNull().equals(iso3Country, ignoreCase = true)
+            runCatching { Locale.Builder().setRegion(it).build().isO3Country }.getOrNull().equals(iso3Country, ignoreCase = true)
         } ?: ""
-        Locale(language, country)
+        runCatching { Locale.Builder().setLanguage(language).setRegion(country).build() }
+            .getOrDefault(Locale.ROOT)
     }
 }
 
