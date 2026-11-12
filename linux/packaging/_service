@@ -10,7 +10,8 @@
   obs_scm   clones the repository WITH its submodules (languages/, Resources/),
             takes the version from the nearest tag (v0.3.0 -> 0.3.0) and
             extracts the recipe files from linux/packaging/ into the package.
-  tar, recompress, set_version   run when the package is built.
+  tar, recompress, set_version   run on the OBS server together with obs_scm
+            (NOT at build time: Debian and Ubuntu have no obs-service-* packages).
 
   revision: master carries the stable releases. Until the first release that
   contains linux/packaging/ has been merged into master, use "dev" here.
@@ -34,10 +35,10 @@
     <param name="extract">linux/packaging/debian.changelog</param>
     <param name="extract">linux/packaging/debian.copyright</param>
   </service>
-  <service name="tar" mode="buildtime"/>
-  <service name="recompress" mode="buildtime">
+  <service name="tar"/>
+  <service name="recompress">
     <param name="file">*.tar</param>
     <param name="compression">xz</param>
   </service>
-  <service name="set_version" mode="buildtime"/>
+  <service name="set_version"/>
 </services>
