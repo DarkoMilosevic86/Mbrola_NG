@@ -193,6 +193,8 @@ fun VoiceCard(vm: VoicesViewModel, voice: VoiceEntry, showLanguage: Boolean, onV
     val context = LocalContext.current
     val installed = vm.isInstalled(voice)
     val download: Download? = vm.downloads[voice.id]
+    // the license is fetched and asked for before anything of the voice is downloaded
+    val waitingForLicense = voice.id in vm.licensePending
     val playing = vm.playing == voice.id
     // the sample of a voice that is not installed is downloaded when "Try" is pressed
     val preparing = vm.preparing == voice.id
@@ -222,6 +224,17 @@ fun VoiceCard(vm: VoicesViewModel, voice: VoiceEntry, showLanguage: Boolean, onV
                 }
             }
             Spacer(Modifier.height(10.dp))
+
+            if (waitingForLicense) {
+                Text(
+                    stringResource(R.string.waiting_license),
+                    style = MaterialTheme.typography.bodyMedium,
+                    // announced by TalkBack without taking focus
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                )
+                TextButton(onClick = { vm.cancelDownload(voice) }) { Text(stringResource(R.string.cancel)) }
+                return@Column
+            }
 
             if (download != null) {
                 val percent = if (download.total > 0) (100 * download.done / download.total).toInt() else 0

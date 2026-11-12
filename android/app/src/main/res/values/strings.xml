@@ -26,6 +26,7 @@
     <string name="remove_title">Remove voice</string>
     <string name="remove_message">Remove the voice %s from this device?</string>
     <string name="license_title">License of the voice %s</string>
+    <string name="waiting_license">Waiting for the license…</string>
     <string name="accept_and_install">Accept and install</string>
     <string name="decline">Decline</string>
     <string name="downloading">Downloading: %1$s of %2$s</string>

@@ -25,6 +25,7 @@
     <string name="remove_title">Uklanjanje glasa</string>
     <string name="remove_message">Ukloniti glas %s s ovog uređaja?</string>
     <string name="license_title">Licenca glasa %s</string>
+    <string name="waiting_license">Čeka se licenca…</string>
     <string name="accept_and_install">Prihvati i instaliraj</string>
     <string name="decline">Odbij</string>
     <string name="downloading">Preuzimanje: %1$s od %2$s</string>

@@ -25,6 +25,7 @@
     <string name="remove_title">Eliminar voz</string>
     <string name="remove_message">¿Eliminar la voz %s de este dispositivo?</string>
     <string name="license_title">Licencia de la voz %s</string>
+    <string name="waiting_license">Esperando la licencia…</string>
     <string name="accept_and_install">Aceptar e instalar</string>
     <string name="decline">Rechazar</string>
     <string name="downloading">Descargando: %1$s de %2$s</string>
