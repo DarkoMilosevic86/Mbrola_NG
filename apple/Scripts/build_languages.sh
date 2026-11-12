@@ -51,6 +51,8 @@ if [ $rebuild -eq 1 ]; then
 fi
 
 for dir in "$ROOT"/languages/*/; do
+  # a language is a folder with a language.txt (languages/ is a submodule)
+  [ -f "$dir/language.txt" ] || continue
   code="$(basename "$dir")"
   dat="$OUT/$code.dat"
   fresh=1

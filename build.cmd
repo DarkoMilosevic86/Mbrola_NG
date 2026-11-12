@@ -23,8 +23,9 @@ call "%VSROOT%\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% >nul || exit /b 1
 set BUILDDIR=%~dp0build\%ARCH%
 cmake -S "%~dp0." -B "%BUILDDIR%" -G Ninja -DCMAKE_BUILD_TYPE=%CONFIG% || exit /b 1
 cmake --build "%BUILDDIR%" || exit /b 1
-rem every folder in languages\ is a language: compile and test it
-for /d %%L in ("%~dp0languages\*") do (
+rem every folder in languages\ with a language.txt is a language: compile and
+rem test it (languages\ is a submodule: .github is not a language)
+for /d %%L in ("%~dp0languages\*") do if exist "%%L\language.txt" (
   "%BUILDDIR%\langc.exe" "%%L" -o "%BUILDDIR%\%%~nxL.dat" || exit /b 1
 )
 endlocal

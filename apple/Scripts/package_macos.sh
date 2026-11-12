@@ -97,6 +97,7 @@ fail() {
 [ -d "$APPEX" ] || fail "the speech extension is not inside the app"
 [ -f "$APPEX/Contents/Resources/catalog.json" ] || fail "catalog.json is missing in the speech extension"
 for dir in "$ROOT"/languages/*/; do
+  [ -f "$dir/language.txt" ] || continue
   code="$(basename "$dir")"
   [ -f "$APPEX/Contents/Resources/languages/$code.dat" ] || fail "language $code is missing in the speech extension"
 done
