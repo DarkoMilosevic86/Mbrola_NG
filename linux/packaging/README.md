@@ -51,7 +51,7 @@ change it back when the release is on `master`.
 ## Version numbers
 
 `set_version` writes the version of the tag into the recipes when the package
-is built. `debian.changelog` and `mbrola-ng.dsc` carry `0.2.0-1`: if the Debian
+is built. `debian.changelog` and `mbrola-ng.dsc` carry `0.2.1-1`: if the Debian
 build fails because their version differs from the archive, set both to the
 version of the tag (for example `0.3.0-1`) and add a changelog entry.
 

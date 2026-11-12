@@ -4,7 +4,7 @@
 #
 # Version is set from the git tag by the set_version service (see _service).
 Name:           mbrola-ng
-Version:        0.2.0
+Version:        0.2.1
 Release:        0
 Summary:        MBROLA NG text-to-speech for Speech Dispatcher and Orca
 # MBROLA NG: GPL-2.0-or-later; mbrola_ng_synth and external/mbrola: AGPL-3.0-only;
@@ -58,5 +58,5 @@ test -s %{_builddir}/sd-module.list
 %config(noreplace) %{_sysconfdir}/speech-dispatcher/modules/mbrola_ng.conf
 
 %changelog
-* Wed Nov 11 2026 Darko Milošević <daremc86@gmail.com> - 0.2.0-0
+* Wed Nov 11 2026 Darko Milošević <daremc86@gmail.com> - 0.2.1-0
 - Packaged for the openSUSE Build Service
