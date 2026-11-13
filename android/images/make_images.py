@@ -7,7 +7,7 @@
 #
 # Writes into android/images:
 #   icon-512.png                 app icon for the store listing (512 x 512)
-#   feature-graphic-en.png / -hr.png   feature graphic (1024 x 500)
+#   feature-graphic-en.png / -hr.png / -es.png   feature graphic (1024 x 500)
 # The icon is the same drawing as the launcher icon
 # (app/src/main/res/drawable/ic_launcher_foreground.xml).
 # Text uses the Poppins font (SIL Open Font License), downloaded once into
@@ -103,6 +103,7 @@ def main():
 	icon()
 	feature("en", "Text-to-speech for Android", "Croatian, English and Spanish for TalkBack")
 	feature("hr", "Pretvaranje teksta u govor", "Hrvatski, engleski i španjolski za TalkBack")
+	feature("es", "Texto a voz para Android", "Croata, inglés y español para TalkBack")
 	for name in sorted(os.listdir(HERE)):
 		if name.endswith(".png"):
 			with Image.open(os.path.join(HERE, name)) as im:
